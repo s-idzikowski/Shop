@@ -4,11 +4,17 @@ declare var require: any
 
 //var React = require('react');
 var ReactDOM = require('react-dom');
-
+// test
 export class Hello extends React.Component {
     render() {
         return (
-            <h1>Welcome to React!! aaaa</h1>
+            <h1>Welcome to React!! aaa</h1>
+        );
+    }
+
+    renderaaa() {
+        return (
+            <h1>Welcome to React!! bbbb</h1>
         );
     }
 }
