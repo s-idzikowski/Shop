@@ -8,8 +8,7 @@ var ReactDOM = require('react-dom');
 export class Hello extends React.Component {
     render() {
         return (
-            <h1>Welcome to React!! Lukasz v2</h1>
-            <h1>Welcome to React!! Jo³ sasa</h1>
+            <h1>Welcome to React!! Eluwina</h1>
         );
     }
 }
