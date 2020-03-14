@@ -1,60 +1,55 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <Name>Shop.Web</Name>
-    <RootNamespace>Shop.Web</RootNamespace>
-    <EnableTypeScript>true</EnableTypeScript>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
-    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>20303f3e-9a40-41d8-a4d3-45322200850e</ProjectGuid>
+    <ProjectGuid>{6b645137-0a28-43ad-a89c-acf1d476c870}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
+    <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
-    <SearchPath>
-    </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-    <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>True</StartWebBrowser>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">16.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <EnableTypeScript>true</EnableTypeScript>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="dist\app-bundle.js" />
-    <Content Include="dist\app-bundle.js.map" />
     <Content Include="gRPC\greet_grpc_web_pb.js" />
     <Content Include="gRPC\greet_pb.js" />
-    <Content Include="index.html">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="libman.json" />
-    <Content Include="server.js" />
     <Content Include="package.json" />
-    <Content Include="README.md" />
-    <Content Include="tsconfig.JSON">
+    <Content Include="server.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="WebPack-config.js" />
+    <Content Include="src\app\index.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="tsconfig.json">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="webpack.config.js">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="App.TSX" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dist\" />
     <Folder Include="gRPC\" />
+    <Folder Include="src\" />
+    <Folder Include="src\app\" />
+    <Folder Include="src\app\components\" />
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\app\App.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\app\components\Hello.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
     <VisualStudio>

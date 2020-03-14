@@ -17,6 +17,8 @@ namespace Shop.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,9 +31,12 @@ namespace Shop.Service
 
             app.UseRouting();
 
+            app.UseGrpcWeb();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<GreeterService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
                 {
