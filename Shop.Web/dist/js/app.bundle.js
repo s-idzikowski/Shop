@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "88a23ec7b0a8b5be5546";
+/******/ 	var hotCurrentHash = "19c094a7e9700088ed96";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -795,163 +795,40 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./gRPC/greet_grpc_web_pb.js":
-/*!***********************************!*\
-  !*** ./gRPC/greet_grpc_web_pb.js ***!
-  \***********************************/
+/***/ "./gRPC/GreetServiceClientPb.ts":
+/*!**************************************!*\
+  !*** ./gRPC/GreetServiceClientPb.ts ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * @fileoverview gRPC-Web generated client stub for greet
- * @enhanceable
- * @public
- */
+"use strict";
 
-// GENERATED CODE -- DO NOT EDIT!
-
-
-
-const grpc = {};
-grpc.web = __webpack_require__(/*! grpc-web */ "./node_modules/grpc-web/index.js");
-
-const proto = {};
-proto.greet = __webpack_require__(/*! ./greet_pb.js */ "./gRPC/greet_pb.js");
-
-/**
- * @param {string} hostname
- * @param {?Object} credentials
- * @param {?Object} options
- * @constructor
- * @struct
- * @final
- */
-proto.greet.GreeterClient =
-    function(hostname, credentials, options) {
-  if (!options) options = {};
-  options['format'] = 'text';
-
-  /**
-   * @private @const {!grpc.web.GrpcWebClientBase} The client
-   */
-  this.client_ = new grpc.web.GrpcWebClientBase(options);
-
-  /**
-   * @private @const {string} The hostname
-   */
-  this.hostname_ = hostname;
-
-};
-
-
-/**
- * @param {string} hostname
- * @param {?Object} credentials
- * @param {?Object} options
- * @constructor
- * @struct
- * @final
- */
-proto.greet.GreeterPromiseClient =
-    function(hostname, credentials, options) {
-  if (!options) options = {};
-  options['format'] = 'text';
-
-  /**
-   * @private @const {!grpc.web.GrpcWebClientBase} The client
-   */
-  this.client_ = new grpc.web.GrpcWebClientBase(options);
-
-  /**
-   * @private @const {string} The hostname
-   */
-  this.hostname_ = hostname;
-
-};
-
-
-/**
- * @const
- * @type {!grpc.web.MethodDescriptor<
- *   !proto.greet.HelloRequest,
- *   !proto.greet.HelloReply>}
- */
-const methodDescriptor_Greeter_SayHello = new grpc.web.MethodDescriptor(
-  '/greet.Greeter/SayHello',
-  grpc.web.MethodType.UNARY,
-  proto.greet.HelloRequest,
-  proto.greet.HelloReply,
-  /**
-   * @param {!proto.greet.HelloRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.greet.HelloReply.deserializeBinary
-);
-
-
-/**
- * @const
- * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.greet.HelloRequest,
- *   !proto.greet.HelloReply>}
- */
-const methodInfo_Greeter_SayHello = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.greet.HelloReply,
-  /**
-   * @param {!proto.greet.HelloRequest} request
-   * @return {!Uint8Array}
-   */
-  function(request) {
-    return request.serializeBinary();
-  },
-  proto.greet.HelloReply.deserializeBinary
-);
-
-
-/**
- * @param {!proto.greet.HelloRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @param {function(?grpc.web.Error, ?proto.greet.HelloReply)}
- *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.greet.HelloReply>|undefined}
- *     The XHR Node Readable Stream
- */
-proto.greet.GreeterClient.prototype.sayHello =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/greet.Greeter/SayHello',
-      request,
-      metadata || {},
-      methodDescriptor_Greeter_SayHello,
-      callback);
-};
-
-
-/**
- * @param {!proto.greet.HelloRequest} request The
- *     request proto
- * @param {?Object<string, string>} metadata User defined
- *     call metadata
- * @return {!Promise<!proto.greet.HelloReply>}
- *     A native promise that resolves to the response
- */
-proto.greet.GreeterPromiseClient.prototype.sayHello =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/greet.Greeter/SayHello',
-      request,
-      metadata || {},
-      methodDescriptor_Greeter_SayHello);
-};
-
-
-module.exports = proto.greet;
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var grpcWeb = __webpack_require__(/*! grpc-web */ "./node_modules/grpc-web/index.js");
+var greet_pb_1 = __webpack_require__(/*! ./greet_pb */ "./gRPC/greet_pb.js");
+var GreeterClient = (function () {
+    function GreeterClient(hostname, credentials, options) {
+        this.methodInfoSayHello = new grpcWeb.AbstractClientBase.MethodInfo(greet_pb_1.HelloReply, function (request) {
+            return request.serializeBinary();
+        }, greet_pb_1.HelloReply.deserializeBinary);
+        if (!options)
+            options = {};
+        if (!credentials)
+            credentials = {};
+        options['format'] = 'binary';
+        this.client_ = new grpcWeb.GrpcWebClientBase(options);
+        this.hostname_ = hostname;
+        this.credentials_ = credentials;
+        this.options_ = options;
+    }
+    GreeterClient.prototype.sayHello = function (request, metadata, callback) {
+        return this.client_.rpcCall(this.hostname_ +
+            '/greet.Greeter/SayHello', request, metadata || {}, this.methodInfoSayHello, callback);
+    };
+    return GreeterClient;
+}());
+exports.GreeterClient = GreeterClient;
 
 
 /***/ }),
@@ -33968,11 +33845,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var _a = __webpack_require__(/*! ./../../../gRPC/greet_pb.js */ "./gRPC/greet_pb.js"), HelloRequest = _a.HelloRequest, HelloReply = _a.HelloReply;
-var GreeterClient = __webpack_require__(/*! ./../../../gRPC/greet_grpc_web_pb.js */ "./gRPC/greet_grpc_web_pb.js").GreeterClient;
-var client = new GreeterClient('https://localhost:5001');
-var request = new HelloRequest();
-request.setName('Hello Slaw!');
+var GreetServiceClientPb_1 = __webpack_require__(/*! ./../../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
+var greet_pb_1 = __webpack_require__(/*! ./../../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
+var client = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001', null, null);
+var request = new greet_pb_1.HelloRequest();
+request.setName('Siema Slaw!');
 client.sayHello(request, {}, function (err, response) {
     console.log(response.getMessage());
 });
