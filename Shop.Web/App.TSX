@@ -2,9 +2,12 @@ import * as React from "react";
 
 declare var require: any
 
-//var React = require('react');
 var ReactDOM = require('react-dom');
-// test 2
+
+const { GetTodoRequest } = require('./gRPC/todos_pb.js');
+const { TodoServiceClient } = require('./gRPC/todos_grpc_web_pb.js');
+const todoService = new proto.todos.TodoServiceClient('http://localhost:8080');
+
 export class Hello extends React.Component {
     render() {
         return (

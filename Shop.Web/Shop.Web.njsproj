@@ -34,8 +34,8 @@
   <ItemGroup>
     <Content Include="dist\app-bundle.js" />
     <Content Include="dist\app-bundle.js.map" />
-    <Content Include="gRPC\helloreply.js" />
-    <Content Include="gRPC\hellorequest.js" />
+    <Content Include="gRPC\greet_grpc_web_pb.js" />
+    <Content Include="gRPC\greet_pb.js" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
