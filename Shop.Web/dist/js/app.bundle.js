@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "19c094a7e9700088ed96";
+/******/ 	var hotCurrentHash = "07dd22574e8cc825d19f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -33812,11 +33812,39 @@ module.exports = function(module) {
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var GreetServiceClientPb_1 = __webpack_require__(/*! ./../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
 var Hello_1 = __webpack_require__(/*! ./components/Hello */ "./src/app/components/Hello.tsx");
-ReactDOM.render(React.createElement(Hello_1.Hello, { compiler: "Typescript", framework: "React", bundler: "Webpack" }), document.getElementById('root'));
+var greeterClient = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
+var App = (function (_super) {
+    __extends(App, _super);
+    function App() {
+        return _super.call(this, {}) || this;
+    }
+    App.prototype.render = function () {
+        return (React.createElement("div", null,
+            React.createElement("h1", null, "Witaj moj swiecie!"),
+            React.createElement(Hello_1.Hello, { greeterClient: greeterClient })));
+    };
+    return App;
+}(React.Component));
+exports.App = App;
+ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 
 
 /***/ }),
@@ -33845,28 +33873,30 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var GreetServiceClientPb_1 = __webpack_require__(/*! ./../../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
 var greet_pb_1 = __webpack_require__(/*! ./../../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
-var client = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001', null, null);
-var request = new greet_pb_1.HelloRequest();
-request.setName('Siema Slaw!');
-client.sayHello(request, {}, function (err, response) {
-    console.log(response.getMessage());
-});
 var Hello = (function (_super) {
     __extends(Hello, _super);
-    function Hello() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Hello(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            helloReply: null
+        };
+        var request = new greet_pb_1.HelloRequest();
+        request.setName('Hello Slaw!');
+        props.greeterClient.sayHello(request, {}, function (err, response) {
+            console.log(response.getMessage());
+            _this.setState({
+                helloReply: response
+            });
+        });
+        return _this;
     }
+    ;
     Hello.prototype.render = function () {
+        var _a;
         return React.createElement("h1", null,
-            "This is a ",
-            this.props.framework,
-            " application using    ",
-            this.props.compiler,
-            " with ",
-            this.props.bundler,
-            " ");
+            "This is a ", (_a = this.state.helloReply) === null || _a === void 0 ? void 0 :
+            _a.getMessage());
     };
     return Hello;
 }(React.Component));

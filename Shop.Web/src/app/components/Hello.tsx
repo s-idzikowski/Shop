@@ -1,36 +1,38 @@
 import * as React from 'react';
 
-declare var require: any
-
 import { GreeterClient } from './../../../gRPC/GreetServiceClientPb';
 import { HelloRequest, HelloReply } from './../../../gRPC/greet_pb';
-
-var request = new HelloRequest();
-request.setName('Hello Slaw!');
 
 interface IProps {
     greeterClient: GreeterClient;
 }
 
-export class Hello extends React.Component<IProps> {
+interface IState {
+    helloReply?: HelloReply;
+}
+
+export class Hello extends React.Component<IProps, IState> {
+
     constructor(props: IProps) {
         super(props);
 
+        this.state = {
+            helloReply: null
+        };
 
-const { HelloRequest, HelloReply } = require('./../../../gRPC/greet_pb.js');
-const { GreeterClient } = require('./../../../gRPC/greet_grpc_web_pb.js');
+        var request = new HelloRequest();
+        request.setName('Hello Slaw!');
 
-var client = new GreeterClient('https://localhost:5001');
-var request = new HelloRequest();
-request.setName('Hello Slaw!');
-
-        props.greeterClient.sayHello(request, {}, (err: any, response: { getMessage: () => any; }) => {
+        props.greeterClient.sayHello(request, {}, (err: any, response: HelloReply) => {
             console.log(response.getMessage());
+
+            this.setState({
+                helloReply: response
+            });
         });
     };
-    
-    render() {
 
-        return <h1>This is a {this.props.greeterClient}</h1>
+    render() {
+        return <h1>This is a {this.state.helloReply?.getMessage()}</h1>
     }
 }
