@@ -11,12 +11,6 @@ export class Hello extends React.Component {
             <h1>Welcome to React!! aaa</h1>
         );
     }
-
-    renderaaa() {
-        return (
-            <h1>Welcome to React!! bbbb</h1>
-        );
-    }
 }
 
 ReactDOM.render(<Hello />, document.getElementById('root'));

@@ -1,0 +1,1 @@
+protoc .\*.proto --js_out=..\..\Shop.Web\gRPC\.
