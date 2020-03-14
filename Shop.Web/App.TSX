@@ -4,7 +4,7 @@ declare var require: any
 
 //var React = require('react');
 var ReactDOM = require('react-dom');
-
+// test 2
 export class Hello extends React.Component {
     render() {
         return (
