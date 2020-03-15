@@ -19,7 +19,7 @@ namespace Shop.Service
         {
             return Task.FromResult(new HelloReply
             {
-                Message = "Hello " + request.Name
+                Message = "Service say hello: " + request.Name
             });
         }
     }

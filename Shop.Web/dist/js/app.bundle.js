@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "07dd22574e8cc825d19f";
+/******/ 	var hotCurrentHash = "7225b42e59a5fa7cd256";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -33833,8 +33833,10 @@ var Hello_1 = __webpack_require__(/*! ./components/Hello */ "./src/app/component
 var greeterClient = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
 var App = (function (_super) {
     __extends(App, _super);
-    function App() {
-        return _super.call(this, {}) || this;
+    function App(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {};
+        return _this;
     }
     App.prototype.render = function () {
         return (React.createElement("div", null,
@@ -33893,10 +33895,8 @@ var Hello = (function (_super) {
     }
     ;
     Hello.prototype.render = function () {
-        var _a;
-        return React.createElement("h1", null,
-            "This is a ", (_a = this.state.helloReply) === null || _a === void 0 ? void 0 :
-            _a.getMessage());
+        return (React.createElement("div", null,
+            React.createElement("h1", null, this.state.helloReply ? "Response: " + this.state.helloReply.getMessage() : "Waiting for response...")));
     };
     return Hello;
 }(React.Component));

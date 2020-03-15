@@ -8,19 +8,18 @@ interface IProps {
 }
 
 interface IState {
-    helloReply?: HelloReply;
+    helloReply: HelloReply;
 }
 
 export class Hello extends React.Component<IProps, IState> {
+    state: IState = {
+        helloReply: null
+    };
 
     constructor(props: IProps) {
         super(props);
 
-        this.state = {
-            helloReply: null
-        };
-
-        var request = new HelloRequest();
+        const request: HelloRequest = new HelloRequest();
         request.setName('Hello Slaw!');
 
         props.greeterClient.sayHello(request, {}, (err: any, response: HelloReply) => {
@@ -33,6 +32,13 @@ export class Hello extends React.Component<IProps, IState> {
     };
 
     render() {
-        return <h1>This is a {this.state.helloReply?.getMessage()}</h1>
+        //const response = () => "Response: " + this.state.helloReply.getMessage();
+        //const waiting = () => "Waiting for response...";
+
+        return (
+            <div>
+                <h1>{this.state.helloReply ? "Response: " + this.state.helloReply.getMessage() : "Waiting for response..."}</h1>
+            </div>
+        );
     }
 }

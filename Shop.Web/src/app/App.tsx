@@ -5,18 +5,32 @@ import { GreeterClient } from './../../gRPC/GreetServiceClientPb';
 
 import { Hello } from './components/Hello';
 
-const greeterClient = new GreeterClient('https://localhost:5001');
+const greeterClient: GreeterClient = new GreeterClient('https://localhost:5001');
 
-export class App extends React.Component {
-    constructor() {
-        super({});
+interface IProps {
+
+}
+
+interface IState {
+
+}
+
+export class App extends React.Component<IProps, IState> {
+    state: IState = {
+
+    };
+
+    constructor(props: IProps) {
+        super(props);
+
+
     }
 
     render() {
         return (
             <div>
                 <h1>Witaj moj swiecie!</h1>
-                <Hello greeterClient={greeterClient}/>
+                <Hello greeterClient={greeterClient} />
             </div>
         );
     }
