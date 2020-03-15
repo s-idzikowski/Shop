@@ -24,9 +24,7 @@
     <Content Include="server.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\app\index.html">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="src\index.html" />
     <Content Include="tsconfig.json">
       <SubType>Code</SubType>
     </Content>
@@ -37,18 +35,14 @@
   <ItemGroup>
     <Folder Include="gRPC\" />
     <Folder Include="src\" />
-    <Folder Include="src\app\" />
-    <Folder Include="src\app\components\" />
+    <Folder Include="src\components\" />
+    <Folder Include="src\containers\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="gRPC\GreetServiceClientPb.ts" />
     <TypeScriptCompile Include="gRPC\greet_pb.d.ts" />
-    <TypeScriptCompile Include="src\app\App.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\app\components\Hello.tsx">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\containers\App.tsx" />
+    <TypeScriptCompile Include="src\containers\Hello.tsx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
