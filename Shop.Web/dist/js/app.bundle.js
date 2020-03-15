@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7225b42e59a5fa7cd256";
+/******/ 	var hotCurrentHash = "6edccf82a08bb6a8d9b8";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -33803,10 +33803,10 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./src/app/App.tsx":
-/*!*************************!*\
-  !*** ./src/app/App.tsx ***!
-  \*************************/
+/***/ "./src/containers/App.tsx":
+/*!********************************!*\
+  !*** ./src/containers/App.tsx ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33828,8 +33828,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-var GreetServiceClientPb_1 = __webpack_require__(/*! ./../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
-var Hello_1 = __webpack_require__(/*! ./components/Hello */ "./src/app/components/Hello.tsx");
+var GreetServiceClientPb_1 = __webpack_require__(/*! ../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
+var Hello_1 = __webpack_require__(/*! ./Hello */ "./src/containers/Hello.tsx");
 var greeterClient = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
 var App = (function (_super) {
     __extends(App, _super);
@@ -33851,10 +33851,10 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('root'))
 
 /***/ }),
 
-/***/ "./src/app/components/Hello.tsx":
-/*!**************************************!*\
-  !*** ./src/app/components/Hello.tsx ***!
-  \**************************************/
+/***/ "./src/containers/Hello.tsx":
+/*!**********************************!*\
+  !*** ./src/containers/Hello.tsx ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33875,7 +33875,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var greet_pb_1 = __webpack_require__(/*! ./../../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
+var greet_pb_1 = __webpack_require__(/*! ../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
 var Hello = (function (_super) {
     __extends(Hello, _super);
     function Hello(props) {
@@ -33906,13 +33906,13 @@ exports.Hello = Hello;
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./src/app/App.tsx webpack-hot-middleware/client ***!
-  \*************************************************************/
+/*!********************************************************************!*\
+  !*** multi ./src/containers/App.tsx webpack-hot-middleware/client ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! ./src/app/App.tsx */"./src/app/App.tsx");
+__webpack_require__(/*! ./src/containers/App.tsx */"./src/containers/App.tsx");
 module.exports = __webpack_require__(/*! webpack-hot-middleware/client */"./node_modules/webpack-hot-middleware/client.js");
 
 

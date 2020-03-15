@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { GreeterClient } from './../../../gRPC/GreetServiceClientPb';
-import { HelloRequest, HelloReply } from './../../../gRPC/greet_pb';
+import { GreeterClient } from '../../gRPC/GreetServiceClientPb';
+import { HelloRequest, HelloReply } from '../../gRPC/greet_pb';
 
 interface IProps {
     greeterClient: GreeterClient;
