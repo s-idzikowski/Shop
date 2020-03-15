@@ -28,7 +28,7 @@ export class App extends React.Component<IProps, IState> {
     render() {
         return (
             <div>
-                <h1>Witaj moj kochany swiecie!</h1>
+                <h1>Witaj moj kochany swiecie! KORONOWIRUS</h1>
                 <Hello greeterClient={greeterClient} />
             </div>
         );
