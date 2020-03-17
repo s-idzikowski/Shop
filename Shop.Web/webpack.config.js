@@ -11,7 +11,21 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].bundle.js',
+        chunkFilename: 'js/[name].bundle.js',
         publicPath: '/'
+    },
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    enforce: true,
+                    chunks: 'all'
+                }
+            }
+        }
     },
     devtool: 'source-map',
     resolve: {
@@ -36,7 +50,8 @@ module.exports = {
 
     },
     plugins: [
-        new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
+        new HtmlWebpackPlugin({ 
+            template: path.resolve(__dirname, 'src', 'index.html') }),
         new webpack.HotModuleReplacementPlugin()
     ],
     devServer: {
