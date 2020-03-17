@@ -8,12 +8,14 @@ const Hello = () => {
     const request: HelloRequest = new HelloRequest();
     request.setName('Hello Slaw!');
 
-    Client.Instance().sayHello(request, {}, (err: any, response: HelloReply) => {
-        console.log(response.getMessage());
-
-        //this.setState({
-        //    helloReply: response
-        //});
+    Client.Instance().sayHello(request, Client.Header(), (err: any, response: HelloReply) => {
+        Client.CheckError(err, () => {
+            console.log(response.getMessage());
+    
+            //this.setState({
+            //    helloReply: response
+            //});
+        });
     });
 
     //const response = () => "Response: " + this.state.helloReply.getMessage();
