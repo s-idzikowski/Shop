@@ -6,11 +6,12 @@ module.exports = {
     mode: 'development',
     entry: {
         app: ['./src/Index.tsx', 'webpack-hot-middleware/client'],
-        vendor: ['react', 'react-dom']
+        vendor: ['react', 'react-dom'],
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].bundle.js'
+        filename: 'js/[name].bundle.js',
+        publicPath: '/'
     },
     devtool: 'source-map',
     resolve: {
@@ -25,12 +26,23 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: 'style-loader!css-loader'
-              },
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
-        ]
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            }
+        ],
+
     },
     plugins: [
         new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'Index.html') }),
         new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+    devServer: {
+        port: 3000,
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        historyApiFallback: true
+    }
 }
