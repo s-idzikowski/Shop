@@ -18,7 +18,7 @@ interface IState {
 class Test extends React.Component<IProps, IState> {
 
     state: IState = {
-        message: null,
+        message: "",
         response: null
     }
 
@@ -31,7 +31,7 @@ class Test extends React.Component<IProps, IState> {
                 console.log(response.getMessage());
 
                 this.setState({
-                    message: null,
+                    message: "",
                     response: response
                 });
             });
@@ -40,8 +40,7 @@ class Test extends React.Component<IProps, IState> {
 
     handleChange = (e: any) => {
         this.setState({
-            message: e.target.value,
-            response: this.state.response
+            message: e.target.value
         });
     }
 
