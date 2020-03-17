@@ -1,6 +1,8 @@
 import * as React from 'react';
-
 import './Test.css';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { HelloRequest, HelloReply } from '../../../gRPC/greet_pb';
 import Client from '../../class/Client';
@@ -21,20 +23,22 @@ class Test extends React.Component<IProps, IState> {
         message: "",
         response: null
     }
-
+    
     clickHandler = () => {
         const request: HelloRequest = new HelloRequest();
         request.setName(this.state.message);
 
         Client.Instance().sayHello(request, Client.Header(), (err: any, response: HelloReply) => {
-            Client.CheckError(err, () => {
-                console.log(response.getMessage());
-
+                if (err) {
+                    toast.error(err.message);
+                } else {
+                    toast.info(response.getMessage());
                 this.setState({
                     message: "",
                     response: response
                 });
-            });
+                }
+                
         });
     };
 
@@ -47,6 +51,7 @@ class Test extends React.Component<IProps, IState> {
     render() {
         return (
             <div>
+                <ToastContainer />
                 <h1>Test message to service gRPC:</h1>
 
                 <form>
@@ -56,6 +61,8 @@ class Test extends React.Component<IProps, IState> {
                     </label>
 
                     <input type="button" onClick={this.clickHandler.bind(this)} value="Send" />
+                    
+                    
                 </form>
 
                 <Hello response={this.state.response} />
