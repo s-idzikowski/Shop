@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "17d84befc27fbc7ad1af";
+/******/ 	var hotCurrentHash = "322da1cc407f2beec027";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3476,15 +3476,15 @@ module.exports = exports;
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./src/containers/App.css":
-/*!**********************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./src/containers/App.css ***!
-  \**********************************************************************/
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css":
+/*!**************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "", ""]);
@@ -34416,7 +34416,7 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 __webpack_require__(/*! ./Index.css */ "./src/Index.css");
 __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-var App_1 = __webpack_require__(/*! ./containers/App */ "./src/containers/App.tsx");
+var App_1 = __webpack_require__(/*! ./containers/App/App */ "./src/containers/App/App.tsx");
 ReactDOM.render(React.createElement(App_1.default, null), document.getElementById('root'));
 
 
@@ -34644,15 +34644,15 @@ exports.default = WebLogo;
 
 /***/ }),
 
-/***/ "./src/containers/App.css":
-/*!********************************!*\
-  !*** ./src/containers/App.css ***!
-  \********************************/
+/***/ "./src/containers/App/App.css":
+/*!************************************!*\
+  !*** ./src/containers/App/App.css ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-            var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App.css");
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css");
 
             content = content.__esModule ? content.default : content;
 
@@ -34673,9 +34673,9 @@ var exported = content.locals ? content.locals : {};
 if (true) {
   if (!content.locals) {
     module.hot.accept(
-      /*! !../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App.css",
+      /*! !../../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css",
       function () {
-        var newContent = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App.css");
+        var newContent = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./App.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css");
 
               newContent = newContent.__esModule ? newContent.default : newContent;
 
@@ -34697,10 +34697,10 @@ module.exports = exported;
 
 /***/ }),
 
-/***/ "./src/containers/App.tsx":
-/*!********************************!*\
-  !*** ./src/containers/App.tsx ***!
-  \********************************/
+/***/ "./src/containers/App/App.tsx":
+/*!************************************!*\
+  !*** ./src/containers/App/App.tsx ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34721,11 +34721,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-__webpack_require__(/*! ./App.css */ "./src/containers/App.css");
-var GreetServiceClientPb_1 = __webpack_require__(/*! ../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
-var WebLogo_1 = __webpack_require__(/*! ../components/Logo/WebLogo */ "./src/components/Logo/WebLogo.tsx");
-var WebFooter_1 = __webpack_require__(/*! ../components/Footer/WebFooter */ "./src/components/Footer/WebFooter.tsx");
-var WebBody_1 = __webpack_require__(/*! ../components/Body/WebBody */ "./src/components/Body/WebBody.tsx");
+__webpack_require__(/*! ./App.css */ "./src/containers/App/App.css");
+var GreetServiceClientPb_1 = __webpack_require__(/*! ../../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
+var WebLogo_1 = __webpack_require__(/*! ../../components/Logo/WebLogo */ "./src/components/Logo/WebLogo.tsx");
+var WebFooter_1 = __webpack_require__(/*! ../../components/Footer/WebFooter */ "./src/components/Footer/WebFooter.tsx");
+var WebBody_1 = __webpack_require__(/*! ../../components/Body/WebBody */ "./src/components/Body/WebBody.tsx");
 var greeterClient = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
 var App = (function (_super) {
     __extends(App, _super);
