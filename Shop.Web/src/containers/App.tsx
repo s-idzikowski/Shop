@@ -1,38 +1,40 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+
+import './App.css';
 
 import { GreeterClient } from '../../gRPC/GreetServiceClientPb';
 
-import { Hello } from './Hello';
+import Hello from '../components/Hello';
+import WebLogo from '../components/Logo/WebLogo';
+import WebFooter from '../components/Footer/WebFooter';
+import WebBody from '../components/Body/WebBody';
 
 const greeterClient: GreeterClient = new GreeterClient('https://localhost:5001');
-
-interface IProps {
-
-}
 
 interface IState {
 
 }
 
-export class App extends React.Component<IProps, IState> {
+export class App extends React.Component {
     state: IState = {
-        
+
     };
 
-    constructor(props: IProps) {
-        super(props);
-        
+    constructor() {
+        super({});
+
+
     }
 
     render() {
         return (
             <div>
-                <h1>Witaj moj kochany swiecie! KORONOWIRUS</h1>
-                <Hello greeterClient={greeterClient} />
+                <WebLogo />
+                <WebBody />
+                <WebFooter />
             </div>
         );
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+export default App;

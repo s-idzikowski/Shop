@@ -5,7 +5,7 @@ const path = require('path'),
 module.exports = {
     mode: 'development',
     entry: {
-        app: ['./src/containers/App.tsx', 'webpack-hot-middleware/client'],
+        app: ['./src/Index.tsx', 'webpack-hot-middleware/client'],
         vendor: ['react', 'react-dom']
     },
     output: {
@@ -14,7 +14,7 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']
     },
     module: {
         rules: [
@@ -22,6 +22,10 @@ module.exports = {
                 test: /\.(ts|tsx)$/,
                 loader: 'ts-loader'
             },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader'
+              },
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
     },
