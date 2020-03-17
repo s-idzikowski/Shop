@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "8f033d96fa8046136915";
+/******/ 	var hotCurrentHash = "fbc722a45368120bcc99";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3572,6 +3572,24 @@ module.exports = exports;
 /*!**************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./src/containers/App/App.css ***!
   \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/containers/Test/Test.css":
+/*!****************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/containers/Test/Test.css ***!
+  \****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -38633,7 +38651,7 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 __webpack_require__(/*! ./Footer.css */ "./src/components/Footer/Footer.css");
 var Footer = function () {
     return (React.createElement("div", null,
-        React.createElement("h1", null, "Footer")));
+        React.createElement("p", { className: "font-weight-italic" }, "\u00A9 Footer")));
 };
 exports.default = Footer;
 
@@ -38708,15 +38726,14 @@ __webpack_require__(/*! ./Header.css */ "./src/components/Header/Header.css");
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 var Header = function () {
     return (React.createElement("div", null,
-        React.createElement(react_router_dom_1.BrowserRouter, null,
-            React.createElement("nav", { className: "navbar navbar-expand-lg navbar-dark bg-dark static-top" },
-                React.createElement("div", { className: "container" },
-                    React.createElement("div", { className: "collapse navbar-collapse", id: "navbarResponsive" },
-                        React.createElement("ul", { className: "navbar-nav ml-auto" },
-                            React.createElement("li", { className: "nav-item active" },
-                                React.createElement(react_router_dom_1.Link, { className: "nav-link", to: "/" }, "Dashboard ")),
-                            React.createElement("li", { className: "nav-item" },
-                                React.createElement(react_router_dom_1.Link, { className: "nav-link", to: "/test" }, "Test")))))))));
+        React.createElement("nav", { className: "navbar navbar-expand-lg navbar-dark bg-dark static-top" },
+            React.createElement("div", { className: "container" },
+                React.createElement("div", { className: "collapse navbar-collapse", id: "navbarResponsive" },
+                    React.createElement("ul", { className: "navbar-nav ml-auto" },
+                        React.createElement("li", { className: "nav-item active" },
+                            React.createElement(react_router_dom_1.Link, { className: "nav-link", to: "/" }, "Dashboard ")),
+                        React.createElement("li", { className: "nav-item" },
+                            React.createElement(react_router_dom_1.Link, { className: "nav-link", to: "/test" }, "Test"))))))));
 };
 exports.default = Header;
 
@@ -38734,19 +38751,11 @@ exports.default = Header;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var Client_1 = __webpack_require__(/*! ../class/Client */ "./src/class/Client.tsx");
-var greet_pb_1 = __webpack_require__(/*! ../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
-var Hello = function () {
-    var request = new greet_pb_1.HelloRequest();
-    request.setName('Hello Slaw!');
-    Client_1.default.Instance().sayHello(request, Client_1.default.Header(), function (err, response) {
-        Client_1.default.CheckError(err, function () {
-            console.log(response.getMessage());
-        });
-    });
+var Hello = function (props) {
+    var response = function () { return "Response: " + props.response.getMessage(); };
     var waiting = function () { return "Waiting for response..."; };
     return (React.createElement("div", null,
-        React.createElement("h1", null, waiting())));
+        React.createElement("h1", null, props.response ? response() : waiting())));
 };
 exports.default = Hello;
 
@@ -38835,7 +38844,7 @@ __webpack_require__(/*! ./App.css */ "./src/containers/App/App.css");
 var Header_1 = __webpack_require__(/*! ../../components/Header/Header */ "./src/components/Header/Header.tsx");
 var Footer_1 = __webpack_require__(/*! ../../components/Footer/Footer */ "./src/components/Footer/Footer.tsx");
 var Dashboard_1 = __webpack_require__(/*! ../../components/Dashboard/Dashboard */ "./src/components/Dashboard/Dashboard.tsx");
-var Hello_1 = __webpack_require__(/*! ../../components/Hello */ "./src/components/Hello.tsx");
+var Test_1 = __webpack_require__(/*! ../Test/Test */ "./src/containers/Test/Test.tsx");
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
@@ -38844,24 +38853,147 @@ var App = (function (_super) {
         return _this;
     }
     App.prototype.render = function () {
-        var tempHello = [];
-        for (var i = 0; i < 50; i++) {
-            tempHello.push(React.createElement(Hello_1.default, { key: i }));
-        }
         return (React.createElement("div", { className: "d-flex flex-column" },
-            React.createElement(Header_1.default, null),
             React.createElement(react_router_dom_1.BrowserRouter, null,
+                React.createElement(Header_1.default, null),
                 React.createElement(react_router_dom_1.Switch, null,
                     React.createElement(react_router_dom_1.Route, { exact: true, path: '/' },
                         React.createElement(Dashboard_1.default, null)),
-                    React.createElement(react_router_dom_1.Route, { path: '/test' }, "TEST"))),
-            React.createElement(Footer_1.default, null),
-            tempHello));
+                    React.createElement(react_router_dom_1.Route, { path: '/test' },
+                        React.createElement(Test_1.default, null)))),
+            React.createElement(Footer_1.default, null)));
     };
     return App;
 }(React.Component));
 exports.App = App;
 exports.default = App;
+
+
+/***/ }),
+
+/***/ "./src/containers/Test/Test.css":
+/*!**************************************!*\
+  !*** ./src/containers/Test/Test.css ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./Test.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/Test/Test.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+var exported = content.locals ? content.locals : {};
+
+
+if (true) {
+  if (!content.locals) {
+    module.hot.accept(
+      /*! !../../../node_modules/css-loader/dist/cjs.js!./Test.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/Test/Test.css",
+      function () {
+        var newContent = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./Test.css */ "./node_modules/css-loader/dist/cjs.js!./src/containers/Test/Test.css");
+
+              newContent = newContent.__esModule ? newContent.default : newContent;
+
+              if (typeof newContent === 'string') {
+                newContent = [[module.i, newContent, '']];
+              }
+
+              update(newContent);
+      }
+    )
+  }
+
+  module.hot.dispose(function() { 
+    update();
+  });
+}
+
+module.exports = exported;
+
+/***/ }),
+
+/***/ "./src/containers/Test/Test.tsx":
+/*!**************************************!*\
+  !*** ./src/containers/Test/Test.tsx ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+__webpack_require__(/*! ./Test.css */ "./src/containers/Test/Test.css");
+var greet_pb_1 = __webpack_require__(/*! ../../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
+var Client_1 = __webpack_require__(/*! ../../class/Client */ "./src/class/Client.tsx");
+var Hello_1 = __webpack_require__(/*! ../../components/Hello */ "./src/components/Hello.tsx");
+var Test = (function (_super) {
+    __extends(Test, _super);
+    function Test() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.state = {
+            message: null,
+            response: null
+        };
+        _this.clickHandler = function () {
+            var request = new greet_pb_1.HelloRequest();
+            request.setName('Hello Slaw!');
+            Client_1.default.Instance().sayHello(request, Client_1.default.Header(), function (err, response) {
+                Client_1.default.CheckError(err, function () {
+                    console.log(response.getMessage());
+                    _this.setState({
+                        message: null,
+                        response: response
+                    });
+                });
+            });
+        };
+        _this.handleChange = function (e) {
+            _this.setState({
+                message: e.target.value,
+                response: _this.state.response
+            });
+        };
+        return _this;
+    }
+    Test.prototype.render = function () {
+        return (React.createElement("div", null,
+            React.createElement("h1", null, "Test message to service gRPC:"),
+            React.createElement("form", null,
+                React.createElement("label", null,
+                    "Message:",
+                    React.createElement("input", { type: "text", value: this.state.message, onChange: this.handleChange.bind(this) })),
+                React.createElement("input", { onClick: this.clickHandler.bind(this), value: "Send" })),
+            React.createElement(Hello_1.default, { response: this.state.response })));
+    };
+    return Test;
+}(React.Component));
+exports.default = Test;
 
 
 /***/ }),

@@ -6,8 +6,7 @@ import './App.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Dashboard from '../../components/Dashboard/Dashboard';
-import Hello from '../../components/Hello';
-import Test from '../../components/Test/Test';
+import Test from '../Test/Test';
 
 interface IState {
 
@@ -19,13 +18,6 @@ export class App extends React.Component {
     };
 
     render() {
-
-        const tempHello = [];
-
-        for (var i = 0; i < 1; i++) {
-            tempHello.push(<Hello key={i} />)
-        }
-
         return (
             <div className="d-flex flex-column">
 
@@ -42,7 +34,6 @@ export class App extends React.Component {
                         </Route>
                     </Switch>
 
-                    {tempHello}
                 </BrowserRouter>
 
                 <Footer />

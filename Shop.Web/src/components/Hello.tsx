@@ -1,30 +1,19 @@
 import * as React from 'react';
 
-import Client from '../class/Client';
-import { HelloRequest, HelloReply } from '../../gRPC/greet_pb';
+import { HelloReply } from '../../gRPC/greet_pb';
 
-const Hello = () => {
+interface IProps {
+    response: HelloReply
+}
 
-    const request: HelloRequest = new HelloRequest();
-    request.setName('Hello Slaw!');
+const Hello = (props: IProps) => {
 
-    Client.Instance().sayHello(request, Client.Header(), (err: any, response: HelloReply) => {
-        Client.CheckError(err, () => {
-            console.log(response.getMessage());
-    
-            //this.setState({
-            //    helloReply: response
-            //});
-        });
-    });
-
-    //const response = () => "Response: " + this.state.helloReply.getMessage();
+    const response = () => "Response: " + props.response.getMessage();
     const waiting = () => "Waiting for response...";
 
-    //<h1>{this.state.helloReply ? response() : waiting()}</h1>
     return (
         <div>
-            <h1>{waiting()}</h1>
+            <h1>{props.response ? response() : waiting()}</h1>
         </div>
     );
 }
