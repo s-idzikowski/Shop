@@ -56,7 +56,7 @@ class Test extends React.Component<IProps, IState> {
                         <input type="text" value={this.state.message} onChange={this.handleChange.bind(this)} />
                     </label>
 
-                    <input onClick={this.clickHandler.bind(this)} value="Send" />
+                    <input type="button" onClick={this.clickHandler.bind(this)} value="Send" />
                 </form>
 
                 <Hello response={this.state.response} />
