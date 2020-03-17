@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "322da1cc407f2beec027";
+/******/ 	var hotCurrentHash = "a663ae0d2f422b0e7514";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -34422,6 +34422,32 @@ ReactDOM.render(React.createElement(App_1.default, null), document.getElementByI
 
 /***/ }),
 
+/***/ "./src/class/Client.tsx":
+/*!******************************!*\
+  !*** ./src/class/Client.tsx ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var GreetServiceClientPb_1 = __webpack_require__(/*! ./../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
+var Client = (function () {
+    function Client() {
+    }
+    Client.Instance = function () {
+        if (!this.instance)
+            this.instance = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
+        return this.instance;
+    };
+    return Client;
+}());
+exports.default = Client;
+
+
+/***/ }),
+
 /***/ "./src/components/Body/WebBody.css":
 /*!*****************************************!*\
   !*** ./src/components/Body/WebBody.css ***!
@@ -34566,6 +34592,34 @@ var WebFooter = function (props) {
         React.createElement("h1", null, "WebFooter")));
 };
 exports.default = WebFooter;
+
+
+/***/ }),
+
+/***/ "./src/components/Hello.tsx":
+/*!**********************************!*\
+  !*** ./src/components/Hello.tsx ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var Client_1 = __webpack_require__(/*! ../class/Client */ "./src/class/Client.tsx");
+var greet_pb_1 = __webpack_require__(/*! ../../gRPC/greet_pb */ "./gRPC/greet_pb.js");
+var Hello = function () {
+    var request = new greet_pb_1.HelloRequest();
+    request.setName('Hello Slaw!');
+    Client_1.default.Instance().sayHello(request, {}, function (err, response) {
+        console.log(response.getMessage());
+    });
+    var waiting = function () { return "Waiting for response..."; };
+    return (React.createElement("div", null,
+        React.createElement("h1", null, waiting)));
+};
+exports.default = Hello;
 
 
 /***/ }),
@@ -34722,11 +34776,10 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 __webpack_require__(/*! ./App.css */ "./src/containers/App/App.css");
-var GreetServiceClientPb_1 = __webpack_require__(/*! ../../../gRPC/GreetServiceClientPb */ "./gRPC/GreetServiceClientPb.ts");
 var WebLogo_1 = __webpack_require__(/*! ../../components/Logo/WebLogo */ "./src/components/Logo/WebLogo.tsx");
 var WebFooter_1 = __webpack_require__(/*! ../../components/Footer/WebFooter */ "./src/components/Footer/WebFooter.tsx");
 var WebBody_1 = __webpack_require__(/*! ../../components/Body/WebBody */ "./src/components/Body/WebBody.tsx");
-var greeterClient = new GreetServiceClientPb_1.GreeterClient('https://localhost:5001');
+var Hello_1 = __webpack_require__(/*! ../../components/Hello */ "./src/components/Hello.tsx");
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
@@ -34738,7 +34791,8 @@ var App = (function (_super) {
         return (React.createElement("div", null,
             React.createElement(WebLogo_1.default, null),
             React.createElement(WebBody_1.default, null),
-            React.createElement(WebFooter_1.default, null)));
+            React.createElement(WebFooter_1.default, null),
+            React.createElement(Hello_1.default, null)));
     };
     return App;
 }(React.Component));
