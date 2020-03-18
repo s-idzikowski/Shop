@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shop.Service";
+
+service User {
+  rpc GetUserById (GetUserRequest) returns (GetUserResponse);
+  rpc GetAllUsers (GetAllUsersRequest) returns (stream GetUserResponse);
+}
+
+
+
+message GetAllUsersRequest{
+
+}
+
+message GetUserRequest {
+  int32 userId = 1;
+}
+
+message GetUserResponse {
+  string username = 1;
+  string password = 2;
+  
+}

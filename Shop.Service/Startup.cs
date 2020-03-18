@@ -37,6 +37,7 @@ namespace Shop.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GreeterService>().EnableGrpcWeb();
+                endpoints.MapGrpcService<UserService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
                 {
