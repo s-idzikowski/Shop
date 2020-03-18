@@ -9,7 +9,7 @@ interface IProps {
 const NavbarLink = (props: IProps) => {
     return (
         <li className="nav-item">
-            <Link className="nav-link" to={props.to}>{props.displayName}}</Link>
+            <Link className="nav-link" to={props.to}>{props.displayName}</Link>
         </li>
     );
 }
