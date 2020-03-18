@@ -15,7 +15,7 @@ abstract class Client {
     }
 
     public static Header(): {} {
-        return { 'custom-header-1': 'value1' };
+        return { 'auth-token': window.sessionStorage.getItem("auth-token") };
     }
 
     public static CheckError(err: grpcWeb.Error, callback: () => void) {

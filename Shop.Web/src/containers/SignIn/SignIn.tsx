@@ -45,6 +45,8 @@ class SignIn extends React.Component {
                     case StatusCode.OK:
 
                         const user = response.getUserdata();
+                        window.sessionStorage.setItem("auth-token", user.getAuthkey());
+                        
                         toast.success("Poprawne logowanie " + user.getUsername());
                         toast.info("Token: " + user.getAuthkey());
 
