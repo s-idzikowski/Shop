@@ -1,12 +1,11 @@
 import * as React from 'react';
 import './Test.css';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 import { HelloRequest, HelloReply } from '../../../gRPC/greet_pb';
 import Client from '../../class/Client';
 import Hello from '../../components/Hello';
+
+import { Label, Button, Input, Form, Tooltip } from 'reactstrap';
 
 interface IProps {
 
@@ -14,56 +13,75 @@ interface IProps {
 
 interface IState {
     message: string,
-    response: HelloReply
+    response: HelloReply,
+    tooltipOpen: boolean
 }
 
 class Test extends React.Component<IProps, IState> {
 
     state: IState = {
         message: "",
-        response: null
+        response: null,
+        tooltipOpen: false
     }
-    
+
     clickHandler = () => {
         const request: HelloRequest = new HelloRequest();
         request.setName(this.state.message);
 
         Client.Instance().sayHello(request, Client.Header(), (err: any, response: HelloReply) => {
-                if (err) {
-                    toast.error(err.message);
-                } else {
-                    toast.info(response.getMessage());
+            Client.CheckError(err, () => {
                 this.setState({
                     message: "",
                     response: response
                 });
-                }
-                
+            })
         });
     };
 
-    handleChange = (e: any) => {
+    textChangeHandler = (e: any) => {
         this.setState({
             message: e.target.value
         });
     }
 
+    closeTooltipButton = () => {
+        this.setState({
+            tooltipOpen: !this.state.tooltipOpen
+        });
+    };
+
     render() {
+        const toggle = () => this.closeTooltipButton();
+
         return (
             <div>
-                <ToastContainer />
                 <h1>Test message to service gRPC:</h1>
 
-                <form>
-                    <label>
-                        Message:
-                        <input type="text" value={this.state.message} onChange={this.handleChange.bind(this)} />
-                    </label>
+                <Form>
+                    <Label>
+                        <p>Message <span style={{ textDecoration: "underline", color: "blue" }} id="ExampleTooltip">(example)</span>:</p>
 
-                    <input type="button" onClick={this.clickHandler.bind(this)} value="Send" />
-                    
-                    
-                </form>
+                        <Tooltip placement="right" isOpen={this.state.tooltipOpen} autohide={false} target="ExampleTooltip" toggle={toggle}>
+                            <div>
+                                <p>"Hello my service!"</p>
+                                <p>"Aloha"</p>
+                                <p>
+                                    <Button color="danger">Do nothing &#x1f355;</Button>
+                                </p>
+                                <p>
+                                    <Button onClick={this.closeTooltipButton.bind(this)}>Close Tooltip</Button>
+                                </p>
+                            </div>
+                        </Tooltip>
+
+                        <Input value={this.state.message} onChange={this.textChangeHandler.bind(this)} />
+                    </Label>
+
+                    <Button onClick={this.clickHandler.bind(this)}>
+                        Send
+                    </Button>
+                </Form>
 
                 <Hello response={this.state.response} />
             </div>

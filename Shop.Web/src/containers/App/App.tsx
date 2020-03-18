@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 
@@ -20,6 +23,8 @@ export class App extends React.Component {
     render() {
         return (
             <div className="d-flex flex-column">
+
+                <ToastContainer />
 
                 <BrowserRouter>
 

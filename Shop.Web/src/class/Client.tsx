@@ -2,6 +2,8 @@ import * as grpcWeb from 'grpc-web';
 
 import { GreeterClient } from './../../gRPC/GreetServiceClientPb';
 
+import { toast } from 'react-toastify';
+
 abstract class Client {
     protected static instance: GreeterClient;
 
@@ -18,21 +20,20 @@ abstract class Client {
 
     public static CheckError(err: grpcWeb.Error, callback: () => void) {
         if (err && err.code !== grpcWeb.StatusCode.OK) {
-            this.ErrorPauseLog();
-            this.ErrorLog('code: ' + err.code);
-            this.ErrorLog('message: ' + decodeURI(err.message));
-            this.ErrorPauseLog();
+            this.ErrorLog("code: " + err.code);
+            this.ErrorLog("message: " + decodeURI(err.message));
             return;
         }
+
+        toast.success("[SERVICE-RESPONSE]");
         callback();
     }
 
     protected static ErrorLog(msg: any) {
-        console.log('[Error] ' + msg);
-    };
+        const message = "[Error] " + msg;
 
-    protected static ErrorPauseLog() {
-        this.ErrorLog('==================================================');
+        console.log(message);
+        toast.error(message);
     };
 }
 
