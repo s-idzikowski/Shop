@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './Test.css';
 
-import { HelloRequest, HelloReply } from '../../../gRPC/greet_pb';
-import Client from '../../class/Client';
+import { HelloRequest, HelloReply, HelloData } from '../../../../gRPC/service_pb';
+import Client from '../../../class/Client';
 import Hello from '../../components/Hello';
 
 import { Label, Button, Input, Form, Tooltip } from 'reactstrap';
@@ -13,7 +13,7 @@ interface IProps {
 
 interface IState {
     message: string,
-    response: HelloReply,
+    helloData: HelloData,
     tooltipOpen: boolean
 }
 
@@ -21,7 +21,7 @@ class Test extends React.Component<IProps, IState> {
 
     state: IState = {
         message: "",
-        response: null,
+        helloData: null,
         tooltipOpen: false
     }
 
@@ -33,7 +33,7 @@ class Test extends React.Component<IProps, IState> {
             Client.CheckError(err, () => {
                 this.setState({
                     message: "",
-                    response: response
+                    helloData: response.getHellodata()
                 });
             })
         });
@@ -83,7 +83,7 @@ class Test extends React.Component<IProps, IState> {
                     </Button>
                 </Form>
 
-                <Hello response={this.state.response} />
+                <Hello helloData={this.state.helloData} />
             </div>
         );
     }

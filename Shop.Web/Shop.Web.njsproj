@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="gRPC\greet_pb.js" />
+    <Content Include="gRPC\service_pb.js" />
     <Content Include="package.json" />
     <Content Include="server.js">
       <SubType>Code</SubType>
@@ -39,8 +39,8 @@
     <Folder Include="src\containers\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="gRPC\GreetServiceClientPb.ts" />
-    <TypeScriptCompile Include="gRPC\greet_pb.d.ts" />
+    <TypeScriptCompile Include="gRPC\ServiceServiceClientPb.ts" />
+    <TypeScriptCompile Include="gRPC\service_pb.d.ts" />
     <TypeScriptCompile Include="src\containers\App.tsx" />
     <TypeScriptCompile Include="src\containers\Hello.tsx" />
   </ItemGroup>

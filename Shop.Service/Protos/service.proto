@@ -2,12 +2,30 @@ syntax = "proto3";
 
 option csharp_namespace = "Shop.Service";
 
+// Greeter
+
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  HelloData helloData = 1;
+}
+
+message HelloData {
+  string message = 1;
+}
+
+// User
+
 service User {
   rpc GetUserById (GetUserRequest) returns (GetUserResponse);
   rpc GetAllUsers (GetAllUsersRequest) returns (stream GetUserResponse);
 }
-
-
 
 message GetAllUsersRequest{
 
@@ -18,7 +36,10 @@ message GetUserRequest {
 }
 
 message GetUserResponse {
+  UserData userData = 1;
+}
+
+message UserData {
   string username = 1;
   string password = 2;
-  
 }

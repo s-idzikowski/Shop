@@ -1,1 +1,1 @@
-protoc .\*.proto --js_out=import_style=commonjs:..\..\Shop.Web\gRPC\. --grpc-web_out=import_style=commonjs,mode=grpcwebtext:..\..\Shop.Web\gRPC\.
+protoc .\*.proto --js_out=import_style=commonjs:..\..\Shop.Web\gRPC\. --grpc-web_out=import_style=typescript,mode=grpcweb:..\..\Shop.Web\gRPC\.
