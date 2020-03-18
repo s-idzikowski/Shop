@@ -2,11 +2,63 @@ syntax = "proto3";
 
 option csharp_namespace = "Shop.Service";
 
-// Greeter
+service Service {
+    rpc UserSignIn (SignInRequest) returns (SignInResponse);
 
-service Greeter {
-  rpc SayHello (HelloRequest) returns (HelloReply);
+    // TODO:
+
+    rpc SayHello (HelloRequest) returns (HelloReply);
+
+    rpc GetUserById (GetUserRequest) returns (GetUserResponse);
+    rpc GetAllUsers (GetAllUsersRequest) returns (stream GetUserResponse);
 }
+
+
+// Start User:
+// Request:
+
+message SignInRequest {
+    SignInData signInData = 1;
+}
+
+// Response:
+
+message SignInResponse {
+    StatusCode statusCode = 1;
+    UserData userData = 2;
+}
+
+// Models:
+
+message SignInData {
+    string username = 1;
+    string password = 2;
+}
+
+enum StatusCode {
+    OK = 0;
+    DATABASE_ERROR = 1;
+
+    SIGNIN_NOT_FOUND = 10;
+    SIGNIN_ACCOUNT_BAN = 11;
+    
+    REGISTER_USERNAME_OCCUPIED = 20;
+    REGISTER_PASSWORD_NOT_VALID = 21;
+    REGISTER_EMAIL_OCCUPIED = 22;
+}
+
+message UserData {
+    string username = 1;
+    string authKey = 2;
+}
+
+// End User
+
+
+
+// TODO
+
+// Greeter
 
 message HelloRequest {
   string name = 1;
@@ -22,11 +74,6 @@ message HelloData {
 
 // User
 
-service User {
-  rpc GetUserById (GetUserRequest) returns (GetUserResponse);
-  rpc GetAllUsers (GetAllUsersRequest) returns (stream GetUserResponse);
-}
-
 message GetAllUsersRequest{
 
 }
@@ -37,9 +84,4 @@ message GetUserRequest {
 
 message GetUserResponse {
   UserData userData = 1;
-}
-
-message UserData {
-  string username = 1;
-  string password = 2;
 }

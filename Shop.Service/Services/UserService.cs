@@ -1,17 +1,42 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
 
 namespace Shop.Service
 {
-    public class UserService : User.UserBase
+    public partial class WebService : Service.ServiceBase
     {
-        private readonly ILogger<UserService> _logger;
+        // TEMP:
+        private readonly static ICollection<SignInData> Users = new List<SignInData>() { new SignInData() { Username = "test", Password = "test" } };
 
-        public UserService(ILogger<UserService> logger)
+        public override Task<SignInResponse> UserSignIn(SignInRequest request, ServerCallContext context)
         {
-            _logger = logger;
+            SignInData user = Users.FirstOrDefault(o => o.Username == request.SignInData.Username && o.Password == request.SignInData.Password);
+
+            StatusCode statusCode;
+            UserData userData;
+
+            if (user != null)
+            {
+                statusCode = StatusCode.Ok;
+                userData = new UserData()
+                {
+                    Username = user.Username,
+                    AuthKey = "123"
+                };
+            }
+            else
+            {
+                statusCode = StatusCode.SigninNotFound;
+                userData = null;
+            }
+
+            return Task.FromResult(new SignInResponse()
+            {
+                StatusCode = statusCode,
+                UserData = userData
+            });
         }
 
         public override Task<GetUserResponse> GetUserById(GetUserRequest request, ServerCallContext context)
@@ -21,17 +46,17 @@ namespace Shop.Service
             if (request.UserId == 1)
             {
                 userData.Username = "Slawek";
-                userData.Password = "Slawekpassword";
+                userData.AuthKey = "123";
             }
             if (request.UserId == 2)
             {
                 userData.Username = "Lukasz";
-                userData.Password = "Lukaszpassword";
+                userData.AuthKey = "1234";
             }
             if (request.UserId != 1 || request.UserId != 2)
             {
                 userData.Username = "SPADAJ";
-                userData.Password = "SPADAJ";
+                userData.AuthKey = "12345";
             }
 
             return Task.FromResult(new GetUserResponse() { UserData = userData });
@@ -44,17 +69,17 @@ namespace Shop.Service
                 new UserData
                 {
                     Username = "Slawek",
-                    Password = "Slawekpassword"
+                    AuthKey = "123"
                 },
                 new UserData
                 {
                     Username = "Lukasz",
-                    Password = "Lukaszpassword"
+                    AuthKey = "1234"
                 },
                 new UserData
                 {
                     Username = "Kuba",
-                    Password = "Kubapassword"
+                    AuthKey = "12345"
                 }
             };
 

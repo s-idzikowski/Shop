@@ -1,15 +1,15 @@
 import * as grpcWeb from 'grpc-web';
 
-import { GreeterClient } from './../../gRPC/ServiceServiceClientPb';
+import { ServiceClient } from './../../gRPC/ServiceServiceClientPb';
 
 import { toast } from 'react-toastify';
 
 abstract class Client {
-    protected static instance: GreeterClient;
+    protected static instance: ServiceClient;
 
-    public static Instance(): GreeterClient {
+    public static Instance(): ServiceClient {
         if (!this.instance)
-            this.instance = new GreeterClient('https://localhost:5001');
+            this.instance = new ServiceClient('https://localhost:5001');
             
         return this.instance;
     }

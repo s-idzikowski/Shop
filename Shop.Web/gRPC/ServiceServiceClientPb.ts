@@ -14,9 +14,11 @@ import {
   GetUserRequest,
   GetUserResponse,
   HelloReply,
-  HelloRequest} from './service_pb';
+  HelloRequest,
+  SignInRequest,
+  SignInResponse} from './service_pb';
 
-export class GreeterClient {
+export class ServiceClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
   credentials_: null | { [index: string]: string; };
@@ -33,6 +35,28 @@ export class GreeterClient {
     this.hostname_ = hostname;
     this.credentials_ = credentials;
     this.options_ = options;
+  }
+
+  methodInfoUserSignIn = new grpcWeb.AbstractClientBase.MethodInfo(
+    SignInResponse,
+    (request: SignInRequest) => {
+      return request.serializeBinary();
+    },
+    SignInResponse.deserializeBinary
+  );
+
+  userSignIn(
+    request: SignInRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: SignInResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserSignIn',
+      request,
+      metadata || {},
+      this.methodInfoUserSignIn,
+      callback);
   }
 
   methodInfoSayHello = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -50,32 +74,11 @@ export class GreeterClient {
                response: HelloReply) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
-        '/Greeter/SayHello',
+        '/Service/SayHello',
       request,
       metadata || {},
       this.methodInfoSayHello,
       callback);
-  }
-
-}
-
-export class UserClient {
-  client_: grpcWeb.AbstractClientBase;
-  hostname_: string;
-  credentials_: null | { [index: string]: string; };
-  options_: null | { [index: string]: string; };
-
-  constructor (hostname: string,
-               credentials?: null | { [index: string]: string; },
-               options?: null | { [index: string]: string; }) {
-    if (!options) options = {};
-    if (!credentials) credentials = {};
-    options['format'] = 'binary';
-
-    this.client_ = new grpcWeb.GrpcWebClientBase(options);
-    this.hostname_ = hostname;
-    this.credentials_ = credentials;
-    this.options_ = options;
   }
 
   methodInfoGetUserById = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -93,7 +96,7 @@ export class UserClient {
                response: GetUserResponse) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
-        '/User/GetUserById',
+        '/Service/GetUserById',
       request,
       metadata || {},
       this.methodInfoGetUserById,
@@ -113,7 +116,7 @@ export class UserClient {
     metadata?: grpcWeb.Metadata) {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/User/GetAllUsers',
+        '/Service/GetAllUsers',
       request,
       metadata || {},
       this.methodInfoGetAllUsers);

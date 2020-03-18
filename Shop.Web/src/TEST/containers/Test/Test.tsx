@@ -7,17 +7,13 @@ import Hello from '../../components/Hello';
 
 import { Label, Button, Input, Form, Tooltip } from 'reactstrap';
 
-interface IProps {
-
-}
-
 interface IState {
     message: string,
     helloData: HelloData,
     tooltipOpen: boolean
 }
 
-class Test extends React.Component<IProps, IState> {
+class Test extends React.Component {
 
     state: IState = {
         message: "",
