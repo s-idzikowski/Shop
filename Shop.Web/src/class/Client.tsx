@@ -25,7 +25,7 @@ abstract class Client {
             return;
         }
 
-        toast.success("[SERVICE-RESPONSE]");
+        console.log("[SERVICE-RESPONSE]");
         callback();
     }
 

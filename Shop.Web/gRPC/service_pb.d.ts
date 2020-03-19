@@ -20,6 +20,26 @@ export namespace SignInRequest {
   }
 }
 
+export class RegisterRequest extends jspb.Message {
+  getRegisterdata(): RegisterData | undefined;
+  setRegisterdata(value?: RegisterData): void;
+  hasRegisterdata(): boolean;
+  clearRegisterdata(): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RegisterRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: RegisterRequest): RegisterRequest.AsObject;
+  static serializeBinaryToWriter(message: RegisterRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RegisterRequest;
+  static deserializeBinaryFromReader(message: RegisterRequest, reader: jspb.BinaryReader): RegisterRequest;
+}
+
+export namespace RegisterRequest {
+  export type AsObject = {
+    registerdata?: RegisterData.AsObject,
+  }
+}
+
 export class SignInResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
@@ -38,6 +58,30 @@ export class SignInResponse extends jspb.Message {
 }
 
 export namespace SignInResponse {
+  export type AsObject = {
+    statuscode: StatusCode,
+    userdata?: UserData.AsObject,
+  }
+}
+
+export class RegisterResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
+  getUserdata(): UserData | undefined;
+  setUserdata(value?: UserData): void;
+  hasUserdata(): boolean;
+  clearUserdata(): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RegisterResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: RegisterResponse): RegisterResponse.AsObject;
+  static serializeBinaryToWriter(message: RegisterResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RegisterResponse;
+  static deserializeBinaryFromReader(message: RegisterResponse, reader: jspb.BinaryReader): RegisterResponse;
+}
+
+export namespace RegisterResponse {
   export type AsObject = {
     statuscode: StatusCode,
     userdata?: UserData.AsObject,
@@ -63,6 +107,32 @@ export namespace SignInData {
   export type AsObject = {
     username: string,
     password: string,
+  }
+}
+
+export class RegisterData extends jspb.Message {
+  getUsername(): string;
+  setUsername(value: string): void;
+
+  getPassword(): string;
+  setPassword(value: string): void;
+
+  getEmailaddress(): string;
+  setEmailaddress(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RegisterData.AsObject;
+  static toObject(includeInstance: boolean, msg: RegisterData): RegisterData.AsObject;
+  static serializeBinaryToWriter(message: RegisterData, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RegisterData;
+  static deserializeBinaryFromReader(message: RegisterData, reader: jspb.BinaryReader): RegisterData;
+}
+
+export namespace RegisterData {
+  export type AsObject = {
+    username: string,
+    password: string,
+    emailaddress: string,
   }
 }
 
@@ -144,61 +214,10 @@ export namespace HelloData {
   }
 }
 
-export class GetAllUsersRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetAllUsersRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetAllUsersRequest): GetAllUsersRequest.AsObject;
-  static serializeBinaryToWriter(message: GetAllUsersRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetAllUsersRequest;
-  static deserializeBinaryFromReader(message: GetAllUsersRequest, reader: jspb.BinaryReader): GetAllUsersRequest;
-}
-
-export namespace GetAllUsersRequest {
-  export type AsObject = {
-  }
-}
-
-export class GetUserRequest extends jspb.Message {
-  getUserid(): number;
-  setUserid(value: number): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetUserRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetUserRequest): GetUserRequest.AsObject;
-  static serializeBinaryToWriter(message: GetUserRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetUserRequest;
-  static deserializeBinaryFromReader(message: GetUserRequest, reader: jspb.BinaryReader): GetUserRequest;
-}
-
-export namespace GetUserRequest {
-  export type AsObject = {
-    userid: number,
-  }
-}
-
-export class GetUserResponse extends jspb.Message {
-  getUserdata(): UserData | undefined;
-  setUserdata(value?: UserData): void;
-  hasUserdata(): boolean;
-  clearUserdata(): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetUserResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetUserResponse): GetUserResponse.AsObject;
-  static serializeBinaryToWriter(message: GetUserResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetUserResponse;
-  static deserializeBinaryFromReader(message: GetUserResponse, reader: jspb.BinaryReader): GetUserResponse;
-}
-
-export namespace GetUserResponse {
-  export type AsObject = {
-    userdata?: UserData.AsObject,
-  }
-}
-
 export enum StatusCode { 
   OK = 0,
   DATABASE_ERROR = 1,
+  UNATHORIZED = 2,
   SIGNIN_NOT_FOUND = 10,
   SIGNIN_ACCOUNT_BAN = 11,
   REGISTER_USERNAME_OCCUPIED = 20,

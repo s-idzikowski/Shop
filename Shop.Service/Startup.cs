@@ -10,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
-using Shop.Service.Data;
+using Shop.Service.Database;
+using Shop.Service.Repositories;
 
 
 namespace Shop.Service
@@ -26,8 +27,8 @@ namespace Shop.Service
             services.AddSingleton<IMongoClient>(s => new MongoClient("mongodb://admin:SasaAdmin@77.55.213.192:27017/?authSource=admin"));
             services.AddScoped(s => new AppDbContext(s.GetRequiredService<IMongoClient>(), "ShopDb"));
 
-
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserRepository, UserRepository>()
+                    .AddTransient(serviceProvider => new Lazy<IUserRepository>(() => serviceProvider.GetRequiredService<IUserRepository>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

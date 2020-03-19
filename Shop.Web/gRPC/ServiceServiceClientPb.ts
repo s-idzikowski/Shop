@@ -10,11 +10,10 @@
 import * as grpcWeb from 'grpc-web';
 
 import {
-  GetAllUsersRequest,
-  GetUserRequest,
-  GetUserResponse,
   HelloReply,
   HelloRequest,
+  RegisterRequest,
+  RegisterResponse,
   SignInRequest,
   SignInResponse} from './service_pb';
 
@@ -59,6 +58,28 @@ export class ServiceClient {
       callback);
   }
 
+  methodInfoUserRegister = new grpcWeb.AbstractClientBase.MethodInfo(
+    RegisterResponse,
+    (request: RegisterRequest) => {
+      return request.serializeBinary();
+    },
+    RegisterResponse.deserializeBinary
+  );
+
+  userRegister(
+    request: RegisterRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: RegisterResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserRegister',
+      request,
+      metadata || {},
+      this.methodInfoUserRegister,
+      callback);
+  }
+
   methodInfoSayHello = new grpcWeb.AbstractClientBase.MethodInfo(
     HelloReply,
     (request: HelloRequest) => {
@@ -79,47 +100,6 @@ export class ServiceClient {
       metadata || {},
       this.methodInfoSayHello,
       callback);
-  }
-
-  methodInfoGetUserById = new grpcWeb.AbstractClientBase.MethodInfo(
-    GetUserResponse,
-    (request: GetUserRequest) => {
-      return request.serializeBinary();
-    },
-    GetUserResponse.deserializeBinary
-  );
-
-  getUserById(
-    request: GetUserRequest,
-    metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: GetUserResponse) => void) {
-    return this.client_.rpcCall(
-      this.hostname_ +
-        '/Service/GetUserById',
-      request,
-      metadata || {},
-      this.methodInfoGetUserById,
-      callback);
-  }
-
-  methodInfoGetAllUsers = new grpcWeb.AbstractClientBase.MethodInfo(
-    GetUserResponse,
-    (request: GetAllUsersRequest) => {
-      return request.serializeBinary();
-    },
-    GetUserResponse.deserializeBinary
-  );
-
-  getAllUsers(
-    request: GetAllUsersRequest,
-    metadata?: grpcWeb.Metadata) {
-    return this.client_.serverStreaming(
-      this.hostname_ +
-        '/Service/GetAllUsers',
-      request,
-      metadata || {},
-      this.methodInfoGetAllUsers);
   }
 
 }

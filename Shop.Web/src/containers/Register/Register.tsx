@@ -1,21 +1,22 @@
 import * as React from 'react';
 
-import './SignIn.css';
-import { Label, Input, Button } from 'reactstrap';
-import { SignInRequest, SignInData, SignInResponse, StatusCode } from '../../../gRPC/service_pb';
+import './Register.css';
+import { RegisterData, RegisterRequest, RegisterResponse, StatusCode } from '../../../gRPC/service_pb';
 import Client from '../../class/Client';
-
 import { toast } from 'react-toastify';
+import { Label, Input, Button } from 'reactstrap';
 
 interface IState {
     username: string,
     password: string,
+    emailAddress: string,
 }
 
-class SignIn extends React.Component {
+class Register extends React.Component {
     state: IState = {
         username: "",
         password: "",
+        emailAddress: "",
     };
 
     usernameChangeHandler = (e: any) => {
@@ -30,15 +31,22 @@ class SignIn extends React.Component {
         });
     }
 
-    signInHandler = () => {
-        const signInData: SignInData = new SignInData();
-        signInData.setUsername(this.state.username);
-        signInData.setPassword(this.state.password);
+    emailAddressChangeHandler = (e: any) => {
+        this.setState({
+            emailAddress: e.target.value
+        });
+    }
 
-        const request: SignInRequest = new SignInRequest();
-        request.setSignindata(signInData);
+    registerHandler = () => {
+        const registerData: RegisterData = new RegisterData();
+        registerData.setUsername(this.state.username);
+        registerData.setPassword(this.state.password);
+        registerData.setEmailaddress(this.state.emailAddress);
 
-        Client.Instance().userSignIn(request, Client.Header(), (err: any, response: SignInResponse) => {
+        const request: RegisterRequest = new RegisterRequest();
+        request.setRegisterdata(registerData);
+
+        Client.Instance().userRegister(request, Client.Header(), (err: any, response: RegisterResponse) => {
             Client.CheckError(err, () => {
 
                 switch (response.getStatuscode()) {
@@ -47,23 +55,23 @@ class SignIn extends React.Component {
                         const user = response.getUserdata();
                         window.sessionStorage.setItem("auth-token", user.getAuthkey());
 
-                        toast.success("Poprawne logowanie " + user.getUsername());
+                        toast.success("Poprawna rejestracja " + user.getUsername());
                         toast.info("Token: " + user.getAuthkey());
 
                         break;
-                    case StatusCode.SIGNIN_NOT_FOUND:
+                    case StatusCode.REGISTER_PASSWORD_NOT_VALID:
 
-                        toast.error("Nazwa użytkownika lub hasło jest niepoprawne.");
-
-                        break;
-                    case StatusCode.SIGNIN_ACCOUNT_BAN:
-
-                        toast.error("Twoje konto jest zawieszone.");
+                        toast.error("Podane hasło nie jest dopuszczalne.");
 
                         break;
-                    case StatusCode.DATABASE_ERROR:
+                    case StatusCode.REGISTER_USERNAME_OCCUPIED:
 
-                        toast.error("Błąd bazy danych.");
+                        toast.error("Podana nazwa użytkownika jest już zajęta.");
+
+                        break;
+                    case StatusCode.REGISTER_EMAIL_OCCUPIED:
+
+                        toast.error("Podany adres email jest już zajęty.");
 
                         break;
                     case StatusCode.UNATHORIZED:
@@ -76,7 +84,8 @@ class SignIn extends React.Component {
 
                 this.setState({
                     username: "",
-                    password: ""
+                    password: "",
+                    emailAddress: ""
                 });
             })
         });
@@ -96,11 +105,16 @@ class SignIn extends React.Component {
                     </Label>
                     <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
 
-                    <Button onClick={this.signInHandler.bind(this)}>Zaloguj</Button>
+                    <Label>
+                        Adres e-mail:
+                    </Label>
+                    <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />
+
+                    <Button onClick={this.registerHandler.bind(this)}>Rejestruj</Button>
                 </form>
             </div>
         );
     }
 }
 
-export default SignIn;
+export default Register;

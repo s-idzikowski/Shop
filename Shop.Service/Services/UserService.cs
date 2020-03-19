@@ -1,30 +1,47 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
+using Shop.Service.Models;
 
 namespace Shop.Service
 {
     public partial class WebService : Service.ServiceBase
     {
-        // TEMP:
-        private readonly static ICollection<SignInData> Users = new List<SignInData>() { new SignInData() { Username = "test", Password = "test" } };
-
-        public override Task<SignInResponse> UserSignIn(SignInRequest request, ServerCallContext context)
+        public override async Task<SignInResponse> UserSignIn(SignInRequest request, ServerCallContext context)
         {
-            SignInData user = Users.FirstOrDefault(o => o.Username == request.SignInData.Username && o.Password == request.SignInData.Password);
+            User user = await Authorize(context);
+
+            if (user != null)
+            {
+                user.AuthToken = null;
+                await userRepository.UpdateAuthToken(user);
+
+                return await Task.FromResult(new SignInResponse()
+                {
+                    StatusCode = StatusCode.Unathorized
+                });
+            }
+
+            user = await userRepository.SignIn(request.SignInData);
 
             StatusCode statusCode;
             UserData userData;
 
             if (user != null)
             {
-                statusCode = StatusCode.Ok;
-                userData = new UserData()
+                if (user.IsBanned)
                 {
-                    Username = user.Username,
-                    AuthKey = "123"
-                };
+                    statusCode = StatusCode.SigninAccountBan;
+                    userData = null;
+                }
+                else
+                {
+                    statusCode = StatusCode.Ok;
+
+                    user.AuthToken = await user.GenerateAuthKey(context);
+                    await userRepository.UpdateAuthToken(user);
+
+                    userData = user.GetUserData();
+                }
             }
             else
             {
@@ -32,61 +49,82 @@ namespace Shop.Service
                 userData = null;
             }
 
-            return Task.FromResult(new SignInResponse()
+            return await Task.FromResult(new SignInResponse()
             {
                 StatusCode = statusCode,
                 UserData = userData
             });
         }
 
-        public override Task<GetUserResponse> GetUserById(GetUserRequest request, ServerCallContext context)
+        public override async Task<RegisterResponse> UserRegister(RegisterRequest request, ServerCallContext context)
         {
-            UserData userData = new UserData();
+            User user = await Authorize(context);
 
-            if (request.UserId == 1)
+            if (user != null)
             {
-                userData.Username = "Slawek";
-                userData.AuthKey = "123";
-            }
-            if (request.UserId == 2)
-            {
-                userData.Username = "Lukasz";
-                userData.AuthKey = "1234";
-            }
-            if (request.UserId != 1 || request.UserId != 2)
-            {
-                userData.Username = "SPADAJ";
-                userData.AuthKey = "12345";
-            }
+                user.AuthToken = null;
+                await userRepository.UpdateAuthToken(user);
 
-            return Task.FromResult(new GetUserResponse() { UserData = userData });
-        }
-
-        public override async Task GetAllUsers(GetAllUsersRequest request, IServerStreamWriter<GetUserResponse> responseStream, ServerCallContext context)
-        {
-            List<UserData> usersData = new List<UserData>()
-            {
-                new UserData
+                return await Task.FromResult(new RegisterResponse()
                 {
-                    Username = "Slawek",
-                    AuthKey = "123"
-                },
-                new UserData
-                {
-                    Username = "Lukasz",
-                    AuthKey = "1234"
-                },
-                new UserData
-                {
-                    Username = "Kuba",
-                    AuthKey = "12345"
-                }
-            };
-
-            foreach (var user in usersData)
-            {
-                await responseStream.WriteAsync(new GetUserResponse() { UserData = user });
+                    StatusCode = StatusCode.Unathorized
+                });
             }
+
+            // Password:
+            // TODO - ONLY VALIDATE!
+            //return await Task.FromResult(new RegisterResponse()
+            //{
+            //    StatusCode = StatusCode.RegisterPasswordNotValid
+            //});
+
+            // Username:
+            user = await userRepository.GetByUsername(request.RegisterData.Username);
+            if (user != null)
+            {
+                return await Task.FromResult(new RegisterResponse()
+                {
+                    StatusCode = StatusCode.RegisterUsernameOccupied
+                });
+            }
+
+            // Email:
+            user = await userRepository.GetByEmailAddress(request.RegisterData.EmailAddress);
+            if (user != null)
+            {
+                return await Task.FromResult(new RegisterResponse()
+                {
+                    StatusCode = StatusCode.RegisterEmailOccupied
+                });
+            }
+
+            // Insert database:
+            user = User.New(request.RegisterData);
+            await userRepository.Register(user);
+
+            StatusCode statusCode;
+            UserData userData;
+
+            if (user != null)
+            {
+                statusCode = StatusCode.Ok;
+
+                user.AuthToken = await user.GenerateAuthKey(context);
+                await userRepository.UpdateAuthToken(user);
+
+                userData = user.GetUserData();
+            }
+            else
+            {
+                statusCode = StatusCode.DatabaseError;
+                userData = null;
+            }
+
+            return await Task.FromResult(new RegisterResponse()
+            {
+                StatusCode = statusCode,
+                UserData = userData
+            });
         }
     }
 }
