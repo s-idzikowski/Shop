@@ -5,6 +5,7 @@ option csharp_namespace = "Shop.Service";
 service Service {
     rpc UserSignIn (SignInRequest) returns (SignInResponse);
     rpc UserRegister (RegisterRequest) returns (RegisterResponse);
+    rpc UserLogout (LogoutRequest) returns (LogoutResponse);
 
     // TODO:
 
@@ -23,6 +24,10 @@ message RegisterRequest {
     RegisterData registerData = 1;
 }
 
+message LogoutRequest {
+
+}
+
 // Response:
 
 message SignInResponse {
@@ -33,6 +38,10 @@ message SignInResponse {
 message RegisterResponse {
     StatusCode statusCode = 1;
     UserData userData = 2;
+}
+
+message LogoutResponse {
+    StatusCode statusCode = 1;
 }
 
 // Models:

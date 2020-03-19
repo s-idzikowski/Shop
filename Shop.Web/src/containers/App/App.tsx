@@ -13,10 +13,12 @@ import Test from '../../TEST/containers/Test/Test';
 import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import NotFound from '../../components/NotFound/NotFound';
+import Logout from '../../components/Logout/Logout';
 
 class App extends React.Component {
     render() {
-        const NotFoundRedirect = () => <Redirect to='/notfound' />
+        const NotFoundRedirect = () => <Redirect to='/notfound' />;
+        const Update = () => this.forceUpdate();
 
         return (
             <div className="d-flex flex-column">
@@ -28,8 +30,16 @@ class App extends React.Component {
 
                     <Switch>
                         <Route exact path='/' component={Dashboard} />
-                        <Route path='/signin' component={SignIn} />
-                        <Route path='/register' component={Register} />
+
+                        <Route path='/signin'>
+                            <SignIn onSignIn={Update} />
+                        </Route>
+                        <Route path='/register'>
+                            <Register onRegister={Update} />
+                        </Route>
+                        <Route path='/logout'>
+                            <Logout onLogout={Update} />
+                        </Route>
 
                         <Route path='/test' component={Test} />
 

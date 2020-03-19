@@ -40,6 +40,20 @@ export namespace RegisterRequest {
   }
 }
 
+export class LogoutRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LogoutRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: LogoutRequest): LogoutRequest.AsObject;
+  static serializeBinaryToWriter(message: LogoutRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LogoutRequest;
+  static deserializeBinaryFromReader(message: LogoutRequest, reader: jspb.BinaryReader): LogoutRequest;
+}
+
+export namespace LogoutRequest {
+  export type AsObject = {
+  }
+}
+
 export class SignInResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
@@ -85,6 +99,24 @@ export namespace RegisterResponse {
   export type AsObject = {
     statuscode: StatusCode,
     userdata?: UserData.AsObject,
+  }
+}
+
+export class LogoutResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LogoutResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: LogoutResponse): LogoutResponse.AsObject;
+  static serializeBinaryToWriter(message: LogoutResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LogoutResponse;
+  static deserializeBinaryFromReader(message: LogoutResponse, reader: jspb.BinaryReader): LogoutResponse;
+}
+
+export namespace LogoutResponse {
+  export type AsObject = {
+    statuscode: StatusCode,
   }
 }
 

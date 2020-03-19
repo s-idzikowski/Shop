@@ -1,23 +1,44 @@
 import * as React from 'react';
 
 import './Register.css';
-import { RegisterData, RegisterRequest, RegisterResponse, StatusCode } from '../../../gRPC/service_pb';
+import { RegisterData, RegisterRequest, RegisterResponse, StatusCode, UserData } from '../../../gRPC/service_pb';
 import Client from '../../class/Client';
 import { toast } from 'react-toastify';
 import { Label, Input, Button } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
+
+interface IProps {
+    onRegister: () => void,
+}
 
 interface IState {
     username: string,
     password: string,
     emailAddress: string,
+    redirect: boolean,
 }
 
-class Register extends React.Component {
+class Register extends React.Component<IProps, IState> {
     state: IState = {
         username: "",
         password: "",
         emailAddress: "",
+        redirect: false,
     };
+
+    constructor(props: IProps) {
+        super(props);
+        const user: UserData.AsObject = JSON.parse(window.sessionStorage.getItem("user"));
+
+        if (user) {
+            this.state = {
+                username: "",
+                password: "",
+                emailAddress: "",
+                redirect: true,
+            };
+        }
+    }
 
     usernameChangeHandler = (e: any) => {
         this.setState({
@@ -49,14 +70,26 @@ class Register extends React.Component {
         Client.Instance().userRegister(request, Client.Header(), (err: any, response: RegisterResponse) => {
             Client.CheckError(err, () => {
 
+                this.setState({
+                    username: "",
+                    password: "",
+                    emailAddress: ""
+                });
+
                 switch (response.getStatuscode()) {
                     case StatusCode.OK:
 
                         const user = response.getUserdata();
                         window.sessionStorage.setItem("auth-token", user.getAuthkey());
+                        window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
 
-                        toast.success("Poprawna rejestracja " + user.getUsername());
-                        toast.info("Token: " + user.getAuthkey());
+                        toast.success("Poprawna rejestracja.");
+
+                        this.props.onRegister();
+
+                        this.setState({
+                            redirect: true
+                        });
 
                         break;
                     case StatusCode.REGISTER_PASSWORD_NOT_VALID:
@@ -79,14 +112,12 @@ class Register extends React.Component {
                         window.sessionStorage.clear();
                         toast.info("Błąd - wylogowano!");
 
+                        this.setState({
+                            redirect: true
+                        });
+
                         break;
                 }
-
-                this.setState({
-                    username: "",
-                    password: "",
-                    emailAddress: ""
-                });
             })
         });
     };
@@ -111,6 +142,8 @@ class Register extends React.Component {
                     <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />
 
                     <Button onClick={this.registerHandler.bind(this)}>Rejestruj</Button>
+
+                    {this.state.redirect ? <Redirect to='/' /> : ""}
                 </form>
             </div>
         );

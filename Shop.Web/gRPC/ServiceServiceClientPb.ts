@@ -12,6 +12,8 @@ import * as grpcWeb from 'grpc-web';
 import {
   HelloReply,
   HelloRequest,
+  LogoutRequest,
+  LogoutResponse,
   RegisterRequest,
   RegisterResponse,
   SignInRequest,
@@ -77,6 +79,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoUserRegister,
+      callback);
+  }
+
+  methodInfoUserLogout = new grpcWeb.AbstractClientBase.MethodInfo(
+    LogoutResponse,
+    (request: LogoutRequest) => {
+      return request.serializeBinary();
+    },
+    LogoutResponse.deserializeBinary
+  );
+
+  userLogout(
+    request: LogoutRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: LogoutResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserLogout',
+      request,
+      metadata || {},
+      this.methodInfoUserLogout,
       callback);
   }
 

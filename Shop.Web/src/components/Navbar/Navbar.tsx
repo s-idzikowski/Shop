@@ -2,19 +2,30 @@ import * as React from 'react';
 
 import './Navbar.css';
 import NavbarLink from './NavbarLink';
+import { UserData } from '../../../gRPC/service_pb';
 
 const Navbar = () => {
+
+    const user: UserData.AsObject = JSON.parse(window.sessionStorage.getItem("user"));
+
+    const signIn = () => <NavbarLink to="/signin" displayName="Zaloguj" />;
+    const register = () => <NavbarLink to="/register" displayName="Rejestracja" />;
+    const logOut = () => <NavbarLink to="/logout" displayName="Wyloguj" />;
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
                 <div className="container">
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav ml-auto">
-                            <NavbarLink to="/" displayName="Dashboard"/>
-                            <NavbarLink to="/signin" displayName="Zaloguj"/>
-                            <NavbarLink to="/register" displayName="Rejestracja"/>
+                            <NavbarLink to="/" displayName="Dashboard" />
 
-                            <NavbarLink to="/test" displayName="TEST"/>
+                            { user ? "" : signIn()}
+                            { user ? "" : register()}
+                            
+                            { user ? logOut() : ""}
+                           
+                            <NavbarLink to="/test" displayName="TEST" />
                         </ul>
                     </div>
                 </div>

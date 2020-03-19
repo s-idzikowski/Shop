@@ -126,5 +126,26 @@ namespace Shop.Service
                 UserData = userData
             });
         }
+
+        public override async Task<LogoutResponse> UserLogout(LogoutRequest request, ServerCallContext context)
+        {
+            User user = await Authorize(context);
+
+            if (user != null)
+            {
+                user.AuthToken = null;
+                await userRepository.UpdateAuthToken(user);
+
+                return await Task.FromResult(new LogoutResponse()
+                {
+                    StatusCode = StatusCode.Ok
+                });
+            }
+
+            return await Task.FromResult(new LogoutResponse()
+            {
+                StatusCode = StatusCode.Unathorized
+            });
+        }
     }
 }
