@@ -58,6 +58,14 @@ class Register extends React.Component<IProps, IState> {
         });
     }
 
+    clearState() {
+        this.setState({
+            username: "",
+            password: "",
+            emailAddress: ""
+        });
+    }
+
     registerHandler = () => {
         const registerData: RegisterData = new RegisterData();
         registerData.setUsername(this.state.username);
@@ -69,13 +77,6 @@ class Register extends React.Component<IProps, IState> {
 
         Client.Instance().userRegister(request, Client.Header(), (err: any, response: RegisterResponse) => {
             Client.CheckError(err, () => {
-
-                this.setState({
-                    username: "",
-                    password: "",
-                    emailAddress: ""
-                });
-
                 switch (response.getStatuscode()) {
                     case StatusCode.OK:
 
@@ -94,16 +95,19 @@ class Register extends React.Component<IProps, IState> {
                         break;
                     case StatusCode.REGISTER_PASSWORD_NOT_VALID:
 
+                        this.clearState();
                         toast.error("Podane hasło nie jest dopuszczalne.");
 
                         break;
                     case StatusCode.REGISTER_USERNAME_OCCUPIED:
 
+                        this.clearState();
                         toast.error("Podana nazwa użytkownika jest już zajęta.");
 
                         break;
                     case StatusCode.REGISTER_EMAIL_OCCUPIED:
 
+                        this.clearState();
                         toast.error("Podany adres email jest już zajęty.");
 
                         break;

@@ -50,6 +50,13 @@ class SignIn extends React.Component<IProps, IState> {
         });
     }
 
+    clearState() {
+        this.setState({
+            username: "",
+            password: ""
+        });
+    }
+
     signInHandler = () => {
         const signInData: SignInData = new SignInData();
         signInData.setUsername(this.state.username);
@@ -60,12 +67,6 @@ class SignIn extends React.Component<IProps, IState> {
 
         Client.Instance().userSignIn(request, Client.Header(), (err: any, response: SignInResponse) => {
             Client.CheckError(err, () => {
-
-                this.setState({
-                    username: "",
-                    password: ""
-                });
-
                 switch (response.getStatuscode()) {
                     case StatusCode.OK:
 
@@ -84,16 +85,19 @@ class SignIn extends React.Component<IProps, IState> {
                         break;
                     case StatusCode.SIGNIN_NOT_FOUND:
 
+                        this.clearState();
                         toast.error("Nazwa użytkownika lub hasło jest niepoprawne.");
 
                         break;
                     case StatusCode.SIGNIN_ACCOUNT_BAN:
 
+                        this.clearState();
                         toast.error("Twoje konto jest zawieszone.");
 
                         break;
                     case StatusCode.DATABASE_ERROR:
 
+                        this.clearState();
                         toast.error("Błąd bazy danych.");
 
                         break;

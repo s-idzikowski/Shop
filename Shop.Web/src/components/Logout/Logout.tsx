@@ -9,7 +9,6 @@ interface IProps {
 }
 
 const Logout = (props: IProps) => {
-
     const request: LogoutRequest = new LogoutRequest();
 
     Client.Instance().userLogout(request, Client.Header(), (err: any, response: LogoutResponse) => {
