@@ -6,6 +6,8 @@ service Service {
     rpc UserSignIn (SignInRequest) returns (SignInResponse);
     rpc UserRegister (RegisterRequest) returns (RegisterResponse);
     rpc UserLogout (LogoutRequest) returns (LogoutResponse);
+    
+    rpc GetUser (UserRequest) returns (UserResponse);
 
     // TODO:
 
@@ -28,6 +30,10 @@ message LogoutRequest {
 
 }
 
+message UserRequest {
+
+}
+
 // Response:
 
 message SignInResponse {
@@ -42,6 +48,11 @@ message RegisterResponse {
 
 message LogoutResponse {
     StatusCode statusCode = 1;
+}
+
+message UserResponse {
+    StatusCode statusCode = 1;
+    UserData userData = 2;
 }
 
 // Models:

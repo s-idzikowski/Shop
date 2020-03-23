@@ -20,10 +20,12 @@ abstract class Client {
         return { 'auth-token': window.sessionStorage.getItem("auth-token") };
     }
 
-    public static CheckError(err: grpcWeb.Error, callback: () => void) {
+    public static CheckError(err: grpcWeb.Error, callback: () => void, onErrorCallback: () => void = undefined) {
         if (err && err.code !== grpcWeb.StatusCode.OK) {
             this.ErrorLog("code: " + err.code);
             this.ErrorLog("message: " + decodeURI(err.message));
+            if (onErrorCallback)
+                onErrorCallback();
             return;
         }
 

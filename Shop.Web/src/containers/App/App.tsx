@@ -14,7 +14,7 @@ import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import NotFound from '../../components/NotFound/NotFound';
 import Logout from '../../components/Logout/Logout';
-import UserPanel from '../../components/UserPanel/UserPanel';
+import UserPanel from '../UserPanel/UserPanel';
 
 class App extends React.Component {
     render() {

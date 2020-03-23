@@ -17,7 +17,9 @@ import {
   RegisterRequest,
   RegisterResponse,
   SignInRequest,
-  SignInResponse} from './service_pb';
+  SignInResponse,
+  UserRequest,
+  UserResponse} from './service_pb';
 
 export class ServiceClient {
   client_: grpcWeb.AbstractClientBase;
@@ -101,6 +103,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoUserLogout,
+      callback);
+  }
+
+  methodInfoGetUser = new grpcWeb.AbstractClientBase.MethodInfo(
+    UserResponse,
+    (request: UserRequest) => {
+      return request.serializeBinary();
+    },
+    UserResponse.deserializeBinary
+  );
+
+  getUser(
+    request: UserRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: UserResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/GetUser',
+      request,
+      metadata || {},
+      this.methodInfoGetUser,
       callback);
   }
 

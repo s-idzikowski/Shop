@@ -147,5 +147,24 @@ namespace Shop.Service
                 StatusCode = StatusCode.Unathorized
             });
         }
+
+        public override async Task<UserResponse> GetUser(UserRequest request, ServerCallContext context)
+        {
+            User user = await Authorize(context);
+
+            if (user != null)
+            {
+                return await Task.FromResult(new UserResponse()
+                {
+                    StatusCode = StatusCode.Ok,
+                    UserData = user.GetUserData()
+                });
+            }
+
+            return await Task.FromResult(new UserResponse()
+            {
+                StatusCode = StatusCode.Unathorized
+            });
+        }
     }
 }
