@@ -73,6 +73,11 @@ enum StatusCode {
 message UserData {
     string username = 1;
     string authKey = 2;
+    string email = 3;
+    string registerTime = 4;
+    string registerIp = 5;
+    string loginTime = 6;
+    string loginIp = 7;
 }
 
 // End User

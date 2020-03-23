@@ -175,6 +175,21 @@ export class UserData extends jspb.Message {
   getAuthkey(): string;
   setAuthkey(value: string): void;
 
+  getEmail(): string;
+  setEmail(value: string): void;
+
+  getRegistertime(): string;
+  setRegistertime(value: string): void;
+
+  getRegisterip(): string;
+  setRegisterip(value: string): void;
+
+  getLogintime(): string;
+  setLogintime(value: string): void;
+
+  getLoginip(): string;
+  setLoginip(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserData.AsObject;
   static toObject(includeInstance: boolean, msg: UserData): UserData.AsObject;
@@ -187,6 +202,11 @@ export namespace UserData {
   export type AsObject = {
     username: string,
     authkey: string,
+    email: string,
+    registertime: string,
+    registerip: string,
+    logintime: string,
+    loginip: string,
   }
 }
 

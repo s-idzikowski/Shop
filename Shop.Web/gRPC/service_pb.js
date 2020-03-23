@@ -1555,7 +1555,12 @@ proto.UserData.prototype.toObject = function(opt_includeInstance) {
 proto.UserData.toObject = function(includeInstance, msg) {
   var f, obj = {
     username: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    authkey: jspb.Message.getFieldWithDefault(msg, 2, "")
+    authkey: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    email: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    registertime: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    registerip: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    logintime: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    loginip: jspb.Message.getFieldWithDefault(msg, 7, "")
   };
 
   if (includeInstance) {
@@ -1600,6 +1605,26 @@ proto.UserData.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setAuthkey(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setEmail(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRegistertime(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRegisterip(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLogintime(value);
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setLoginip(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1643,6 +1668,41 @@ proto.UserData.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getEmail();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getRegistertime();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = message.getRegisterip();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = message.getLogintime();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+  f = message.getLoginip();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
+      f
+    );
+  }
 };
 
 
@@ -1679,6 +1739,96 @@ proto.UserData.prototype.getAuthkey = function() {
  */
 proto.UserData.prototype.setAuthkey = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string email = 3;
+ * @return {string}
+ */
+proto.UserData.prototype.getEmail = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.UserData} returns this
+ */
+proto.UserData.prototype.setEmail = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string registerTime = 4;
+ * @return {string}
+ */
+proto.UserData.prototype.getRegistertime = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.UserData} returns this
+ */
+proto.UserData.prototype.setRegistertime = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional string registerIp = 5;
+ * @return {string}
+ */
+proto.UserData.prototype.getRegisterip = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.UserData} returns this
+ */
+proto.UserData.prototype.setRegisterip = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string loginTime = 6;
+ * @return {string}
+ */
+proto.UserData.prototype.getLogintime = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.UserData} returns this
+ */
+proto.UserData.prototype.setLogintime = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
+ * optional string loginIp = 7;
+ * @return {string}
+ */
+proto.UserData.prototype.getLoginip = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.UserData} returns this
+ */
+proto.UserData.prototype.setLoginip = function(value) {
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 

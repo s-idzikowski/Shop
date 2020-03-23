@@ -2,6 +2,8 @@
 using Shop.Service.Database;
 using Shop.Service.Models;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Shop.Service.Repositories
@@ -9,6 +11,7 @@ namespace Shop.Service.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext db;
+        private readonly string BackEndSalt = "s@lt{0}2=<02>=0";
 
 
 
@@ -18,18 +21,30 @@ namespace Shop.Service.Repositories
         }
 
 
+        private string HashPassword(string password)
+        {
+            using (var hash = SHA512.Create())
+            {
+                var bytes = hash.ComputeHash(Encoding.UTF8.GetBytes(string.Format(BackEndSalt, password)));
+
+                var hashBuilder = new StringBuilder();
+                foreach (var _byte in bytes)
+                    hashBuilder.Append(_byte.ToString("X2"));
+                return hashBuilder.ToString();
+            }
+        }
 
         public Task<User> SignIn(SignInData signInData)
         {
-            //TODO - h@$h
-            signInData.Password = signInData.Password;
+            signInData.Password = HashPassword(signInData.Password);
+
             return db.Users.Find(o => o.Username == signInData.Username && o.PasswordHash == signInData.Password).SingleOrDefaultAsync();
         }
 
         public Task Register(User user)
         {
-            //TODO - h@$h
-            user.PasswordHash = user.PasswordHash;
+            user.PasswordHash = HashPassword(user.PasswordHash);
+
             return db.Users.InsertOneAsync(user);
         }
 
@@ -40,7 +55,9 @@ namespace Shop.Service.Repositories
 
             UpdateDefinition<User> update = Builders<User>.Update
                 .Set(o => o.AuthToken, user.AuthToken)
-                .Set(o => o.LoginTime, user.LoginTime);
+                .Set(o => o.LoginTime, user.LoginTime)
+                .Set(o => o.LoginIp, user.LoginIp);
+
             return db.Users.UpdateOneAsync(filter, update);
         }
 

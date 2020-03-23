@@ -28,9 +28,8 @@ class Register extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        const user: UserData.AsObject = JSON.parse(window.sessionStorage.getItem("user"));
 
-        if (user) {
+        if (Client.GetUser()) {
             this.state = {
                 username: "",
                 password: "",
@@ -69,7 +68,7 @@ class Register extends React.Component<IProps, IState> {
     registerHandler = () => {
         const registerData: RegisterData = new RegisterData();
         registerData.setUsername(this.state.username);
-        registerData.setPassword(this.state.password);
+        registerData.setPassword(Client.HashSensitiveData(this.state.password));
         registerData.setEmailaddress(this.state.emailAddress);
 
         const request: RegisterRequest = new RegisterRequest();
@@ -129,6 +128,8 @@ class Register extends React.Component<IProps, IState> {
     render() {
         return (
             <div>
+                {this.state.redirect ? <Redirect to='/' /> : ""}
+
                 <form>
                     <Label>
                         Nazwa użytkownika:
@@ -146,8 +147,6 @@ class Register extends React.Component<IProps, IState> {
                     <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />
 
                     <Button onClick={this.registerHandler.bind(this)}>Rejestruj</Button>
-
-                    {this.state.redirect ? <Redirect to='/' /> : ""}
                 </form>
             </div>
         );

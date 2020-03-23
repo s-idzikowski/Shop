@@ -10,6 +10,7 @@ const Navbar = () => {
 
     const signIn = () => <NavbarLink to="/signin" displayName="Zaloguj" />;
     const register = () => <NavbarLink to="/register" displayName="Rejestracja" />;
+    const userPanel = () => <NavbarLink to="/userpanel" displayName="Panel użytkownika" />;
     const logOut = () => <NavbarLink to="/logout" displayName="Wyloguj" />;
 
     return (
@@ -20,11 +21,13 @@ const Navbar = () => {
                         <ul className="navbar-nav ml-auto">
                             <NavbarLink to="/" displayName="Dashboard" />
 
-                            { user ? "" : signIn()}
-                            { user ? "" : register()}
-                            
-                            { user ? logOut() : ""}
-                           
+                            {user ? "" : signIn()}
+                            {user ? "" : register()}
+
+                            {user ? userPanel() : ""}
+
+                            {user ? logOut() : ""}
+
                             <NavbarLink to="/test" displayName="TEST" />
                         </ul>
                     </div>

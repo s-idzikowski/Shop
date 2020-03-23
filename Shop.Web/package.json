@@ -14,6 +14,7 @@
   "dependencies": {
     "bootstrap": "^4.4.1",
     "browserify": "^16.5.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "google-protobuf": "^3.11.4",
     "grpc-web": "^1.0.7",

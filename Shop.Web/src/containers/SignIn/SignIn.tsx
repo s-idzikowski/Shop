@@ -27,9 +27,8 @@ class SignIn extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        const user: UserData.AsObject = JSON.parse(window.sessionStorage.getItem("user"));
 
-        if (user) {
+        if (Client.GetUser()) {
             this.state = {
                 username: "",
                 password: "",
@@ -60,7 +59,7 @@ class SignIn extends React.Component<IProps, IState> {
     signInHandler = () => {
         const signInData: SignInData = new SignInData();
         signInData.setUsername(this.state.username);
-        signInData.setPassword(this.state.password);
+        signInData.setPassword(Client.HashSensitiveData(this.state.password));
 
         const request: SignInRequest = new SignInRequest();
         request.setSignindata(signInData);
@@ -119,6 +118,8 @@ class SignIn extends React.Component<IProps, IState> {
     render() {
         return (
             <div>
+                {this.state.redirect ? <Redirect to='/' /> : ""}
+
                 <form>
                     <Label>
                         Nazwa użytkownika:
@@ -131,8 +132,6 @@ class SignIn extends React.Component<IProps, IState> {
                     <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
 
                     <Button onClick={this.signInHandler.bind(this)}>Zaloguj</Button>
-
-                    {this.state.redirect ? <Redirect to='/' /> : ""}
                 </form>
             </div>
         );

@@ -99,7 +99,7 @@ namespace Shop.Service
             }
 
             // Insert database:
-            user = User.New(request.RegisterData);
+            user = User.New(context, request.RegisterData);
             await userRepository.Register(user);
 
             StatusCode statusCode;

@@ -1,8 +1,10 @@
 import * as grpcWeb from 'grpc-web';
+import * as crypto from 'crypto';
 
 import { ServiceClient } from './../../gRPC/ServiceServiceClientPb';
 
 import { toast } from 'react-toastify';
+import { UserData } from '../../gRPC/service_pb';
 
 abstract class Client {
     protected static instance: ServiceClient;
@@ -10,7 +12,7 @@ abstract class Client {
     public static Instance(): ServiceClient {
         if (!this.instance)
             this.instance = new ServiceClient('https://localhost:5001');
-            
+
         return this.instance;
     }
 
@@ -35,6 +37,16 @@ abstract class Client {
         console.log(message);
         toast.error(message);
     };
+
+    public static GetUser(): UserData.AsObject {
+        return JSON.parse(window.sessionStorage.getItem("user"));
+    }
+
+    public static HashSensitiveData(data: any): any {
+        const hash = crypto.createHash("sha1");
+        hash.update("Ser$ErT" + data + "D@tE");
+        return hash.digest('hex');
+    }
 }
 
 export default Client;
