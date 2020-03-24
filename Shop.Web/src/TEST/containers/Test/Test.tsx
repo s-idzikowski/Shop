@@ -6,6 +6,14 @@ import Client from '../../../class/Client';
 import Hello from '../../components/Hello';
 
 import { Label, Button, Input, Form, Tooltip } from 'reactstrap';
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import Dashboard from '../../../components/Dashboard/Dashboard';
+import SignIn from '../../../containers/SignIn/SignIn';
+import Register from '../../../containers/Register/Register';
+import Logout from '../../../components/Logout/Logout';
+import UserPanel from '../../../containers/UserPanel/UserPanel';
+import NotFound from '../../../components/NotFound/NotFound';
+import NavbarLink from '../../../components/Navbar/NavbarLink';
 
 interface IState {
     message: string,
@@ -80,6 +88,33 @@ class Test extends React.Component {
                 </Form>
 
                 <Hello helloData={this.state.helloData} />
+
+                <h1>Menu:</h1>
+                <BrowserRouter>
+
+                    <Link className="nav-link" to="/test">HOME</Link>
+                    <Link className="nav-link" to="/test/test1">test1</Link>
+                    <Link className="nav-link" to="/test/test2">test2</Link>
+
+                    <div>
+                        <Switch>
+                            <Route exact path='/test'>
+                                HOME
+                            </Route>
+
+                            <Route path='/test/test1'>
+                                TEST 1
+                            </Route>
+
+                            <Route path='/test/test2'>
+                                TEST 2
+                            </Route>
+
+                            <Route component={NotFound} />
+                        </Switch>
+                    </div>
+
+                </BrowserRouter>
             </div>
         );
     }

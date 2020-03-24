@@ -18,7 +18,6 @@ import UserPanel from '../UserPanel/UserPanel';
 
 class App extends React.Component {
     render() {
-        const NotFoundRedirect = () => <Redirect to='/notfound' />;
         const Update = () => this.forceUpdate();
 
         return (
@@ -29,25 +28,26 @@ class App extends React.Component {
 
                     <Header />
 
-                    <Switch>
-                        <Route exact path='/' component={Dashboard} />
+                    <div className="container">
+                        <Switch>
+                            <Route exact path='/' component={Dashboard} />
 
-                        <Route path='/signin'>
-                            <SignIn onSignIn={Update} />
-                        </Route>
-                        <Route path='/register'>
-                            <Register onRegister={Update} />
-                        </Route>
-                        <Route path='/logout'>
-                            <Logout onLogout={Update} />
-                        </Route>
-                        <Route path='/userpanel' component={UserPanel} />
+                            <Route path='/signin'>
+                                <SignIn onSignIn={Update} />
+                            </Route>
+                            <Route path='/register'>
+                                <Register onRegister={Update} />
+                            </Route>
+                            <Route path='/logout'>
+                                <Logout onLogout={Update} />
+                            </Route>
+                            <Route path='/userpanel' component={UserPanel} />
 
-                        <Route path='/test' component={Test} />
+                            <Route path='/test' component={Test} />
 
-                        <Route path='/notfound' component={NotFound} />
-                        <Route component={NotFoundRedirect} />
-                    </Switch>
+                            <Route component={NotFound} />
+                        </Switch>
+                    </div>
 
                 </BrowserRouter>
 

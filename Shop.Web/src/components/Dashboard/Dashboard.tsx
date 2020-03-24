@@ -1,12 +1,14 @@
 import * as React from 'react';
 
 import './Dashboard.css';
+import PageTitle from '../PageTitle/PageTitle';
 
 const Dashboard = () => {
 
     return (
         <div>
-            <h1>Dashboard</h1>
+            <PageTitle title="Dashboard" />
+
         </div>
     );
 }

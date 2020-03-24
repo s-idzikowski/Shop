@@ -6,6 +6,7 @@ import Client from '../../class/Client';
 import { toast } from 'react-toastify';
 import { Label, Input, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
+import PageTitle from '../../components/PageTitle/PageTitle';
 
 interface IProps {
     onRegister: () => void,
@@ -131,22 +132,24 @@ class Register extends React.Component<IProps, IState> {
                 {this.state.redirect ? <Redirect to='/' /> : ""}
 
                 <form>
-                    <Label>
-                        Nazwa użytkownika:
-                    </Label>
-                    <Input value={this.state.username} onChange={this.usernameChangeHandler.bind(this)} />
+                    <div>
+                        <Label>Nazwa użytkownika:</Label>
+                        <Input value={this.state.username} onChange={this.usernameChangeHandler.bind(this)} />
+                    </div>
 
-                    <Label>
-                        Hasło:
-                    </Label>
-                    <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
+                    <div>
+                        <Label>Hasło:</Label>
+                        <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
+                    </div>
+                    
+                    <div>
+                        <Label>Adres e-mail:</Label>
+                        <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />
+                    </div>
 
-                    <Label>
-                        Adres e-mail:
-                    </Label>
-                    <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />
-
-                    <Button onClick={this.registerHandler.bind(this)}>Rejestruj</Button>
+                    <div>
+                        <Button onClick={this.registerHandler.bind(this)}>Rejestruj</Button>
+                    </div>
                 </form>
             </div>
         );

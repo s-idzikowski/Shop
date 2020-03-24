@@ -6,7 +6,8 @@ const NotFound = () => {
 
     return (
         <div>
-            <h1>404 - Not found...</h1>
+            <h2>Strona nie istnieje (błąd 404)</h2>
+            <h2>¯\_( ͡° ͜ʖ ͡°)_/¯</h2>
         </div>
     );
 }
