@@ -7,6 +7,7 @@ import Client from '../../class/Client';
 
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
+import PageTitle from '../../components/PageTitle/PageTitle';
 
 interface IProps {
     onSignIn: () => void,
@@ -121,17 +122,19 @@ class SignIn extends React.Component<IProps, IState> {
                 {this.state.redirect ? <Redirect to='/' /> : ""}
 
                 <form>
-                    <Label>
-                        Nazwa użytkownika:
-                    </Label>
-                    <Input value={this.state.username} onChange={this.usernameChangeHandler.bind(this)} />
+                    <div>
+                        <Label>Nazwa użytkownika:</Label>
+                        <Input value={this.state.username} onChange={this.usernameChangeHandler.bind(this)} />
+                    </div>
 
-                    <Label>
-                        Hasło:
-                    </Label>
-                    <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
+                    <div>
+                        <Label>Hasło:</Label>
+                        <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
+                    </div>
 
-                    <Button onClick={this.signInHandler.bind(this)}>Zaloguj</Button>
+                    <div>
+                        <Button onClick={this.signInHandler.bind(this)}>Zaloguj</Button>
+                    </div>
                 </form>
             </div>
         );
