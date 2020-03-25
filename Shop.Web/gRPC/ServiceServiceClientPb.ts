@@ -12,12 +12,12 @@ import * as grpcWeb from 'grpc-web';
 import {
   HelloReply,
   HelloRequest,
-  LogoutRequest,
   LogoutResponse,
   RegisterRequest,
   RegisterResponse,
   SignInRequest,
   SignInResponse,
+  UserOperation,
   UserRequest,
   UserResponse} from './service_pb';
 
@@ -86,14 +86,14 @@ export class ServiceClient {
 
   methodInfoUserLogout = new grpcWeb.AbstractClientBase.MethodInfo(
     LogoutResponse,
-    (request: LogoutRequest) => {
+    (request: UserRequest) => {
       return request.serializeBinary();
     },
     LogoutResponse.deserializeBinary
   );
 
   userLogout(
-    request: LogoutRequest,
+    request: UserRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
                response: LogoutResponse) => void) {
@@ -125,6 +125,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoGetUser,
+      callback);
+  }
+
+  methodInfoGetUserOperations = new grpcWeb.AbstractClientBase.MethodInfo(
+    UserOperation,
+    (request: UserRequest) => {
+      return request.serializeBinary();
+    },
+    UserOperation.deserializeBinary
+  );
+
+  getUserOperations(
+    request: UserRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: UserOperation) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/GetUserOperations',
+      request,
+      metadata || {},
+      this.methodInfoGetUserOperations,
       callback);
   }
 

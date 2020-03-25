@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Shop.Service.Models;
 
 namespace Shop.Service
@@ -8,20 +9,9 @@ namespace Shop.Service
     {
         public override async Task<SignInResponse> UserSignIn(SignInRequest request, ServerCallContext context)
         {
-            User user = await Authorize(context);
+            User user = await userRepository.GetByUsername(request.SignInData.Username);
 
-            if (user != null)
-            {
-                user.AuthToken = null;
-                await userRepository.UpdateAuthToken(user);
-
-                return await Task.FromResult(new SignInResponse()
-                {
-                    StatusCode = StatusCode.Unathorized
-                });
-            }
-
-            user = await userRepository.SignIn(request.SignInData);
+            await userRepository.SignIn(user, request.SignInData.Password, context);
 
             StatusCode statusCode;
             UserData userData;
@@ -36,10 +26,6 @@ namespace Shop.Service
                 else
                 {
                     statusCode = StatusCode.Ok;
-
-                    user.AuthToken = await user.GenerateAuthKey(context);
-                    await userRepository.UpdateAuthToken(user);
-
                     userData = user.GetUserData();
                 }
             }
@@ -58,19 +44,6 @@ namespace Shop.Service
 
         public override async Task<RegisterResponse> UserRegister(RegisterRequest request, ServerCallContext context)
         {
-            User user = await Authorize(context);
-
-            if (user != null)
-            {
-                user.AuthToken = null;
-                await userRepository.UpdateAuthToken(user);
-
-                return await Task.FromResult(new RegisterResponse()
-                {
-                    StatusCode = StatusCode.Unathorized
-                });
-            }
-
             // Password:
             // TODO - ONLY VALIDATE!
             //return await Task.FromResult(new RegisterResponse()
@@ -79,7 +52,7 @@ namespace Shop.Service
             //});
 
             // Username:
-            user = await userRepository.GetByUsername(request.RegisterData.Username);
+            User user = await userRepository.GetByUsername(request.RegisterData.Username);
             if (user != null)
             {
                 return await Task.FromResult(new RegisterResponse()
@@ -99,8 +72,7 @@ namespace Shop.Service
             }
 
             // Insert database:
-            user = User.New(context, request.RegisterData);
-            await userRepository.Register(user);
+            user = await userRepository.Register(request.RegisterData, context);
 
             StatusCode statusCode;
             UserData userData;
@@ -108,10 +80,6 @@ namespace Shop.Service
             if (user != null)
             {
                 statusCode = StatusCode.Ok;
-
-                user.AuthToken = await user.GenerateAuthKey(context);
-                await userRepository.UpdateAuthToken(user);
-
                 userData = user.GetUserData();
             }
             else
@@ -127,40 +95,26 @@ namespace Shop.Service
             });
         }
 
-        public override async Task<LogoutResponse> UserLogout(LogoutRequest request, ServerCallContext context)
+        [Authorize]
+        public override async Task<LogoutResponse> UserLogout(UserRequest request, ServerCallContext context)
         {
-            User user = await Authorize(context);
-
-            if (user != null)
-            {
-                user.AuthToken = null;
-                await userRepository.UpdateAuthToken(user);
-
-                return await Task.FromResult(new LogoutResponse()
-                {
-                    StatusCode = StatusCode.Ok
-                });
-            }
+            //await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.LogOut, context.Host));
 
             return await Task.FromResult(new LogoutResponse()
             {
-                StatusCode = StatusCode.Unathorized
+                StatusCode = StatusCode.Ok
             });
         }
 
+        [Authorize]
         public override async Task<UserResponse> GetUser(UserRequest request, ServerCallContext context)
         {
-            User user = await Authorize(context);
 
-            if (user != null)
+            return await Task.FromResult(new UserResponse()
             {
-                return await Task.FromResult(new UserResponse()
-                {
-                    StatusCode = StatusCode.Ok,
-                    UserData = user.GetUserData()
-                });
-            }
-
+                StatusCode = StatusCode.Ok
+            });
+            // todo
             return await Task.FromResult(new UserResponse()
             {
                 StatusCode = StatusCode.Unathorized

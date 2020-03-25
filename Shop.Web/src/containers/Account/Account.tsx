@@ -17,26 +17,20 @@ interface IProps {
 
 interface IState {
     user: UserData.AsObject,
-    error: boolean,
-    redirect: boolean
+    error: boolean
 }
 
 class Account extends React.Component<IProps, IState> {
     state: IState = {
         user: null,
-        error: false,
-        redirect: false
+        error: false
     };
 
     constructor(props: IProps) {
         super(props);
 
         if (!Client.GetUser()) {
-            this.state = {
-                user: null,
-                error: false,
-                redirect: true,
-            };
+            Client.Redirect();
         }
         else {
             const request: UserRequest = new UserRequest();
@@ -47,19 +41,25 @@ class Account extends React.Component<IProps, IState> {
                         case StatusCode.OK:
 
                             const user = response.getUserdata();
-                            window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
+                            if (user) {
+                                window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
 
-                            this.setState({
-                                user: user.toObject()
-                            });
+                                this.setState({
+                                    user: user.toObject()
+                                });
+                            }
+                            else {
+                                Client.ErrorLog("User is null");
+                            
+                                this.setState({
+                                    error: true
+                                });
+                            }
 
                             break;
                         case StatusCode.UNATHORIZED:
 
-                            window.sessionStorage.clear();
-                            this.setState({
-                                redirect: true
-                            });
+                            Client.Redirect();
 
                             break;
                     }
@@ -81,19 +81,25 @@ class Account extends React.Component<IProps, IState> {
                     case StatusCode.OK:
 
                         const user = response.getUserdata();
-                        window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
+                        if (user) {
+                            window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
 
-                        this.setState({
-                            user: user.toObject()
-                        });
+                            this.setState({
+                                user: user.toObject()
+                            });
+                        }
+                        else {
+                            Client.ErrorLog("User is null");
+
+                            this.setState({
+                                error: true
+                            });
+                        }
 
                         break;
                     case StatusCode.UNATHORIZED:
 
-                        window.sessionStorage.clear();
-                        this.setState({
-                            redirect: true
-                        });
+                        Client.Redirect();
 
                         break;
                 }
@@ -115,8 +121,6 @@ class Account extends React.Component<IProps, IState> {
 
         return (
             <div>
-                {this.state.redirect ? <Redirect to='/' /> : ""}
-
                 <PageTitle title="Moje konto" />
 
                 <div className="row">

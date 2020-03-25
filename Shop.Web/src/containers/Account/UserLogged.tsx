@@ -14,13 +14,7 @@ const UserLogged = (props: IProps) => {
             <UserLoggedRow label="Nazwa użytkownika:" valueInput={props.user.username} />
             <UserLoggedRow label="Adres e-mail:" valueInput={props.user.email} />
 
-            <UserLoggedRow label="Data rejestracji:" valueInput={props.user.registertime} />
-            <UserLoggedRow label="Adres IP rejestracji:" valueInput={props.user.registerip} />
-
-            <UserLoggedRow label="Data ostatniego logowania:" valueInput={props.user.logintime} />
-            <UserLoggedRow label="Adres IP logowania:" valueInput={props.user.loginip} />
-
-            <UserLoggedRow label="[DEBUG] AuthToken:" valueInput={props.user.authkey} />
+            <UserLoggedRow label="[DEBUG] AuthToken:" valueInput={props.user.authorization} />
         </div>
     );
 }

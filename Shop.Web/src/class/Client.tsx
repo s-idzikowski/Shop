@@ -17,26 +17,41 @@ abstract class Client {
     }
 
     public static Header(): {} {
-        return { 
-            'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MDQwMGU3Ni03YjQ1LTRkNzAtOGU4MS05ZmUwMDYwZmU5MGMiLCJ1bmlxdWVfbmFtZSI6InNhc2EiLCJuYmYiOjE1ODUxMDAzMjcsImV4cCI6MTU4NTE4NjcyNywiaWF0IjoxNTg1MTAwMzI3fQ.iBfy8ruw5bvnrX4e8PSr7JCiWEmFEAGcOSjPl38nEdD-F8rKy7n5XbwsqwUqO2B4dOMZ004RiE_uGFO6CXLavw',
-            'auth-token': window.sessionStorage.getItem("auth-token"),
-                 };
+        return {
+            'Authorization': window.sessionStorage.getItem("Authorization"),
+        };
     }
 
     public static CheckError(err: grpcWeb.Error, callback: () => void, onErrorCallback: () => void = undefined) {
-        if (err && err.code !== grpcWeb.StatusCode.OK) {
-            this.ErrorLog("code: " + err.code);
-            this.ErrorLog("message: " + decodeURI(err.message));
-            if (onErrorCallback)
-                onErrorCallback();
+        if (err) {
+            switch (err.code) {
+                case grpcWeb.StatusCode.OK:
+
+                    callback();
+
+                    break;
+                case grpcWeb.StatusCode.UNAUTHENTICATED:
+
+                    this.Redirect();
+
+                    break;
+                default:
+
+                    this.ErrorLog("Code: " + err.code);
+                    this.ErrorLog("message: " + decodeURI(err.message));
+
+                    if (onErrorCallback)
+                        onErrorCallback();
+
+                    break;
+            }
             return;
         }
-
-        console.log("[SERVICE-RESPONSE]");
+        
         callback();
     }
 
-    protected static ErrorLog(msg: any) {
+    public static ErrorLog(msg: any) {
         const message = "[Error] " + msg;
 
         console.log(message);
@@ -51,6 +66,12 @@ abstract class Client {
         const hash = crypto.createHash("sha1");
         hash.update("Ser$ErT" + data + "D@tE");
         return hash.digest('hex');
+    }
+
+    public static Redirect()
+    {
+        window.sessionStorage.clear();
+        window.location.href = "\\";
     }
 }
 

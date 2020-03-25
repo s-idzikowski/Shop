@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Client from '../../class/Client';
-import { LogoutRequest, LogoutResponse, StatusCode } from '../../../gRPC/service_pb';
+import { LogoutResponse, StatusCode, UserRequest } from '../../../gRPC/service_pb';
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const Logout = (props: IProps) => {
-    const request: LogoutRequest = new LogoutRequest();
+    const request: UserRequest = new UserRequest();
 
     Client.Instance().userLogout(request, Client.Header(), (err: any, response: LogoutResponse) => {
         Client.CheckError(err, () => {

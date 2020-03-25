@@ -40,20 +40,6 @@ export namespace RegisterRequest {
   }
 }
 
-export class LogoutRequest extends jspb.Message {
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): LogoutRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: LogoutRequest): LogoutRequest.AsObject;
-  static serializeBinaryToWriter(message: LogoutRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): LogoutRequest;
-  static deserializeBinaryFromReader(message: LogoutRequest, reader: jspb.BinaryReader): LogoutRequest;
-}
-
-export namespace LogoutRequest {
-  export type AsObject = {
-  }
-}
-
 export class UserRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserRequest.AsObject;
@@ -207,26 +193,17 @@ export namespace RegisterData {
 }
 
 export class UserData extends jspb.Message {
+  getUserid(): string;
+  setUserid(value: string): void;
+
+  getAuthorization(): string;
+  setAuthorization(value: string): void;
+
   getUsername(): string;
   setUsername(value: string): void;
 
-  getAuthkey(): string;
-  setAuthkey(value: string): void;
-
   getEmail(): string;
   setEmail(value: string): void;
-
-  getRegistertime(): string;
-  setRegistertime(value: string): void;
-
-  getRegisterip(): string;
-  setRegisterip(value: string): void;
-
-  getLogintime(): string;
-  setLogintime(value: string): void;
-
-  getLoginip(): string;
-  setLoginip(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserData.AsObject;
@@ -238,13 +215,36 @@ export class UserData extends jspb.Message {
 
 export namespace UserData {
   export type AsObject = {
+    userid: string,
+    authorization: string,
     username: string,
-    authkey: string,
     email: string,
-    registertime: string,
-    registerip: string,
-    logintime: string,
-    loginip: string,
+  }
+}
+
+export class UserOperation extends jspb.Message {
+  getType(): OperationTypes;
+  setType(value: OperationTypes): void;
+
+  getTime(): string;
+  setTime(value: string): void;
+
+  getIp(): string;
+  setIp(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UserOperation.AsObject;
+  static toObject(includeInstance: boolean, msg: UserOperation): UserOperation.AsObject;
+  static serializeBinaryToWriter(message: UserOperation, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UserOperation;
+  static deserializeBinaryFromReader(message: UserOperation, reader: jspb.BinaryReader): UserOperation;
+}
+
+export namespace UserOperation {
+  export type AsObject = {
+    type: OperationTypes,
+    time: string,
+    ip: string,
   }
 }
 
@@ -313,4 +313,11 @@ export enum StatusCode {
   REGISTER_USERNAME_OCCUPIED = 20,
   REGISTER_PASSWORD_NOT_VALID = 21,
   REGISTER_EMAIL_OCCUPIED = 22,
+}
+export enum OperationTypes { 
+  REGISTER = 0,
+  LOGIN = 1,
+  FAILEDLOGIN = 2,
+  LOGOUT = 3,
+  CHANGEPASSWORD = 10,
 }

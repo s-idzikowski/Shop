@@ -1,13 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using Grpc.Core;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Shop.Service.Database;
 using Shop.Service.Models;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Shop.Service.Repositories
@@ -15,8 +12,8 @@ namespace Shop.Service.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext db;
-        private readonly string BackEndSalt = "s@lt{0}2=<02>=0";
         private readonly IConfiguration config;
+
 
 
         public UserRepository(AppDbContext db, IConfiguration config)
@@ -26,78 +23,56 @@ namespace Shop.Service.Repositories
         }
 
 
-        private void HashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
+
+        public async Task<User> SignIn(User user, string password, ServerCallContext context)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            if (user == null)
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Host));
+
+                return null;
+            }
+
+            string token = await user.GenerateToken(password, config.GetSection("AppSettings:Token").Value);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Host));
+
+                return null;
+            }
+            else
+            {
+                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Login, context.Host));
+
+                user.AuthorizationToken = token;
+
+                return user;
             }
         }
 
-        public async Task<User> SignIn(SignInData signInData)
+        public async Task<User> Register(RegisterData registerData, ServerCallContext context)
         {
+            User user = User.New(context, registerData);
 
-            User user = await db.Users.Find(u => u.Username == signInData.Username).SingleOrDefaultAsync();
-            if (user == null) return null;
+            user.HashPassword();
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(user.PasswordSalt2))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signInData.Password));
+            await db.Users.InsertOneAsync(user);
 
-                bool verifyPassword = true;
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != user.PasswordHash2[i])
-                        verifyPassword = false;
-                }
-                if (!verifyPassword) return null;
-            }
+            await AddOperations(user.Id, Operation.GetOne(OperationTypes.Register, context.Host));
 
-            // create token
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("AppSettings:Token").Value));
-            
-            var creeds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(24),
-                SigningCredentials = creeds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            Console.WriteLine("TOKEN: " + token.ToString());
-            Console.WriteLine("TOKENDOLOGOWANIA: " + tokenHandler.WriteToken(token));
-
-            return user;
+            return await SignIn(user, registerData.Password, context);
         }
 
-        public Task Register(User user)
-        {
-            HashPassword(user.PasswordHash, out byte[] passwordHash, out byte[] passwordSalt);
-            user.PasswordHash2 = passwordHash;
-            user.PasswordSalt2 = passwordSalt;
 
-            return db.Users.InsertOneAsync(user);
-        }
 
-        public Task UpdateAuthToken(User user)
+        public Task AddOperations(Guid userId, IEnumerable<Operation> operations)
         {
             FilterDefinition<User> filter = Builders<User>.Filter
-                .Eq(o => o.Id, user.Id);
+                .Eq(o => o.Id, userId);
 
             UpdateDefinition<User> update = Builders<User>.Update
-                .Set(o => o.AuthToken, user.AuthToken)
-                .Set(o => o.LastLogin, user.LastLogin)
-                .PushEach(o => o.Operations, user.Operations);
+                .PushEach(o => o.Operations, operations);
 
             return db.Users.UpdateOneAsync(filter, update);
         }
@@ -110,11 +85,6 @@ namespace Shop.Service.Repositories
         public Task<User> GetByEmailAddress(string emailAddress)
         {
             return db.Users.Find(o => o.EmailAddress == emailAddress).SingleOrDefaultAsync();
-        }
-
-        public Task<User> GetByAuthToken(string authToken)
-        {
-            return db.Users.Find(o => o.AuthToken == authToken).SingleOrDefaultAsync();
         }
 
         public Task<User> GetById(Guid id)

@@ -5,9 +5,10 @@ option csharp_namespace = "Shop.Service";
 service Service {
     rpc UserSignIn (SignInRequest) returns (SignInResponse);
     rpc UserRegister (RegisterRequest) returns (RegisterResponse);
-    rpc UserLogout (LogoutRequest) returns (LogoutResponse);
+    rpc UserLogout (UserRequest) returns (LogoutResponse);
     
     rpc GetUser (UserRequest) returns (UserResponse);
+    rpc GetUserOperations (UserRequest) returns (UserOperation);
 
     // TODO:
 
@@ -26,12 +27,8 @@ message RegisterRequest {
     RegisterData registerData = 1;
 }
 
-message LogoutRequest {
-
-}
-
 message UserRequest {
-
+    string userId = 1;
 }
 
 // Response:
@@ -82,13 +79,25 @@ enum StatusCode {
 }
 
 message UserData {
-    string username = 1;
-    string authKey = 2;
-    string email = 3;
-    string registerTime = 4;
-    string registerIp = 5;
-    string loginTime = 6;
-    string loginIp = 7;
+    string userId = 1;
+    string authorization = 2;
+    string username = 3;
+    string email = 4;
+}
+
+message UserOperation {
+    OperationTypes type = 1;
+    string time = 2;
+    string ip = 3;
+}
+
+enum OperationTypes {
+    REGISTER = 0;
+    LOGIN = 1;
+    FAILEDLOGIN = 2;
+    LOGOUT = 3;
+
+    CHANGEPASSWORD = 10;
 }
 
 // End User

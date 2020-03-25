@@ -1,9 +1,5 @@
-using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using Shop.Service.Models;
 using Shop.Service.Repositories;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Shop.Service
 {
@@ -19,16 +15,6 @@ namespace Shop.Service
         {
             this.logger = logger;
             this.userRepository = userRepository;
-        }
-
-        private async Task<User> Authorize(ServerCallContext context)
-        {
-            string token = context.RequestHeaders.FirstOrDefault(o => o.Key == "auth-token")?.Value;
-
-            if (string.IsNullOrWhiteSpace(token))
-                return await Task.FromResult<User>(null);
-
-            return await userRepository.GetByAuthToken(token);
         }
     }
 }

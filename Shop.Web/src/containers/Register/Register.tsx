@@ -31,12 +31,7 @@ class Register extends React.Component<IProps, IState> {
         super(props);
 
         if (Client.GetUser()) {
-            this.state = {
-                username: "",
-                password: "",
-                emailAddress: "",
-                redirect: true,
-            };
+            Client.Redirect();
         }
     }
 
@@ -81,7 +76,7 @@ class Register extends React.Component<IProps, IState> {
                     case StatusCode.OK:
 
                         const user = response.getUserdata();
-                        window.sessionStorage.setItem("auth-token", user.getAuthkey());
+                        window.sessionStorage.setItem("Authorization", user.getAuthorization());
                         window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
 
                         toast.success("Poprawna rejestracja.");
