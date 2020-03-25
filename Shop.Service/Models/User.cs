@@ -13,6 +13,8 @@ namespace Shop.Service.Models
         public Guid Id { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
+        public byte[] PasswordHash2 { get; set; }
+        public byte[] PasswordSalt2 { get; set; }
         public string EmailAddress { get; set; }
 
         public string AuthToken { get; set; }
