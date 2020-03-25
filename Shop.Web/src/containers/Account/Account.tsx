@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './UserPanel.css';
+import './Account.css';
 import { UserData, UserRequest, UserResponse, StatusCode } from '../../../gRPC/service_pb';
 import { Redirect, BrowserRouter, Link, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
@@ -21,7 +21,7 @@ interface IState {
     redirect: boolean
 }
 
-class UserPanel extends React.Component<IProps, IState> {
+class Account extends React.Component<IProps, IState> {
     state: IState = {
         user: null,
         error: false,
@@ -72,6 +72,39 @@ class UserPanel extends React.Component<IProps, IState> {
         }
     }
 
+    logHandler() {
+        const request: UserRequest = new UserRequest();
+
+        Client.Instance().getUser(request, Client.Header(), (err: any, response: UserResponse) => {
+            Client.CheckError(err, () => {
+                switch (response.getStatuscode()) {
+                    case StatusCode.OK:
+
+                        const user = response.getUserdata();
+                        window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
+
+                        this.setState({
+                            user: user.toObject()
+                        });
+
+                        break;
+                    case StatusCode.UNATHORIZED:
+
+                        window.sessionStorage.clear();
+                        this.setState({
+                            redirect: true
+                        });
+
+                        break;
+                }
+            }, () => {
+                this.setState({
+                    error: true
+                });
+            });
+        });
+    }
+
     render() {
         const userLogged = () => <UserLogged user={this.state.user} />;
         const loading = () => <Loading />;
@@ -84,16 +117,17 @@ class UserPanel extends React.Component<IProps, IState> {
             <div>
                 {this.state.redirect ? <Redirect to='/' /> : ""}
 
-                <PageTitle title="Panel użytkownika"/>
+                <PageTitle title="Moje konto" />
 
                 <div className="row">
                     <BrowserRouter>
                         <div className="col-4">
                             <div className="shadow p-2 m-2">
                                 <ul className="nav flex-column">
-                                    <NavbarLink to="/userpanel" displayName="Moje dane" />
-                                    <NavbarLink to="/userpanel/changepassword" displayName="Zmień hasło" />
-                                    <NavbarLink to="/userpanel/log" displayName="Dziennik aktywności" />
+                                    <NavbarLink to="/Account" displayName="Moje dane" />
+                                    <NavbarLink to="/Account/changepassword" displayName="Zmień hasło" />
+                                    <NavbarLink onClick={this.logHandler.bind(this)} to="/Account/log" displayName="Dziennik aktywności" />
+                                    <NavbarLink to="/Account/settings" displayName="Ustawienia" />
                                 </ul>
                             </div>
                         </div>
@@ -101,16 +135,20 @@ class UserPanel extends React.Component<IProps, IState> {
                         <div className="col-8">
                             <div className="shadow p-2 m-2">
                                 <Switch>
-                                    <Route exact path='/userpanel'>
-                                        <h2>{isError() ? serviceError() : (isLoading() ? userLogged() : loading())}</h2>
+                                    <Route exact path='/Account'>
+                                        {isError() ? serviceError() : (isLoading() ? userLogged() : loading())}
                                     </Route>
 
-                                    <Route path='/userpanel/changepassword'>
+                                    <Route path='/Account/changepassword'>
                                         Zmiana hasła
                                     </Route>
 
-                                    <Route path='/userpanel/log'>
+                                    <Route path='/Account/log'>
                                         Dziennik aktywności
+                                    </Route>
+
+                                    <Route path='/Account/settings'>
+                                        Ustawienia
                                     </Route>
 
                                     <Route component={NotFound} />
@@ -124,4 +162,4 @@ class UserPanel extends React.Component<IProps, IState> {
     }
 }
 
-export default UserPanel;
+export default Account;

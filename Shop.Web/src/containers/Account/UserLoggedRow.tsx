@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './UserPanel.css';
+import './Account.css';
 import { Label, Input } from 'reactstrap';
 
 interface IProps {

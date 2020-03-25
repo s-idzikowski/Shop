@@ -55,8 +55,8 @@ namespace Shop.Service.Repositories
 
             UpdateDefinition<User> update = Builders<User>.Update
                 .Set(o => o.AuthToken, user.AuthToken)
-                .Set(o => o.LoginTime, user.LoginTime)
-                .Set(o => o.LoginIp, user.LoginIp);
+                .Set(o => o.LastLogin, user.LastLogin)
+                .PushEach(o => o.Operations, user.Operations);
 
             return db.Users.UpdateOneAsync(filter, update);
         }

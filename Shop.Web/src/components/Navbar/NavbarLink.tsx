@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState } from 'react';
+//import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface IProps {
     to: string,
     displayName: string,
+    onClick?: () => any,
 }
 
 const NavbarLink = (props: IProps) => {
@@ -27,7 +28,7 @@ const NavbarLink = (props: IProps) => {
 
     return (
         <li className="nav-item">
-            <Link className="nav-link" to={props.to}>{props.displayName}</Link>
+            <Link onClick={props.onClick} className="nav-link" to={props.to}>{props.displayName}</Link>
         </li>
     );
 }

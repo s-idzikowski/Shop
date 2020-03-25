@@ -14,7 +14,7 @@ import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import NotFound from '../../components/NotFound/NotFound';
 import Logout from '../../components/Logout/Logout';
-import UserPanel from '../UserPanel/UserPanel';
+import Account from '../Account/Account';
 
 class App extends React.Component {
     render() {
@@ -41,7 +41,7 @@ class App extends React.Component {
                             <Route path='/logout'>
                                 <Logout onLogout={Update} />
                             </Route>
-                            <Route path='/userpanel' component={UserPanel} />
+                            <Route path='/account' component={Account} />
 
                             <Route path='/test' component={Test} />
 

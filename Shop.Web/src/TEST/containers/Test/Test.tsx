@@ -11,7 +11,7 @@ import Dashboard from '../../../components/Dashboard/Dashboard';
 import SignIn from '../../../containers/SignIn/SignIn';
 import Register from '../../../containers/Register/Register';
 import Logout from '../../../components/Logout/Logout';
-import UserPanel from '../../../containers/UserPanel/UserPanel';
+import UserPanel from '../../../containers/Account/Account';
 import NotFound from '../../../components/NotFound/NotFound';
 import NavbarLink from '../../../components/Navbar/NavbarLink';
 

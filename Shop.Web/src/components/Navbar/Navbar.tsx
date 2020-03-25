@@ -10,7 +10,7 @@ const Navbar = () => {
 
     const signIn = () => <NavbarLink to="/signin" displayName="Zaloguj" />;
     const register = () => <NavbarLink to="/register" displayName="Rejestracja" />;
-    const userPanel = () => <NavbarLink to="/userpanel" displayName="Panel użytkownika" />;
+    const account = () => <NavbarLink to="/account" displayName="Moje konto" />;
     const logOut = () => <NavbarLink to="/logout" displayName="Wyloguj" />;
 
     return (
@@ -24,7 +24,7 @@ const Navbar = () => {
                             {user ? "" : signIn()}
                             {user ? "" : register()}
 
-                            {user ? userPanel() : ""}
+                            {user ? account() : ""}
 
                             {user ? logOut() : ""}
 

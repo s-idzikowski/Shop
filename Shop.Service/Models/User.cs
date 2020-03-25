@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +18,9 @@ namespace Shop.Service.Models
 
         public string AuthToken { get; set; }
         public bool IsBanned { get; set; }
+        public DateTime LastLogin { get; set; }
 
-        public DateTime LoginTime { get; set; }
-        public string LoginIp { get; set; }
-
-        public DateTime RegisterTime { get; set; }
-        public string RegisterIp { get; set; }
+        public ICollection<Operation> Operations { get; set; } = new List<Operation>();
 
 
 
@@ -33,12 +31,6 @@ namespace Shop.Service.Models
                 Username = Username,
                 AuthKey = AuthToken,
                 Email = EmailAddress,
-
-                RegisterTime = RegisterTime.ToString(),
-                RegisterIp = RegisterIp,
-
-                LoginTime = LoginTime.ToString(),
-                LoginIp = LoginIp,
             };
         }
 
@@ -50,17 +42,31 @@ namespace Shop.Service.Models
                 PasswordHash = registerData.Password,
                 EmailAddress = registerData.EmailAddress,
 
-                RegisterIp = context.Host,
-                RegisterTime = DateTime.Now
+                Operations = new List<Operation>() {
+                    new Operation()
+                    {
+                        Type = OperationTypes.Register,
+                        Time = DateTime.Now,
+                        Ip = context.Host,
+                        Headers = context.RequestHeaders
+                    }
+                }
             };
         }
 
         public Task<string> GenerateAuthKey(ServerCallContext context, bool newLoginTime = true)
         {
             if (newLoginTime)
-                LoginTime = DateTime.Now;
-
-            LoginIp = context.Host;
+            {
+                Operations.Add(new Operation()
+                {
+                    Type = OperationTypes.Login,
+                    Time = DateTime.Now,
+                    Ip = context.Host,
+                    Headers = context.RequestHeaders
+                });
+                LastLogin = DateTime.Now;
+            }
 
             return Task.Run(() =>
             {
@@ -79,6 +85,6 @@ namespace Shop.Service.Models
         }
 
         private readonly string AuthKeySalt = $"SlTcADdX";
-        private string AuthKeyPattern => $"{Id}-{Username}-{LoginTime.ToString()}";
+        private string AuthKeyPattern => $"{Id}-{Username}-{LastLogin.ToString()}";
     }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './UserPanel.css';
+import './Account.css';
 import { UserData } from '../../../gRPC/service_pb';
 import UserLoggedRow from './UserLoggedRow';
 
