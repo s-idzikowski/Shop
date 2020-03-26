@@ -984,7 +984,7 @@ proto.UserResponse.prototype.hasUserdata = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.UserOperationsResponse.repeatedFields_ = [1];
+proto.UserOperationsResponse.repeatedFields_ = [2];
 
 
 
@@ -1017,6 +1017,7 @@ proto.UserOperationsResponse.prototype.toObject = function(opt_includeInstance) 
  */
 proto.UserOperationsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
+    statuscode: jspb.Message.getFieldWithDefault(msg, 1, 0),
     operationdataList: jspb.Message.toObjectList(msg.getOperationdataList(),
     proto.OperationData.toObject, includeInstance)
   };
@@ -1056,6 +1057,10 @@ proto.UserOperationsResponse.deserializeBinaryFromReader = function(msg, reader)
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {!proto.StatusCode} */ (reader.readEnum());
+      msg.setStatuscode(value);
+      break;
+    case 2:
       var value = new proto.OperationData;
       reader.readMessage(value,proto.OperationData.deserializeBinaryFromReader);
       msg.addOperationdata(value);
@@ -1089,10 +1094,17 @@ proto.UserOperationsResponse.prototype.serializeBinary = function() {
  */
 proto.UserOperationsResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getStatuscode();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
   f = message.getOperationdataList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      1,
+      2,
       f,
       proto.OperationData.serializeBinaryToWriter
     );
@@ -1101,12 +1113,30 @@ proto.UserOperationsResponse.serializeBinaryToWriter = function(message, writer)
 
 
 /**
- * repeated OperationData OperationData = 1;
+ * optional StatusCode statusCode = 1;
+ * @return {!proto.StatusCode}
+ */
+proto.UserOperationsResponse.prototype.getStatuscode = function() {
+  return /** @type {!proto.StatusCode} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.StatusCode} value
+ * @return {!proto.UserOperationsResponse} returns this
+ */
+proto.UserOperationsResponse.prototype.setStatuscode = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * repeated OperationData OperationData = 2;
  * @return {!Array<!proto.OperationData>}
  */
 proto.UserOperationsResponse.prototype.getOperationdataList = function() {
   return /** @type{!Array<!proto.OperationData>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.OperationData, 1));
+    jspb.Message.getRepeatedWrapperField(this, proto.OperationData, 2));
 };
 
 
@@ -1115,7 +1145,7 @@ proto.UserOperationsResponse.prototype.getOperationdataList = function() {
  * @return {!proto.UserOperationsResponse} returns this
 */
 proto.UserOperationsResponse.prototype.setOperationdataList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+  return jspb.Message.setRepeatedWrapperField(this, 2, value);
 };
 
 
@@ -1125,7 +1155,7 @@ proto.UserOperationsResponse.prototype.setOperationdataList = function(value) {
  * @return {!proto.OperationData}
  */
 proto.UserOperationsResponse.prototype.addOperationdata = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.OperationData, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.OperationData, opt_index);
 };
 
 

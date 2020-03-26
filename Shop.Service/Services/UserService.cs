@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +18,7 @@ namespace Shop.Service
                 return await GetResponse(StatusCode.SigninNotFound);
             }
 
-            string token = await user.GenerateToken(request.SignInData.Password, config.GetSection("AppSettings:Token").Value);
+            string token = await user.GenerateToken(request.SignInData.Password, ConfigToken);
 
             if (string.IsNullOrEmpty(token))
             {
@@ -61,7 +63,7 @@ namespace Shop.Service
             await userRepository.Register(user);
             await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Register, context.Peer));
 
-            string token = await user.GenerateToken(request.RegisterData.Password, config.GetSection("AppSettings:Token").Value);
+            string token = await user.GenerateToken(request.RegisterData.Password, ConfigToken);
 
             return await GetResponse(StatusCode.Ok, token);
         }
@@ -77,35 +79,36 @@ namespace Shop.Service
         [Authorize]
         public override async Task<UserResponse> GetUser(UserRequest request, ServerCallContext context)
         {
-            //User user = await userRepository.GetById(Guid.Parse(request.UserId));
+            User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
 
             return await Task.FromResult(new UserResponse()
             {
-                StatusCode = StatusCode.DatabaseError,
-                //UserData = user.GetUserData()
+                StatusCode = StatusCode.Ok,
+                UserData = user.GetUserData()
             });
         }
 
         [Authorize]
-        public override Task<UserOperationsResponse> GetUserOperations(UserRequest request, ServerCallContext context)
+        public override async Task<UserOperationsResponse> GetUserOperations(UserRequest request, ServerCallContext context)
         {
-            //User user = await userRepository.GetById(Guid.Parse(request.UserId));
+            List<Operation> operations = await userRepository.GetUserOperations(User.GetGuidFromHeaders(context.RequestHeaders));
 
-            //var result = new Operations();
+            var userOperationsResponse = new UserOperationsResponse()
+            {
+                StatusCode = StatusCode.Ok
+            };
 
-            //foreach (var operation in user.Operations)
-            //{
-            //    result.UserOperation.Add(new UserOperation
-            //    {
-            //        Ip = operation.Ip,
-            //        Time = operation.Time.ToString(),
-            //        Type = operation.Type
-            //    });
-            //}
+            foreach (Operation operation in operations)
+            {
+                userOperationsResponse.OperationData.Add(new OperationData()
+                {
+                    Ip = operation.Ip,
+                    Time = operation.Time.ToString(),
+                    Type = operation.Type,
+                });
+            }
 
-            //return await Task.FromResult(result);
-
-            return base.GetUserOperations(request, context);
+            return await Task.FromResult(userOperationsResponse);
         }
 
 

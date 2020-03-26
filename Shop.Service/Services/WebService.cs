@@ -10,6 +10,8 @@ namespace Shop.Service
         private readonly IUserRepository userRepository;
         private readonly IConfiguration config;
 
+        private string ConfigToken => config.GetSection("AppSettings:Token").Value;
+
 
 
         public WebService(ILogger<WebService> logger,

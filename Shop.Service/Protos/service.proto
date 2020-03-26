@@ -40,7 +40,8 @@ message UserResponse {
 }
 
 message UserOperationsResponse {
-    repeated OperationData OperationData = 1;
+    StatusCode statusCode = 1;
+    repeated OperationData OperationData = 2;
 }
 
 // Models:

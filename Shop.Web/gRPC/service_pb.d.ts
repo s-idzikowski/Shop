@@ -101,6 +101,9 @@ export namespace UserResponse {
 }
 
 export class UserOperationsResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
   getOperationdataList(): Array<OperationData>;
   setOperationdataList(value: Array<OperationData>): void;
   clearOperationdataList(): void;
@@ -116,6 +119,7 @@ export class UserOperationsResponse extends jspb.Message {
 
 export namespace UserOperationsResponse {
   export type AsObject = {
+    statuscode: StatusCode,
     operationdataList: Array<OperationData.AsObject>,
   }
 }

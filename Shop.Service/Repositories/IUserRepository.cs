@@ -1,5 +1,4 @@
-﻿using Grpc.Core;
-using Shop.Service.Models;
+﻿using Shop.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,5 +14,7 @@ namespace Shop.Service.Repositories
         Task<User> GetById(Guid id);
 
         Task AddOperations(Guid userId, IEnumerable<Operation> operations);
+
+        Task<List<Operation>> GetUserOperations(Guid id);
     }
 }

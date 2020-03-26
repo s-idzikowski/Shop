@@ -8,7 +8,7 @@ interface IProps {
     valueInput: string,
 }
 
-const UserLoggedRow = (props: IProps) => {
+const UserAccountRow = (props: IProps) => {
     return (
         <div>
             <Label>{props.label}</Label>
@@ -17,4 +17,4 @@ const UserLoggedRow = (props: IProps) => {
     );
 }
 
-export default UserLoggedRow;
+export default UserAccountRow;

@@ -1,15 +1,16 @@
 import * as React from 'react';
 
 import './Account.css';
-import { UserData, UserRequest, UserResponse } from '../../../gRPC/service_pb';
+import { UserData, UserRequest, UserResponse, UserOperationsResponse, OperationData } from '../../../gRPC/service_pb';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
-import UserLogged from './UserLogged';
+import AccountData from './AccountData';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import NotFound from '../../components/NotFound/NotFound';
 import NavbarLink from '../../components/Navbar/NavbarLink';
 import PageTitle from '../../components/PageTitle/PageTitle';
+import AccountOperations from './AccountOperations';
 
 interface IProps {
 
@@ -17,15 +18,17 @@ interface IProps {
 
 interface IState {
     user: UserData.AsObject,
-    error: boolean,
-    operations: any
+    userError: boolean,
+    operations: Array<OperationData.AsObject>,
+    operationsError: boolean,
 }
 
 class Account extends React.Component<IProps, IState> {
     state: IState = {
         user: JSON.parse(window.sessionStorage.getItem("user")),
-        error: false,
-        operations: null
+        userError: false,
+        operations: null,
+        operationsError: false,
     };
 
     constructor(props: IProps) {
@@ -34,11 +37,18 @@ class Account extends React.Component<IProps, IState> {
         if (!Client.IsLogged()) {
             Client.Redirect();
         } else {
-            const request: UserRequest = new UserRequest();
+            this.accountHandler();
+            this.operationsHandler();
+        }
+    }
 
-            Client.Instance().getUser(request, Client.Header(), (err: any, response: UserResponse) => {
-                Client.CheckError(err, () => {
-                    
+    accountHandler() {
+        if (this.state.user)
+            return;
+
+        Client.Instance().getUser(new UserRequest(), Client.Header(), (err: any, response: UserResponse) => {
+            Client.CheckError(err, () => {
+
                 const onSuccess = () => {
                     this.setState({
                         user: response.getUserdata().toObject()
@@ -46,49 +56,61 @@ class Account extends React.Component<IProps, IState> {
                 };
 
                 const onError = () => {
-                    Client.ErrorLog("TODO: User is null");
                     this.setState({
-                        error: true
+                        userError: true
                     });
                 };
-                
+
                 Client.CheckStatusCode(response.getStatuscode(), onError, onSuccess, null);
 
-                }, () => {
-                    this.setState({
-                        error: true
-                    });
+            }, () => {
+                this.setState({
+                    userError: true
                 });
             });
-        }
+        });
     }
 
-    logHandler() {
-        // const request: UserRequest = new UserRequest();
-        // request.setUserid(this.state.user.userid);
-        // Client.Instance().getUserOperations(request, Client.Header(), (err: any, response: Operations) => {
-        //     Client.CheckError(err, () => {
-        //         this.setState({
-        //             operations : response.getUseroperationList()
+    operationsHandler() {
+        if (this.state.operations)
+            return;
 
-        //             //todo
-        //         })
-                
-        //     }, () => {
-        //         this.setState({
-        //             error: true
-        //         });
-        //     });
-        // });
+        Client.Instance().getUserOperations(new UserRequest(), Client.Header(), (err: any, response: UserOperationsResponse) => {
+            Client.CheckError(err, () => {
+
+                const onSuccess = () => {
+                    this.setState({
+                        operations: response.getOperationdataList().map((value, index) => value.toObject())
+                    });
+                };
+
+                const onError = () => {
+                    this.setState({
+                        operationsError: true
+                    });
+                };
+
+                Client.CheckStatusCode(response.getStatuscode(), onError, onSuccess, null);
+
+            }, () => {
+                this.setState({
+                    operationsError: true
+                });
+            });
+        });
     }
 
     render() {
-        const userLogged = () => <UserLogged user={this.state.user} />;
         const loading = () => <Loading />;
         const serviceError = () => <ServiceError />;
 
-        const isLoading = () => this.state.user;
-        const isError = () => this.state.error;
+        const userAccount = () => <AccountData user={this.state.user} />;
+        const userLoading = () => this.state.user;
+        const userError = () => this.state.userError;
+
+        const operations = () => <AccountOperations operations={this.state.operations} />;
+        const operationsLoading = () => this.state.operations;
+        const operationsError = () => this.state.operationsError;
 
         return (
             <div>
@@ -99,9 +121,9 @@ class Account extends React.Component<IProps, IState> {
                         <div className="col-4">
                             <div className="shadow p-2 m-2">
                                 <ul className="nav flex-column">
-                                    <NavbarLink to="/Account" displayName="Moje dane" />
+                                    <NavbarLink onClick={this.accountHandler.bind(this)} to="/Account" displayName="Moje dane" />
                                     <NavbarLink to="/Account/changepassword" displayName="Zmień hasło" />
-                                    <NavbarLink onClick={this.logHandler.bind(this)} to="/Account/log" displayName="Dziennik aktywności" />
+                                    <NavbarLink onClick={this.operationsHandler.bind(this)} to="/Account/log" displayName="Dziennik aktywności" />
                                     <NavbarLink to="/Account/settings" displayName="Ustawienia" />
                                 </ul>
                             </div>
@@ -111,7 +133,7 @@ class Account extends React.Component<IProps, IState> {
                             <div className="shadow p-2 m-2">
                                 <Switch>
                                     <Route exact path='/Account'>
-                                        {isError() ? serviceError() : (isLoading() ? userLogged() : loading())}
+                                        {userError() ? serviceError() : (userLoading() ? userAccount() : loading())}
                                     </Route>
 
                                     <Route path='/Account/changepassword'>
@@ -119,8 +141,7 @@ class Account extends React.Component<IProps, IState> {
                                     </Route>
 
                                     <Route path='/Account/log'>
-                                        Dziennik aktywności
-                                       
+                                        {operationsError() ? serviceError() : (operationsLoading() ? operations() : loading())}
                                     </Route>
 
                                     <Route path='/Account/settings'>

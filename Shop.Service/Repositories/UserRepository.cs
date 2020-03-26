@@ -48,7 +48,18 @@ namespace Shop.Service.Repositories
 
         public Task<User> GetById(Guid id)
         {
-            return db.Users.Find(o => o.Id == id).SingleOrDefaultAsync();
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, id);
+
+            return db.Users.Find(filter).SingleOrDefaultAsync();
+        }
+
+        public Task<List<Operation>> GetUserOperations(Guid id)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, id);
+
+            return db.Users.Find(filter).Project(o => o.Operations).SingleAsync();
         }
     }
 }

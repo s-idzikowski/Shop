@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Shop.Service.Models
 
         public bool IsBanned { get; set; }
 
-        public ICollection<Operation> Operations { get; set; } = new List<Operation>();
+        public List<Operation> Operations { get; set; } = new List<Operation>();
 
 
 
@@ -88,7 +89,7 @@ namespace Shop.Service.Models
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(Claims()),
+                Subject = new ClaimsIdentity(Claims),
                 Expires = DateTime.Now.AddHours(24),
                 SigningCredentials = creeds
             };
@@ -99,21 +100,28 @@ namespace Shop.Service.Models
             //Console.WriteLine("TOKEN: " + token.ToString());
             //Console.WriteLine("TOKENDOLOGOWANIA: " + tokenHandler.WriteToken(token));
 
-            return $"Bearer {tokenHandler.WriteToken(token)}";
+            return $"{TokenPrefix}{tokenHandler.WriteToken(token)}";
         }
 
-        private void ReadToken()
-        {
+        private static readonly string TokenPrefix = "Bearer ";
 
+        private Claim[] Claims => new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
+            new Claim(ClaimTypes.Name, Username),
+        };
+
+        public static Guid GetGuidFromHeaders(Metadata headers)
+        {
+            return new Guid(GetFromHeaders(headers, "nameid"));
         }
 
-        private Claim[] Claims()
+        private static string GetFromHeaders(Metadata headers, string claimType)
         {
-            return new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
-                new Claim(ClaimTypes.Name, Username),
-            };
+            string fullToken = headers.Single(o => o.Key == "authorization").Value;
+            string token = fullToken.Remove(0, TokenPrefix.Length);
+            var tokenS = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            return tokenS.Claims.First(claim => claim.Type == claimType).Value;
         }
     }
 }
