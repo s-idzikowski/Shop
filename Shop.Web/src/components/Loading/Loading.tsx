@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import './Loading.css';
-
 const Loading = () => {
 
     return (
-        <div>
-            <h1>Loading...</h1>
+        <div className="d-flex justify-content-center m-4">
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
         </div>
     );
 }

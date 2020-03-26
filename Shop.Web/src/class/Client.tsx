@@ -1,10 +1,10 @@
 import * as grpcWeb from 'grpc-web';
 import * as crypto from 'crypto';
 
-import { ServiceClient } from './../../gRPC/ServiceServiceClientPb';
+import { ServiceClient } from '../../gRPC/ServiceServiceClientPb';
 
 import { toast } from 'react-toastify';
-import { StatusCode, BasicResponse } from '../../gRPC/service_pb';
+import { StatusCode } from '../../gRPC/service_pb';
 
 abstract class Client {
     protected static instance: ServiceClient;
@@ -57,12 +57,6 @@ abstract class Client {
         toast.error(message);
     };
 
-    public static HashSensitiveData(data: any): any {
-        const hash = crypto.createHash("sha1");
-        hash.update("Ser$ErT" + data + "D@tE");
-        return hash.digest('hex');
-    }
-
     public static Redirect() {
         window.sessionStorage.clear();
         window.location.href = "\\";
@@ -84,7 +78,7 @@ abstract class Client {
                     onRedirect();
 
                 break;
-            case StatusCode.REGISTER_PASSWORD_NOT_VALID:
+            case StatusCode.PASSWORD_NOT_VALID:
 
                 if (onError)
                     onError();
@@ -120,11 +114,27 @@ abstract class Client {
                 toast.error("Twoje konto jest zawieszone.");
 
                 break;
+
             case StatusCode.DATABASE_ERROR:
 
                 if (onError)
                     onError();
                 toast.error("Błąd bazy danych.");
+
+                break;
+
+            case StatusCode.CHANGEPASSWORD_SAME:
+
+                if (onError)
+                    onError();
+                toast.warn("Podane hasła są takie same.");
+
+                break;
+            case StatusCode.CHANGEPASSWORD_WRONG_OLD_PASSWORD:
+
+                if (onError)
+                    onError();
+                toast.warn("Podano błędne stare hasło.");
 
                 break;
 

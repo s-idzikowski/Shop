@@ -54,6 +54,28 @@ export namespace UserRequest {
   }
 }
 
+export class ChangePasswordRequest extends jspb.Message {
+  getOldpassword(): string;
+  setOldpassword(value: string): void;
+
+  getNewpassword(): string;
+  setNewpassword(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ChangePasswordRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ChangePasswordRequest): ChangePasswordRequest.AsObject;
+  static serializeBinaryToWriter(message: ChangePasswordRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ChangePasswordRequest;
+  static deserializeBinaryFromReader(message: ChangePasswordRequest, reader: jspb.BinaryReader): ChangePasswordRequest;
+}
+
+export namespace ChangePasswordRequest {
+  export type AsObject = {
+    oldpassword: string,
+    newpassword: string,
+  }
+}
+
 export class BasicResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
@@ -227,8 +249,10 @@ export enum StatusCode {
   SIGNIN_NOT_FOUND = 10,
   SIGNIN_ACCOUNT_BAN = 11,
   REGISTER_USERNAME_OCCUPIED = 20,
-  REGISTER_PASSWORD_NOT_VALID = 21,
+  PASSWORD_NOT_VALID = 21,
   REGISTER_EMAIL_OCCUPIED = 22,
+  CHANGEPASSWORD_SAME = 30,
+  CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31,
 }
 export enum OperationTypes { 
   REGISTER = 0,

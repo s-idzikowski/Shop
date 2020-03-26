@@ -7,6 +7,9 @@ import Client from '../../class/Client';
 
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
+import Loading from '../../components/Loading/Loading';
+import ServiceError from '../../components/ServiceError/ServiceError';
+import ClientHelper from '../../class/ClientHelper';
 
 interface IProps {
     onSignIn: () => void,
@@ -16,6 +19,8 @@ interface IState {
     username: string,
     password: string,
     redirect: boolean,
+    loading: boolean,
+    error: boolean,
 }
 
 class SignIn extends React.Component<IProps, IState> {
@@ -23,6 +28,8 @@ class SignIn extends React.Component<IProps, IState> {
         username: "",
         password: "",
         redirect: false,
+        loading: false,
+        error: false,
     };
 
     constructor(props: IProps) {
@@ -48,14 +55,23 @@ class SignIn extends React.Component<IProps, IState> {
     clearState() {
         this.setState({
             username: "",
-            password: ""
+            password: "",
+            loading: false,
+            error: false,
         });
     }
 
     signInHandler = () => {
+        if (!this.validate())
+            return;
+
+        this.setState({
+            loading: true,
+        });
+
         const signInData: SignInData = new SignInData();
         signInData.setUsername(this.state.username);
-        signInData.setPassword(Client.HashSensitiveData(this.state.password));
+        signInData.setPassword(ClientHelper.HashSensitiveData(this.state.password));
 
         const request: SignInRequest = new SignInRequest();
         request.setSignindata(signInData);
@@ -64,42 +80,76 @@ class SignIn extends React.Component<IProps, IState> {
             Client.CheckError(err, () => {
 
                 const onSuccess = () => {
-                    window.sessionStorage.setItem("Authorization", response.getAuthorization());    
+                    window.sessionStorage.setItem("Authorization", response.getAuthorization());
                     toast.success("Poprawne logowanie.");
                     this.props.onSignIn();
                 };
 
                 const onRedirect = () => {
                     this.setState({
-                        redirect: true
+                        loading: false,
+                        redirect: true,
                     });
                 };
 
                 Client.CheckStatusCode(response.getStatuscode(), this.clearState.bind(this), onSuccess, onRedirect);
 
-            })
+            }, () => {
+                this.setState({
+                    loading: false,
+                    error: true,
+                });
+            });
         });
     };
 
+    validate = (): boolean => {
+        var status: boolean = true;
+
+        if (!ClientHelper.ValidateLength(this.state.username)) {
+            status = false;
+            toast.warn("Pole 'Nazwa użytkownika' jest niepoprawne.");
+        }
+
+        if (!ClientHelper.ValidateLength(this.state.password)) {
+            status = false;
+            toast.warn("Pole 'Hasło' jest niepoprawne.");
+        }
+
+        return status;
+    }
+
     render() {
+        if (this.state.loading) {
+            return (
+                <Loading />
+            );
+        } else if (this.state.error) {
+            return (
+                <ServiceError />
+            );
+        } else if (this.state.redirect) {
+            return (
+                <Redirect to='/' />
+            );
+        }
+
         return (
             <div>
-                {this.state.redirect ? <Redirect to='/' /> : ""}
-
                 <form>
-                    <div>
+                    <p>
                         <Label>Nazwa użytkownika:</Label>
                         <Input value={this.state.username} onChange={this.usernameChangeHandler.bind(this)} />
-                    </div>
+                    </p>
 
-                    <div>
+                    <p>
                         <Label>Hasło:</Label>
                         <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
-                    </div>
+                    </p>
 
-                    <div>
+                    <p>
                         <Button onClick={this.signInHandler.bind(this)}>Zaloguj</Button>
-                    </div>
+                    </p>
                 </form>
             </div>
         );

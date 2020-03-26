@@ -2,7 +2,7 @@ import * as React from 'react';
 import Client from '../../class/Client';
 import { UserRequest, BasicResponse } from '../../../gRPC/service_pb';
 import { toast } from 'react-toastify';
-import { Redirect } from 'react-router-dom';
+import Loading from '../Loading/Loading';
 
 interface IProps {
     onLogout: () => void,
@@ -15,21 +15,25 @@ const Logout = (props: IProps) => {
         Client.CheckError(err, () => {
 
             const onSuccess = () => {
-                window.sessionStorage.clear();
                 toast.success("Poprawnie wylogowano.");
                 props.onLogout();
+
+                Client.Redirect();
             };
 
             Client.CheckStatusCode(response.getStatuscode(), null, onSuccess, null);
+        }, () => {
+            toast.info("Wylogowano.");
+            props.onLogout();
 
-        })
+            Client.Redirect();
+        });
     });
 
     return (
         <div>
             <h1>Wylogowywanie...</h1>
-
-            <Redirect to='/' />
+            <Loading />
         </div>
     );
 }

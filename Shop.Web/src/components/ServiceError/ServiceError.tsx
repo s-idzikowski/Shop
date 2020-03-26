@@ -2,11 +2,24 @@ import * as React from 'react';
 
 import './ServiceError.css';
 
-const ServiceError = () => {
+interface IProps {
+    message?: string
+}
+
+const ServiceError = (props: IProps) => {
 
     return (
-        <div>
-            <h1>Service Error :c</h1>
+        <div className="alert alert-danger m-2 p-2">
+            <p>
+                Błąd serwisu. Spróbuj ponownie za chwilę!
+            </p>
+            {
+                props.message ? (
+                    <p>
+                        {props.message}
+                    </p>
+                ) : ""
+            }
         </div>
     );
 }

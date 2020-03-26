@@ -6,6 +6,7 @@ service Service {
     rpc UserSignIn (SignInRequest) returns (BasicResponse);
     rpc UserRegister (RegisterRequest) returns (BasicResponse);
     rpc UserLogout (UserRequest) returns (BasicResponse);
+    rpc UserChangePassword (ChangePasswordRequest) returns (BasicResponse);
     
     rpc GetUser (UserRequest) returns (UserResponse);
     rpc GetUserOperations (UserRequest) returns (UserOperationsResponse);
@@ -25,6 +26,11 @@ message RegisterRequest {
 
 message UserRequest {
 
+}
+
+message ChangePasswordRequest {
+    string oldPassword = 1;
+    string newPassword = 2;
 }
 
 // Response:
@@ -79,8 +85,11 @@ enum StatusCode {
     SIGNIN_ACCOUNT_BAN = 11;
     
     REGISTER_USERNAME_OCCUPIED = 20;
-    REGISTER_PASSWORD_NOT_VALID = 21;
+    PASSWORD_NOT_VALID = 21;
     REGISTER_EMAIL_OCCUPIED = 22;
+
+    CHANGEPASSWORD_SAME = 30;
+    CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31;
 }
 
 enum OperationTypes {

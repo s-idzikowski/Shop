@@ -11,10 +11,11 @@ namespace Shop.Service.Repositories
 
         Task<User> GetByUsername(string username);
         Task<User> GetByEmailAddress(string emailAddress);
-        Task<User> GetById(Guid id);
+        Task<User> GetById(Guid userId);
 
         Task AddOperations(Guid userId, IEnumerable<Operation> operations);
-
         Task<List<Operation>> GetUserOperations(Guid id);
+
+        Task ChangePassword(User user);
     }
 }

@@ -4,13 +4,15 @@ import './Account.css';
 import { UserData, UserRequest, UserResponse, UserOperationsResponse, OperationData } from '../../../gRPC/service_pb';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
-import AccountData from './AccountData';
+import AccountData from './Data/AccountData';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import NotFound from '../../components/NotFound/NotFound';
 import NavbarLink from '../../components/Navbar/NavbarLink';
 import PageTitle from '../../components/PageTitle/PageTitle';
-import AccountOperations from './AccountOperations';
+import AccountOperations from './Operations/AccountOperations';
+import AccountChangePassword from './ChangePassword/AccountChangePassword';
+import AccountAddress from './Address/AccountAddress';
 
 interface IProps {
 
@@ -19,14 +21,16 @@ interface IProps {
 interface IState {
     user: UserData.AsObject,
     userError: boolean,
+
     operations: Array<OperationData.AsObject>,
     operationsError: boolean,
 }
 
 class Account extends React.Component<IProps, IState> {
     state: IState = {
-        user: JSON.parse(window.sessionStorage.getItem("user")),
+        user: null,
         userError: false,
+
         operations: null,
         operationsError: false,
     };
@@ -37,8 +41,10 @@ class Account extends React.Component<IProps, IState> {
         if (!Client.IsLogged()) {
             Client.Redirect();
         } else {
-            this.accountHandler();
-            this.operationsHandler();
+            if (window.location.pathname == "/account")
+                this.accountHandler();
+            else if (window.location.pathname == "/account/log")
+                this.operationsHandler();
         }
     }
 
@@ -51,7 +57,8 @@ class Account extends React.Component<IProps, IState> {
 
                 const onSuccess = () => {
                     this.setState({
-                        user: response.getUserdata().toObject()
+                        user: response.getUserdata().toObject(),
+                        userError: false,
                     });
                 };
 
@@ -80,7 +87,8 @@ class Account extends React.Component<IProps, IState> {
 
                 const onSuccess = () => {
                     this.setState({
-                        operations: response.getOperationdataList().map((value, index) => value.toObject())
+                        operations: response.getOperationdataList().map((value, index) => value.toObject()),
+                        operationsError: false,
                     });
                 };
 
@@ -121,10 +129,11 @@ class Account extends React.Component<IProps, IState> {
                         <div className="col-4">
                             <div className="shadow p-2 m-2">
                                 <ul className="nav flex-column">
-                                    <NavbarLink onClick={this.accountHandler.bind(this)} to="/Account" displayName="Moje dane" />
-                                    <NavbarLink to="/Account/changepassword" displayName="Zmień hasło" />
-                                    <NavbarLink onClick={this.operationsHandler.bind(this)} to="/Account/log" displayName="Dziennik aktywności" />
-                                    <NavbarLink to="/Account/settings" displayName="Ustawienia" />
+                                    <NavbarLink onClick={this.accountHandler.bind(this)} to="/account" displayName="Moje dane" />
+                                    <NavbarLink to="/account/address" displayName="Moje adresy" />
+                                    <NavbarLink to="/account/changepassword" displayName="Zmień hasło" />
+                                    <NavbarLink onClick={this.operationsHandler.bind(this)} to="/account/log" displayName="Dziennik aktywności" />
+                                    <NavbarLink to="/account/settings" displayName="Ustawienia" />
                                 </ul>
                             </div>
                         </div>
@@ -132,19 +141,23 @@ class Account extends React.Component<IProps, IState> {
                         <div className="col-8">
                             <div className="shadow p-2 m-2">
                                 <Switch>
-                                    <Route exact path='/Account'>
+                                    <Route exact path='/account'>
                                         {userError() ? serviceError() : (userLoading() ? userAccount() : loading())}
                                     </Route>
 
-                                    <Route path='/Account/changepassword'>
-                                        Zmiana hasła
+                                    <Route path='/account/address'>
+                                        <AccountAddress />
                                     </Route>
 
-                                    <Route path='/Account/log'>
+                                    <Route path='/account/changepassword'>
+                                        <AccountChangePassword />
+                                    </Route>
+
+                                    <Route path='/account/log'>
                                         {operationsError() ? serviceError() : (operationsLoading() ? operations() : loading())}
                                     </Route>
 
-                                    <Route path='/Account/settings'>
+                                    <Route path='/account/settings'>
                                         Ustawienia
                                     </Route>
 

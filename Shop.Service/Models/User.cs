@@ -38,9 +38,9 @@ namespace Shop.Service.Models
 
 
 
-        public void HashPassword()
+        public void HashPassword(byte[] newPassword = null)
         {
-            byte[] password = PasswordHash;
+            byte[] password = newPassword ?? PasswordHash;
             using (var hmac = new HMACSHA512())
             {
                 PasswordSalt = hmac.Key;
@@ -122,6 +122,14 @@ namespace Shop.Service.Models
             string token = fullToken.Remove(0, TokenPrefix.Length);
             var tokenS = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
             return tokenS.Claims.First(claim => claim.Type == claimType).Value;
+        }
+
+        public static bool IsValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+
+            return password.Length >= 40;
         }
     }
 }

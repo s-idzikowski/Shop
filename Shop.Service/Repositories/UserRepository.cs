@@ -25,17 +25,6 @@ namespace Shop.Service.Repositories
             await db.Users.InsertOneAsync(user);
         }
 
-        public Task AddOperations(Guid userId, IEnumerable<Operation> operations)
-        {
-            FilterDefinition<User> filter = Builders<User>.Filter
-                .Eq(o => o.Id, userId);
-
-            UpdateDefinition<User> update = Builders<User>.Update
-                .PushEach(o => o.Operations, operations);
-
-            return db.Users.UpdateOneAsync(filter, update);
-        }
-
         public Task<User> GetByUsername(string username)
         {
             return db.Users.Find(o => o.Username == username).SingleOrDefaultAsync();
@@ -46,12 +35,23 @@ namespace Shop.Service.Repositories
             return db.Users.Find(o => o.EmailAddress == emailAddress).SingleOrDefaultAsync();
         }
 
-        public Task<User> GetById(Guid id)
+        public Task<User> GetById(Guid userId)
         {
             FilterDefinition<User> filter = Builders<User>.Filter
-                .Eq(o => o.Id, id);
+                .Eq(o => o.Id, userId);
 
             return db.Users.Find(filter).SingleOrDefaultAsync();
+        }
+
+        public Task AddOperations(Guid userId, IEnumerable<Operation> operations)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, userId);
+
+            UpdateDefinition<User> update = Builders<User>.Update
+                .PushEach(o => o.Operations, operations, position: 0);
+
+            return db.Users.UpdateOneAsync(filter, update);
         }
 
         public Task<List<Operation>> GetUserOperations(Guid id)
@@ -60,6 +60,18 @@ namespace Shop.Service.Repositories
                 .Eq(o => o.Id, id);
 
             return db.Users.Find(filter).Project(o => o.Operations).SingleAsync();
+        }
+
+        public Task ChangePassword(User user)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, user.Id);
+
+            UpdateDefinition<User> update = Builders<User>.Update
+                .Set(o => o.PasswordHash, user.PasswordHash)
+                .Set(o => o.PasswordSalt, user.PasswordSalt);
+
+            return db.Users.UpdateOneAsync(filter, update);
         }
     }
 }
