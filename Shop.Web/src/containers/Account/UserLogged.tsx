@@ -13,8 +13,6 @@ const UserLogged = (props: IProps) => {
         <div>
             <UserLoggedRow label="Nazwa użytkownika:" valueInput={props.user.username} />
             <UserLoggedRow label="Adres e-mail:" valueInput={props.user.email} />
-
-            <UserLoggedRow label="[DEBUG] AuthToken:" valueInput={props.user.authorization} />
         </div>
     );
 }

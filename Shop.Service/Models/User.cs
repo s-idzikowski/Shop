@@ -76,32 +76,44 @@ namespace Shop.Service.Models
                         return default;
                 }
 
-                // create token
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
-                    new Claim(ClaimTypes.Name, Username),
-                };
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configToken));
-
-                var creeds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddHours(24),
-                    SigningCredentials = creeds
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-
-                Console.WriteLine("TOKEN: " + token.ToString());
-                //Console.WriteLine("TOKENDOLOGOWANIA: " + tokenHandler.WriteToken(token));
-
-                return $"Bearer {tokenHandler.WriteToken(token)}";
+                return CreateToken(configToken);
             });
+        }
+
+        private string CreateToken(string configToken)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configToken));
+
+            var creeds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(Claims()),
+                Expires = DateTime.Now.AddHours(24),
+                SigningCredentials = creeds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            //Console.WriteLine("TOKEN: " + token.ToString());
+            //Console.WriteLine("TOKENDOLOGOWANIA: " + tokenHandler.WriteToken(token));
+
+            return $"Bearer {tokenHandler.WriteToken(token)}";
+        }
+
+        private void ReadToken()
+        {
+
+        }
+
+        private Claim[] Claims()
+        {
+            return new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
+                new Claim(ClaimTypes.Name, Username),
+            };
         }
     }
 }
