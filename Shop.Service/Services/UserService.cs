@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -109,16 +110,35 @@ namespace Shop.Service
         [Authorize]
         public override async Task<UserResponse> GetUser(UserRequest request, ServerCallContext context)
         {
+            User user = await userRepository.GetById(Guid.Parse(request.UserId));
 
             return await Task.FromResult(new UserResponse()
             {
-                StatusCode = StatusCode.Ok
-            });
-            // todo
-            return await Task.FromResult(new UserResponse()
-            {
-                StatusCode = StatusCode.Unathorized
+                StatusCode = StatusCode.Ok,
+                UserData = user.GetUserData()
             });
         }
+
+        [Authorize]
+        public override async Task<Operations> GetUserOperations(UserRequest request, ServerCallContext context)
+        {
+            User user = await userRepository.GetById(Guid.Parse(request.UserId));
+
+            var result = new Operations();
+            
+            foreach (var operation in user.Operations)
+            {
+                result.UserOperation.Add(new UserOperation
+                {
+                    Ip = operation.Ip,
+                    Time = operation.Time.ToString(),
+                    Type = operation.Type
+                });
+            }
+
+            return await Task.FromResult(result);
+                
+        }
+
     }
 }

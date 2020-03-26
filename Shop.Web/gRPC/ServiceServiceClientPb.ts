@@ -13,11 +13,11 @@ import {
   HelloReply,
   HelloRequest,
   LogoutResponse,
+  Operations,
   RegisterRequest,
   RegisterResponse,
   SignInRequest,
   SignInResponse,
-  UserOperation,
   UserRequest,
   UserResponse} from './service_pb';
 
@@ -129,18 +129,18 @@ export class ServiceClient {
   }
 
   methodInfoGetUserOperations = new grpcWeb.AbstractClientBase.MethodInfo(
-    UserOperation,
+    Operations,
     (request: UserRequest) => {
       return request.serializeBinary();
     },
-    UserOperation.deserializeBinary
+    Operations.deserializeBinary
   );
 
   getUserOperations(
     request: UserRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: UserOperation) => void) {
+               response: Operations) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
         '/Service/GetUserOperations',

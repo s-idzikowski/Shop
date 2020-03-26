@@ -20,7 +20,13 @@ using Shop.Service.Repositories;
 namespace Shop.Service
 {
     public class Startup
+
     {
+        private readonly IConfiguration config;
+        public Startup(IConfiguration config)
+        {
+            this.config = config;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -43,7 +49,7 @@ namespace Shop.Service
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SekretnyTokenSekretnyTokenSekretnyTokenSekretnyToken")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("AppSettings:Token").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };

@@ -41,6 +41,9 @@ export namespace RegisterRequest {
 }
 
 export class UserRequest extends jspb.Message {
+  getUserid(): string;
+  setUserid(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UserRequest): UserRequest.AsObject;
@@ -51,6 +54,7 @@ export class UserRequest extends jspb.Message {
 
 export namespace UserRequest {
   export type AsObject = {
+    userid: string,
   }
 }
 
@@ -245,6 +249,26 @@ export namespace UserOperation {
     type: OperationTypes,
     time: string,
     ip: string,
+  }
+}
+
+export class Operations extends jspb.Message {
+  getUseroperationList(): Array<UserOperation>;
+  setUseroperationList(value: Array<UserOperation>): void;
+  clearUseroperationList(): void;
+  addUseroperation(value?: UserOperation, index?: number): UserOperation;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Operations.AsObject;
+  static toObject(includeInstance: boolean, msg: Operations): Operations.AsObject;
+  static serializeBinaryToWriter(message: Operations, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Operations;
+  static deserializeBinaryFromReader(message: Operations, reader: jspb.BinaryReader): Operations;
+}
+
+export namespace Operations {
+  export type AsObject = {
+    useroperationList: Array<UserOperation.AsObject>,
   }
 }
 

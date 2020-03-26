@@ -27,23 +27,19 @@ namespace Shop.Service.Repositories
         public async Task<User> SignIn(User user, string password, ServerCallContext context)
         {
             if (user == null)
-            {
-                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Host));
-
                 return null;
-            }
 
             string token = await user.GenerateToken(password, config.GetSection("AppSettings:Token").Value);
 
             if (string.IsNullOrEmpty(token))
             {
-                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Host));
-
+                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Peer));
+                
                 return null;
             }
             else
             {
-                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Login, context.Host));
+                await AddOperations(user.Id, Operation.GetOne(OperationTypes.Login, context.Peer));
 
                 user.AuthorizationToken = token;
 

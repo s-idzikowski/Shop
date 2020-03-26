@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import './Account.css';
-import { UserData, UserRequest, UserResponse, StatusCode } from '../../../gRPC/service_pb';
+import { UserData, UserRequest, UserResponse, StatusCode, Operations, OperationTypes } from '../../../gRPC/service_pb';
 import { Redirect, BrowserRouter, Link, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
 import UserLogged from './UserLogged';
@@ -17,13 +17,15 @@ interface IProps {
 
 interface IState {
     user: UserData.AsObject,
-    error: boolean
+    error: boolean,
+    operations: any
 }
 
 class Account extends React.Component<IProps, IState> {
     state: IState = {
-        user: null,
-        error: false
+        user: JSON.parse(window.sessionStorage.getItem("user")),
+        error: false,
+        operations: null
     };
 
     constructor(props: IProps) {
@@ -32,77 +34,19 @@ class Account extends React.Component<IProps, IState> {
         if (!Client.GetUser()) {
             Client.Redirect();
         }
-        else {
-            const request: UserRequest = new UserRequest();
-
-            Client.Instance().getUser(request, Client.Header(), (err: any, response: UserResponse) => {
-                Client.CheckError(err, () => {
-                    switch (response.getStatuscode()) {
-                        case StatusCode.OK:
-
-                            const user = response.getUserdata();
-                            if (user) {
-                                window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
-
-                                this.setState({
-                                    user: user.toObject()
-                                });
-                            }
-                            else {
-                                Client.ErrorLog("User is null");
-                            
-                                this.setState({
-                                    error: true
-                                });
-                            }
-
-                            break;
-                        case StatusCode.UNATHORIZED:
-
-                            Client.Redirect();
-
-                            break;
-                    }
-                }, () => {
-                    this.setState({
-                        error: true
-                    });
-                });
-            });
-        }
     }
 
     logHandler() {
         const request: UserRequest = new UserRequest();
-
-        Client.Instance().getUser(request, Client.Header(), (err: any, response: UserResponse) => {
+        request.setUserid(this.state.user.userid);
+        Client.Instance().getUserOperations(request, Client.Header(), (err: any, response: Operations) => {
             Client.CheckError(err, () => {
-                switch (response.getStatuscode()) {
-                    case StatusCode.OK:
+                this.setState({
+                    operations : response.getUseroperationList()
 
-                        const user = response.getUserdata();
-                        if (user) {
-                            window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
-
-                            this.setState({
-                                user: user.toObject()
-                            });
-                        }
-                        else {
-                            Client.ErrorLog("User is null");
-
-                            this.setState({
-                                error: true
-                            });
-                        }
-
-                        break;
-                    case StatusCode.UNATHORIZED:
-
-                        Client.Redirect();
-
-                        break;
-                }
+                    //todo
+                })
+                
             }, () => {
                 this.setState({
                     error: true
@@ -149,6 +93,7 @@ class Account extends React.Component<IProps, IState> {
 
                                     <Route path='/Account/log'>
                                         Dziennik aktywności
+                                       
                                     </Route>
 
                                     <Route path='/Account/settings'>
