@@ -24,18 +24,12 @@ namespace Shop.Service.Models
 
         public ICollection<Operation> Operations { get; set; } = new List<Operation>();
 
-        [BsonIgnore]
-        public string AuthorizationToken { get; set; }
-
 
 
         public UserData GetUserData()
         {
             return new UserData()
             {
-                UserId = Id.ToString(),
-                Authorization = AuthorizationToken,
-
                 Username = Username,
                 Email = EmailAddress,
             };

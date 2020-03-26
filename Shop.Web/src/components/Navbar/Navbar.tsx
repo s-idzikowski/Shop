@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import './Navbar.css';
 import NavbarLink from './NavbarLink';
-import { UserData } from '../../../gRPC/service_pb';
+import Client from '../../class/Client';
 
 const Navbar = () => {
 
-    const user: UserData.AsObject = JSON.parse(window.sessionStorage.getItem("user"));
+    const isLogged: boolean = Client.IsLogged();
 
     const signIn = () => <NavbarLink to="/signin" displayName="Zaloguj" />;
     const register = () => <NavbarLink to="/register" displayName="Rejestracja" />;
@@ -21,14 +21,12 @@ const Navbar = () => {
                         <ul className="navbar-nav ml-auto">
                             <NavbarLink to="/" displayName="Dashboard" />
 
-                            {user ? "" : signIn()}
-                            {user ? "" : register()}
+                            {isLogged ? "" : signIn()}
+                            {isLogged ? "" : register()}
 
-                            {user ? account() : ""}
+                            {isLogged ? account() : ""}
 
-                            {user ? logOut() : ""}
-
-                            <NavbarLink to="/test" displayName="TEST" />
+                            {isLogged ? logOut() : ""}
                         </ul>
                     </div>
                 </div>

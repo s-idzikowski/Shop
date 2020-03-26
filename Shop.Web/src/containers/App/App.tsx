@@ -9,7 +9,6 @@ import './App.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Dashboard from '../../components/Dashboard/Dashboard';
-import Test from '../../TEST/containers/Test/Test';
 import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import NotFound from '../../components/NotFound/NotFound';
@@ -42,8 +41,6 @@ class App extends React.Component {
                                 <Logout onLogout={Update} />
                             </Route>
                             <Route path='/account' component={Account} />
-
-                            <Route path='/test' component={Test} />
 
                             <Route component={NotFound} />
                         </Switch>

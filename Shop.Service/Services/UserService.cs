@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -8,42 +7,32 @@ namespace Shop.Service
 {
     public partial class WebService : Service.ServiceBase
     {
-        public override async Task<SignInResponse> UserSignIn(SignInRequest request, ServerCallContext context)
+        public override async Task<BasicResponse> UserSignIn(SignInRequest request, ServerCallContext context)
         {
             User user = await userRepository.GetByUsername(request.SignInData.Username);
 
-            await userRepository.SignIn(user, request.SignInData.Password, context);
-
-            StatusCode statusCode;
-            UserData userData;
-
-            if (user != null)
+            if (user == null)
             {
-                if (user.IsBanned)
-                {
-                    statusCode = StatusCode.SigninAccountBan;
-                    userData = null;
-                }
-                else
-                {
-                    statusCode = StatusCode.Ok;
-                    userData = user.GetUserData();
-                }
+                return await GetResponse(StatusCode.SigninNotFound);
+            }
+
+            string token = await user.GenerateToken(request.SignInData.Password, config.GetSection("AppSettings:Token").Value);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Peer));
+
+                return await GetResponse(StatusCode.SigninNotFound);
             }
             else
             {
-                statusCode = StatusCode.SigninNotFound;
-                userData = null;
-            }
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Login, context.Peer));
 
-            return await Task.FromResult(new SignInResponse()
-            {
-                StatusCode = statusCode,
-                UserData = userData
-            });
+                return await GetResponse(StatusCode.Ok, token);
+            }
         }
 
-        public override async Task<RegisterResponse> UserRegister(RegisterRequest request, ServerCallContext context)
+        public override async Task<BasicResponse> UserRegister(RegisterRequest request, ServerCallContext context)
         {
             // Password:
             // TODO - ONLY VALIDATE!
@@ -56,89 +45,88 @@ namespace Shop.Service
             User user = await userRepository.GetByUsername(request.RegisterData.Username);
             if (user != null)
             {
-                return await Task.FromResult(new RegisterResponse()
-                {
-                    StatusCode = StatusCode.RegisterUsernameOccupied
-                });
+                return await GetResponse(StatusCode.RegisterUsernameOccupied);
             }
 
             // Email:
             user = await userRepository.GetByEmailAddress(request.RegisterData.EmailAddress);
             if (user != null)
             {
-                return await Task.FromResult(new RegisterResponse()
-                {
-                    StatusCode = StatusCode.RegisterEmailOccupied
-                });
+                return await GetResponse(StatusCode.RegisterEmailOccupied);
             }
 
-            // Insert database:
-            user = await userRepository.Register(request.RegisterData, context);
+            user = User.New(context, request.RegisterData);
+            user.HashPassword();
 
-            StatusCode statusCode;
-            UserData userData;
+            await userRepository.Register(user);
+            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Register, context.Peer));
 
-            if (user != null)
-            {
-                statusCode = StatusCode.Ok;
-                userData = user.GetUserData();
-            }
-            else
-            {
-                statusCode = StatusCode.DatabaseError;
-                userData = null;
-            }
+            string token = await user.GenerateToken(request.RegisterData.Password, config.GetSection("AppSettings:Token").Value);
 
-            return await Task.FromResult(new RegisterResponse()
-            {
-                StatusCode = statusCode,
-                UserData = userData
-            });
+            return await GetResponse(StatusCode.Ok, token);
         }
 
         [Authorize]
-        public override async Task<LogoutResponse> UserLogout(UserRequest request, ServerCallContext context)
+        public override async Task<BasicResponse> UserLogout(UserRequest request, ServerCallContext context)
         {
             //await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.LogOut, context.Host));
 
-            return await Task.FromResult(new LogoutResponse()
-            {
-                StatusCode = StatusCode.Ok
-            });
+            return await GetResponse(StatusCode.Ok);
         }
 
         [Authorize]
         public override async Task<UserResponse> GetUser(UserRequest request, ServerCallContext context)
         {
-            User user = await userRepository.GetById(Guid.Parse(request.UserId));
+            //User user = await userRepository.GetById(Guid.Parse(request.UserId));
 
             return await Task.FromResult(new UserResponse()
             {
-                StatusCode = StatusCode.Ok,
-                UserData = user.GetUserData()
+                StatusCode = StatusCode.DatabaseError,
+                //UserData = user.GetUserData()
             });
         }
 
         [Authorize]
-        public override async Task<Operations> GetUserOperations(UserRequest request, ServerCallContext context)
+        public override Task<UserOperationsResponse> GetUserOperations(UserRequest request, ServerCallContext context)
         {
-            User user = await userRepository.GetById(Guid.Parse(request.UserId));
+            //User user = await userRepository.GetById(Guid.Parse(request.UserId));
 
-            var result = new Operations();
-            
-            foreach (var operation in user.Operations)
-            {
-                result.UserOperation.Add(new UserOperation
-                {
-                    Ip = operation.Ip,
-                    Time = operation.Time.ToString(),
-                    Type = operation.Type
-                });
-            }
+            //var result = new Operations();
 
-            return await Task.FromResult(result);
-                
+            //foreach (var operation in user.Operations)
+            //{
+            //    result.UserOperation.Add(new UserOperation
+            //    {
+            //        Ip = operation.Ip,
+            //        Time = operation.Time.ToString(),
+            //        Type = operation.Type
+            //    });
+            //}
+
+            //return await Task.FromResult(result);
+
+            return base.GetUserOperations(request, context);
         }
 
+
+
+        private Task<BasicResponse> GetResponse(StatusCode statusCode, string authorization = default)
+        {
+            if (string.IsNullOrEmpty(authorization))
+            {
+                return Task.FromResult(new BasicResponse()
+                {
+                    StatusCode = statusCode
+                });
+            }
+            else
+            {
+                return Task.FromResult(new BasicResponse()
+                {
+                    StatusCode = statusCode,
+                    Authorization = authorization
+                });
+            }
+        }
     }
 }

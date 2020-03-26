@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Client from '../../class/Client';
-import { LogoutResponse, StatusCode, UserRequest } from '../../../gRPC/service_pb';
+import { UserRequest, BasicResponse } from '../../../gRPC/service_pb';
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
 
@@ -11,24 +11,17 @@ interface IProps {
 const Logout = (props: IProps) => {
     const request: UserRequest = new UserRequest();
 
-    Client.Instance().userLogout(request, Client.Header(), (err: any, response: LogoutResponse) => {
+    Client.Instance().userLogout(request, Client.Header(), (err: any, response: BasicResponse) => {
         Client.CheckError(err, () => {
-            switch (response.getStatuscode()) {
-                case StatusCode.OK:
 
-                    window.sessionStorage.clear();
-                    toast.success("Poprawnie wylogowano.");
+            const onSuccess = () => {
+                window.sessionStorage.clear();
+                toast.success("Poprawnie wylogowano.");
+                props.onLogout();
+            };
 
-                    props.onLogout();
+            Client.CheckStatusCode(response.getStatuscode(), null, onSuccess, null);
 
-                    break;
-                case StatusCode.UNATHORIZED:
-
-                    window.sessionStorage.clear();
-                    toast.info("Błąd - wylogowano!");
-
-                    break;
-            }
         })
     });
 

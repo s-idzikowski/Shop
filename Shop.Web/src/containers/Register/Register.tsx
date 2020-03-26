@@ -1,12 +1,11 @@
 import * as React from 'react';
 
 import './Register.css';
-import { RegisterData, RegisterRequest, RegisterResponse, StatusCode, UserData } from '../../../gRPC/service_pb';
+import { RegisterData, RegisterRequest, BasicResponse } from '../../../gRPC/service_pb';
 import Client from '../../class/Client';
 import { toast } from 'react-toastify';
 import { Label, Input, Button } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
-import PageTitle from '../../components/PageTitle/PageTitle';
 
 interface IProps {
     onRegister: () => void,
@@ -30,7 +29,7 @@ class Register extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        if (Client.GetUser()) {
+        if (Client.IsLogged()) {
             Client.Redirect();
         }
     }
@@ -70,53 +69,23 @@ class Register extends React.Component<IProps, IState> {
         const request: RegisterRequest = new RegisterRequest();
         request.setRegisterdata(registerData);
 
-        Client.Instance().userRegister(request, Client.Header(), (err: any, response: RegisterResponse) => {
+        Client.Instance().userRegister(request, Client.Header(), (err: any, response: BasicResponse) => {
             Client.CheckError(err, () => {
-                switch (response.getStatuscode()) {
-                    case StatusCode.OK:
 
-                        const user = response.getUserdata();
-                        window.sessionStorage.setItem("Authorization", user.getAuthorization());
-                        window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
+                const onSuccess = () => {
+                    window.sessionStorage.setItem("Authorization", response.getAuthorization());    
+                    toast.success("Poprawna rejestracja.");
+                    this.props.onRegister();
+                };
 
-                        toast.success("Poprawna rejestracja.");
+                const onRedirect = () => {
+                    this.setState({
+                        redirect: true
+                    });
+                };
 
-                        this.props.onRegister();
+                Client.CheckStatusCode(response.getStatuscode(), this.clearState.bind(this), onSuccess, onRedirect);
 
-                        this.setState({
-                            redirect: true
-                        });
-
-                        break;
-                    case StatusCode.REGISTER_PASSWORD_NOT_VALID:
-
-                        this.clearState();
-                        toast.error("Podane hasło nie jest dopuszczalne.");
-
-                        break;
-                    case StatusCode.REGISTER_USERNAME_OCCUPIED:
-
-                        this.clearState();
-                        toast.error("Podana nazwa użytkownika jest już zajęta.");
-
-                        break;
-                    case StatusCode.REGISTER_EMAIL_OCCUPIED:
-
-                        this.clearState();
-                        toast.error("Podany adres email jest już zajęty.");
-
-                        break;
-                    case StatusCode.UNATHORIZED:
-
-                        window.sessionStorage.clear();
-                        toast.info("Błąd - wylogowano!");
-
-                        this.setState({
-                            redirect: true
-                        });
-
-                        break;
-                }
             })
         });
     };
@@ -136,7 +105,7 @@ class Register extends React.Component<IProps, IState> {
                         <Label>Hasło:</Label>
                         <Input type="password" value={this.state.password} onChange={this.passwordChangeHandler.bind(this)} />
                     </div>
-                    
+
                     <div>
                         <Label>Adres e-mail:</Label>
                         <Input value={this.state.emailAddress} onChange={this.emailAddressChangeHandler.bind(this)} />

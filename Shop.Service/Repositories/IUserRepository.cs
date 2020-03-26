@@ -8,8 +8,7 @@ namespace Shop.Service.Repositories
 {
     public interface IUserRepository
     {
-        Task<User> SignIn(User user, string password, ServerCallContext context);
-        Task<User> Register(RegisterData registerData, ServerCallContext context);
+        Task Register(User user);
 
         Task<User> GetByUsername(string username);
         Task<User> GetByEmailAddress(string emailAddress);

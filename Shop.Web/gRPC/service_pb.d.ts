@@ -41,9 +41,6 @@ export namespace RegisterRequest {
 }
 
 export class UserRequest extends jspb.Message {
-  getUserid(): string;
-  setUserid(value: string): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UserRequest): UserRequest.AsObject;
@@ -54,73 +51,28 @@ export class UserRequest extends jspb.Message {
 
 export namespace UserRequest {
   export type AsObject = {
-    userid: string,
   }
 }
 
-export class SignInResponse extends jspb.Message {
+export class BasicResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
 
-  getUserdata(): UserData | undefined;
-  setUserdata(value?: UserData): void;
-  hasUserdata(): boolean;
-  clearUserdata(): void;
+  getAuthorization(): string;
+  setAuthorization(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): SignInResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: SignInResponse): SignInResponse.AsObject;
-  static serializeBinaryToWriter(message: SignInResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): SignInResponse;
-  static deserializeBinaryFromReader(message: SignInResponse, reader: jspb.BinaryReader): SignInResponse;
+  toObject(includeInstance?: boolean): BasicResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: BasicResponse): BasicResponse.AsObject;
+  static serializeBinaryToWriter(message: BasicResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BasicResponse;
+  static deserializeBinaryFromReader(message: BasicResponse, reader: jspb.BinaryReader): BasicResponse;
 }
 
-export namespace SignInResponse {
+export namespace BasicResponse {
   export type AsObject = {
     statuscode: StatusCode,
-    userdata?: UserData.AsObject,
-  }
-}
-
-export class RegisterResponse extends jspb.Message {
-  getStatuscode(): StatusCode;
-  setStatuscode(value: StatusCode): void;
-
-  getUserdata(): UserData | undefined;
-  setUserdata(value?: UserData): void;
-  hasUserdata(): boolean;
-  clearUserdata(): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): RegisterResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: RegisterResponse): RegisterResponse.AsObject;
-  static serializeBinaryToWriter(message: RegisterResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): RegisterResponse;
-  static deserializeBinaryFromReader(message: RegisterResponse, reader: jspb.BinaryReader): RegisterResponse;
-}
-
-export namespace RegisterResponse {
-  export type AsObject = {
-    statuscode: StatusCode,
-    userdata?: UserData.AsObject,
-  }
-}
-
-export class LogoutResponse extends jspb.Message {
-  getStatuscode(): StatusCode;
-  setStatuscode(value: StatusCode): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): LogoutResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: LogoutResponse): LogoutResponse.AsObject;
-  static serializeBinaryToWriter(message: LogoutResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): LogoutResponse;
-  static deserializeBinaryFromReader(message: LogoutResponse, reader: jspb.BinaryReader): LogoutResponse;
-}
-
-export namespace LogoutResponse {
-  export type AsObject = {
-    statuscode: StatusCode,
+    authorization: string,
   }
 }
 
@@ -145,6 +97,26 @@ export namespace UserResponse {
   export type AsObject = {
     statuscode: StatusCode,
     userdata?: UserData.AsObject,
+  }
+}
+
+export class UserOperationsResponse extends jspb.Message {
+  getOperationdataList(): Array<OperationData>;
+  setOperationdataList(value: Array<OperationData>): void;
+  clearOperationdataList(): void;
+  addOperationdata(value?: OperationData, index?: number): OperationData;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UserOperationsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UserOperationsResponse): UserOperationsResponse.AsObject;
+  static serializeBinaryToWriter(message: UserOperationsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UserOperationsResponse;
+  static deserializeBinaryFromReader(message: UserOperationsResponse, reader: jspb.BinaryReader): UserOperationsResponse;
+}
+
+export namespace UserOperationsResponse {
+  export type AsObject = {
+    operationdataList: Array<OperationData.AsObject>,
   }
 }
 
@@ -197,12 +169,6 @@ export namespace RegisterData {
 }
 
 export class UserData extends jspb.Message {
-  getUserid(): string;
-  setUserid(value: string): void;
-
-  getAuthorization(): string;
-  setAuthorization(value: string): void;
-
   getUsername(): string;
   setUsername(value: string): void;
 
@@ -219,14 +185,12 @@ export class UserData extends jspb.Message {
 
 export namespace UserData {
   export type AsObject = {
-    userid: string,
-    authorization: string,
     username: string,
     email: string,
   }
 }
 
-export class UserOperation extends jspb.Message {
+export class OperationData extends jspb.Message {
   getType(): OperationTypes;
   setType(value: OperationTypes): void;
 
@@ -237,94 +201,18 @@ export class UserOperation extends jspb.Message {
   setIp(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UserOperation.AsObject;
-  static toObject(includeInstance: boolean, msg: UserOperation): UserOperation.AsObject;
-  static serializeBinaryToWriter(message: UserOperation, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UserOperation;
-  static deserializeBinaryFromReader(message: UserOperation, reader: jspb.BinaryReader): UserOperation;
+  toObject(includeInstance?: boolean): OperationData.AsObject;
+  static toObject(includeInstance: boolean, msg: OperationData): OperationData.AsObject;
+  static serializeBinaryToWriter(message: OperationData, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): OperationData;
+  static deserializeBinaryFromReader(message: OperationData, reader: jspb.BinaryReader): OperationData;
 }
 
-export namespace UserOperation {
+export namespace OperationData {
   export type AsObject = {
     type: OperationTypes,
     time: string,
     ip: string,
-  }
-}
-
-export class Operations extends jspb.Message {
-  getUseroperationList(): Array<UserOperation>;
-  setUseroperationList(value: Array<UserOperation>): void;
-  clearUseroperationList(): void;
-  addUseroperation(value?: UserOperation, index?: number): UserOperation;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Operations.AsObject;
-  static toObject(includeInstance: boolean, msg: Operations): Operations.AsObject;
-  static serializeBinaryToWriter(message: Operations, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Operations;
-  static deserializeBinaryFromReader(message: Operations, reader: jspb.BinaryReader): Operations;
-}
-
-export namespace Operations {
-  export type AsObject = {
-    useroperationList: Array<UserOperation.AsObject>,
-  }
-}
-
-export class HelloRequest extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): HelloRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: HelloRequest): HelloRequest.AsObject;
-  static serializeBinaryToWriter(message: HelloRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): HelloRequest;
-  static deserializeBinaryFromReader(message: HelloRequest, reader: jspb.BinaryReader): HelloRequest;
-}
-
-export namespace HelloRequest {
-  export type AsObject = {
-    name: string,
-  }
-}
-
-export class HelloReply extends jspb.Message {
-  getHellodata(): HelloData | undefined;
-  setHellodata(value?: HelloData): void;
-  hasHellodata(): boolean;
-  clearHellodata(): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): HelloReply.AsObject;
-  static toObject(includeInstance: boolean, msg: HelloReply): HelloReply.AsObject;
-  static serializeBinaryToWriter(message: HelloReply, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): HelloReply;
-  static deserializeBinaryFromReader(message: HelloReply, reader: jspb.BinaryReader): HelloReply;
-}
-
-export namespace HelloReply {
-  export type AsObject = {
-    hellodata?: HelloData.AsObject,
-  }
-}
-
-export class HelloData extends jspb.Message {
-  getMessage(): string;
-  setMessage(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): HelloData.AsObject;
-  static toObject(includeInstance: boolean, msg: HelloData): HelloData.AsObject;
-  static serializeBinaryToWriter(message: HelloData, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): HelloData;
-  static deserializeBinaryFromReader(message: HelloData, reader: jspb.BinaryReader): HelloData;
-}
-
-export namespace HelloData {
-  export type AsObject = {
-    message: string,
   }
 }
 

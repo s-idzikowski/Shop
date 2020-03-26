@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import './Account.css';
-import { UserData, UserRequest, UserResponse, StatusCode, Operations, OperationTypes } from '../../../gRPC/service_pb';
-import { Redirect, BrowserRouter, Link, Switch, Route } from 'react-router-dom';
+import { UserData, UserRequest, UserResponse } from '../../../gRPC/service_pb';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
 import UserLogged from './UserLogged';
 import Loading from '../../components/Loading/Loading';
@@ -31,28 +31,55 @@ class Account extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        if (!Client.GetUser()) {
+        if (!Client.IsLogged()) {
             Client.Redirect();
+        } else {
+            const request: UserRequest = new UserRequest();
+
+            Client.Instance().getUser(request, Client.Header(), (err: any, response: UserResponse) => {
+                Client.CheckError(err, () => {
+                    
+                const onSuccess = () => {
+                    this.setState({
+                        user: response.getUserdata().toObject()
+                    });
+                };
+
+                const onError = () => {
+                    Client.ErrorLog("TODO: User is null");
+                    this.setState({
+                        error: true
+                    });
+                };
+                
+                Client.CheckStatusCode(response.getStatuscode(), onError, onSuccess, null);
+
+                }, () => {
+                    this.setState({
+                        error: true
+                    });
+                });
+            });
         }
     }
 
     logHandler() {
-        const request: UserRequest = new UserRequest();
-        request.setUserid(this.state.user.userid);
-        Client.Instance().getUserOperations(request, Client.Header(), (err: any, response: Operations) => {
-            Client.CheckError(err, () => {
-                this.setState({
-                    operations : response.getUseroperationList()
+        // const request: UserRequest = new UserRequest();
+        // request.setUserid(this.state.user.userid);
+        // Client.Instance().getUserOperations(request, Client.Header(), (err: any, response: Operations) => {
+        //     Client.CheckError(err, () => {
+        //         this.setState({
+        //             operations : response.getUseroperationList()
 
-                    //todo
-                })
+        //             //todo
+        //         })
                 
-            }, () => {
-                this.setState({
-                    error: true
-                });
-            });
-        });
+        //     }, () => {
+        //         this.setState({
+        //             error: true
+        //         });
+        //     });
+        // });
     }
 
     render() {

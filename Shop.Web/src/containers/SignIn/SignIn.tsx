@@ -2,12 +2,11 @@ import * as React from 'react';
 
 import './SignIn.css';
 import { Label, Input, Button } from 'reactstrap';
-import { SignInRequest, SignInData, SignInResponse, StatusCode, UserData } from '../../../gRPC/service_pb';
+import { SignInRequest, SignInData, BasicResponse } from '../../../gRPC/service_pb';
 import Client from '../../class/Client';
 
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
-import PageTitle from '../../components/PageTitle/PageTitle';
 
 interface IProps {
     onSignIn: () => void,
@@ -29,7 +28,7 @@ class SignIn extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        if (Client.GetUser()) {
+        if (Client.IsLogged()) {
             Client.Redirect();
         }
     }
@@ -61,53 +60,23 @@ class SignIn extends React.Component<IProps, IState> {
         const request: SignInRequest = new SignInRequest();
         request.setSignindata(signInData);
 
-        Client.Instance().userSignIn(request, Client.Header(), (err: any, response: SignInResponse) => {
+        Client.Instance().userSignIn(request, Client.Header(), (err: any, response: BasicResponse) => {
             Client.CheckError(err, () => {
-                switch (response.getStatuscode()) {
-                    case StatusCode.OK:
 
-                        const user = response.getUserdata();
-                        window.sessionStorage.setItem("Authorization", user.getAuthorization());
-                        window.sessionStorage.setItem("user", JSON.stringify(user.toObject()));
+                const onSuccess = () => {
+                    window.sessionStorage.setItem("Authorization", response.getAuthorization());    
+                    toast.success("Poprawne logowanie.");
+                    this.props.onSignIn();
+                };
 
-                        toast.success("Poprawne logowanie.");
+                const onRedirect = () => {
+                    this.setState({
+                        redirect: true
+                    });
+                };
 
-                        this.props.onSignIn();
+                Client.CheckStatusCode(response.getStatuscode(), this.clearState.bind(this), onSuccess, onRedirect);
 
-                        this.setState({
-                            redirect: true
-                        });
-
-                        break;
-                    case StatusCode.SIGNIN_NOT_FOUND:
-
-                        this.clearState();
-                        toast.error("Nazwa użytkownika lub hasło jest niepoprawne.");
-
-                        break;
-                    case StatusCode.SIGNIN_ACCOUNT_BAN:
-
-                        this.clearState();
-                        toast.error("Twoje konto jest zawieszone.");
-
-                        break;
-                    case StatusCode.DATABASE_ERROR:
-
-                        this.clearState();
-                        toast.error("Błąd bazy danych.");
-
-                        break;
-                    case StatusCode.UNATHORIZED:
-
-                        window.sessionStorage.clear();
-                        toast.info("Błąd - wylogowano!");
-
-                        this.setState({
-                            redirect: true
-                        });
-
-                        break;
-                }
             })
         });
     };

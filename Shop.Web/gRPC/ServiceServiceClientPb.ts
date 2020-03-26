@@ -10,14 +10,10 @@
 import * as grpcWeb from 'grpc-web';
 
 import {
-  HelloReply,
-  HelloRequest,
-  LogoutResponse,
-  Operations,
+  BasicResponse,
   RegisterRequest,
-  RegisterResponse,
   SignInRequest,
-  SignInResponse,
+  UserOperationsResponse,
   UserRequest,
   UserResponse} from './service_pb';
 
@@ -41,18 +37,18 @@ export class ServiceClient {
   }
 
   methodInfoUserSignIn = new grpcWeb.AbstractClientBase.MethodInfo(
-    SignInResponse,
+    BasicResponse,
     (request: SignInRequest) => {
       return request.serializeBinary();
     },
-    SignInResponse.deserializeBinary
+    BasicResponse.deserializeBinary
   );
 
   userSignIn(
     request: SignInRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: SignInResponse) => void) {
+               response: BasicResponse) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
         '/Service/UserSignIn',
@@ -63,18 +59,18 @@ export class ServiceClient {
   }
 
   methodInfoUserRegister = new grpcWeb.AbstractClientBase.MethodInfo(
-    RegisterResponse,
+    BasicResponse,
     (request: RegisterRequest) => {
       return request.serializeBinary();
     },
-    RegisterResponse.deserializeBinary
+    BasicResponse.deserializeBinary
   );
 
   userRegister(
     request: RegisterRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: RegisterResponse) => void) {
+               response: BasicResponse) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
         '/Service/UserRegister',
@@ -85,18 +81,18 @@ export class ServiceClient {
   }
 
   methodInfoUserLogout = new grpcWeb.AbstractClientBase.MethodInfo(
-    LogoutResponse,
+    BasicResponse,
     (request: UserRequest) => {
       return request.serializeBinary();
     },
-    LogoutResponse.deserializeBinary
+    BasicResponse.deserializeBinary
   );
 
   userLogout(
     request: UserRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: LogoutResponse) => void) {
+               response: BasicResponse) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
         '/Service/UserLogout',
@@ -129,46 +125,24 @@ export class ServiceClient {
   }
 
   methodInfoGetUserOperations = new grpcWeb.AbstractClientBase.MethodInfo(
-    Operations,
+    UserOperationsResponse,
     (request: UserRequest) => {
       return request.serializeBinary();
     },
-    Operations.deserializeBinary
+    UserOperationsResponse.deserializeBinary
   );
 
   getUserOperations(
     request: UserRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: Operations) => void) {
+               response: UserOperationsResponse) => void) {
     return this.client_.rpcCall(
       this.hostname_ +
         '/Service/GetUserOperations',
       request,
       metadata || {},
       this.methodInfoGetUserOperations,
-      callback);
-  }
-
-  methodInfoSayHello = new grpcWeb.AbstractClientBase.MethodInfo(
-    HelloReply,
-    (request: HelloRequest) => {
-      return request.serializeBinary();
-    },
-    HelloReply.deserializeBinary
-  );
-
-  sayHello(
-    request: HelloRequest,
-    metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: HelloReply) => void) {
-    return this.client_.rpcCall(
-      this.hostname_ +
-        '/Service/SayHello',
-      request,
-      metadata || {},
-      this.methodInfoSayHello,
       callback);
   }
 
