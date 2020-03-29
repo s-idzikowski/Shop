@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as grpcWeb from 'grpc-web';
 
 import './../Account.css';
 import { Label, Input, Button } from 'reactstrap';
@@ -8,45 +9,46 @@ import { toast } from 'react-toastify';
 import Loading from '../../../components/Loading/Loading';
 import ClientHelper from '../../../class/ClientHelper';
 
-interface IProps {
-
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Props {
+    
 }
 
-interface IState {
-    oldPassword: string,
-    newPassword: string,
-    newPassword2: string,
-    loading: boolean
+interface State {
+    oldPassword: string;
+    newPassword: string;
+    newPassword2: string;
+    loading: boolean;
 }
 
-class AccountChangePassword extends React.Component<IProps, IState> {
+class AccountChangePassword extends React.Component<Props, State> {
 
-    state: IState = {
+    state: State = {
         oldPassword: "",
         newPassword: "",
         newPassword2: "",
         loading: false,
     };
 
-    oldPasswordChangeHandler = (e: any) => {
+    oldPasswordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             oldPassword: e.target.value
         });
     }
 
-    newPasswordChangeHandler = (e: any) => {
+    newPasswordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPassword: e.target.value
         });
     }
 
-    newPassword2ChangeHandler = (e: any) => {
+    newPassword2ChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPassword2: e.target.value
         });
     }
 
-    clearState = () => {
+    clearState = (): void => {
         this.setState({
             oldPassword: "",
             newPassword: "",
@@ -55,7 +57,7 @@ class AccountChangePassword extends React.Component<IProps, IState> {
         });
     };
 
-    changePasswordHandler = () => {
+    changePasswordHandler = (): void => {
         if (!this.validatePassword())
             return;
 
@@ -67,10 +69,10 @@ class AccountChangePassword extends React.Component<IProps, IState> {
         changePasswordRequest.setOldpassword(ClientHelper.HashSensitiveData(this.state.oldPassword));
         changePasswordRequest.setNewpassword(ClientHelper.HashSensitiveData(this.state.newPassword));
 
-        Client.Instance().userChangePassword(changePasswordRequest, Client.Header(), (err: any, response: BasicResponse) => {
+        Client.Instance().userChangePassword(changePasswordRequest, Client.Header(), (err: grpcWeb.Error, response: BasicResponse) => {
             Client.CheckError(err, () => {
 
-                const onSuccess = () => {
+                const onSuccess = (): void => {
                     window.sessionStorage.setItem("Authorization", response.getAuthorization());
                     toast.success("Hasło zostało zmienione.");
 
@@ -86,7 +88,7 @@ class AccountChangePassword extends React.Component<IProps, IState> {
     };
 
     validatePassword = (): boolean => {
-        var status: boolean = true;
+        let status = true;
 
         if (ClientHelper.ValidateLength(this.state.oldPassword)) {
             status = false;
@@ -111,7 +113,7 @@ class AccountChangePassword extends React.Component<IProps, IState> {
         return status;
     }
 
-    render() {
+    render(): JSX.Element {
         if (this.state.loading) {
             return (
                 <Loading />

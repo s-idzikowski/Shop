@@ -1,20 +1,22 @@
 import * as React from 'react';
+import * as grpcWeb from 'grpc-web';
 import Client from '../../class/Client';
 import { UserRequest, BasicResponse } from '../../../gRPC/service_pb';
 import { toast } from 'react-toastify';
 import Loading from '../Loading/Loading';
 
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface IProps {
-    onLogout: () => void,
+    onLogout: () => void;
 }
 
-const Logout = (props: IProps) => {
+const Logout = (props: IProps): JSX.Element => {
     const request: UserRequest = new UserRequest();
 
-    Client.Instance().userLogout(request, Client.Header(), (err: any, response: BasicResponse) => {
+    Client.Instance().userLogout(request, Client.Header(), (err: grpcWeb.Error, response: BasicResponse) => {
         Client.CheckError(err, () => {
 
-            const onSuccess = () => {
+            const onSuccess = (): void => {
                 toast.success("Poprawnie wylogowano.");
                 props.onLogout();
 

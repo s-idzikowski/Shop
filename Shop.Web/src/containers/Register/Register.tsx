@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as grpcWeb from 'grpc-web';
 
 import './Register.css';
 import { RegisterData, RegisterRequest, BasicResponse } from '../../../gRPC/service_pb';
@@ -10,21 +11,21 @@ import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import ClientHelper from '../../class/ClientHelper';
 
-interface IProps {
-    onRegister: () => void,
+interface Props {
+    onRegister: () => void;
 }
 
-interface IState {
-    username: string,
-    password: string,
-    emailAddress: string,
-    redirect: boolean,
-    loading: boolean,
-    error: boolean,
+interface State {
+    username: string;
+    password: string;
+    emailAddress: string;
+    redirect: boolean;
+    loading: boolean;
+    error: boolean;
 }
 
-class Register extends React.Component<IProps, IState> {
-    state: IState = {
+class Register extends React.Component<Props, State> {
+    state: State = {
         username: "",
         password: "",
         emailAddress: "",
@@ -33,7 +34,7 @@ class Register extends React.Component<IProps, IState> {
         error: false,
     };
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         if (Client.IsLogged()) {
@@ -41,25 +42,25 @@ class Register extends React.Component<IProps, IState> {
         }
     }
 
-    usernameChangeHandler = (e: any) => {
+    usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             username: e.target.value
         });
     }
 
-    passwordChangeHandler = (e: any) => {
+    passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             password: e.target.value
         });
     }
 
-    emailAddressChangeHandler = (e: any) => {
+    emailAddressChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             emailAddress: e.target.value
         });
     }
 
-    clearState() {
+    clearState(): void {
         this.setState({
             username: "",
             password: "",
@@ -69,7 +70,7 @@ class Register extends React.Component<IProps, IState> {
         });
     }
 
-    registerHandler = () => {
+    registerHandler = (): void => {
         if (!this.validate())
             return;
 
@@ -85,16 +86,16 @@ class Register extends React.Component<IProps, IState> {
         const request: RegisterRequest = new RegisterRequest();
         request.setRegisterdata(registerData);
 
-        Client.Instance().userRegister(request, Client.Header(), (err: any, response: BasicResponse) => {
+        Client.Instance().userRegister(request, Client.Header(), (err: grpcWeb.Error, response: BasicResponse) => {
             Client.CheckError(err, () => {
 
-                const onSuccess = () => {
+                const onSuccess = (): void => {
                     window.sessionStorage.setItem("Authorization", response.getAuthorization());
                     toast.success("Poprawna rejestracja.");
                     this.props.onRegister();
                 };
 
-                const onRedirect = () => {
+                const onRedirect = (): void => {
                     this.setState({
                         loading: false,
                         redirect: true,
@@ -113,7 +114,7 @@ class Register extends React.Component<IProps, IState> {
     };
 
     validate = (): boolean => {
-        var status: boolean = true;
+        let status = true;
 
         if (!ClientHelper.ValidateLength(this.state.username)) {
             status = false;
@@ -133,7 +134,7 @@ class Register extends React.Component<IProps, IState> {
         return status;
     }
 
-    render() {
+    render(): JSX.Element {
         if (this.state.loading) {
             return (
                 <Loading />

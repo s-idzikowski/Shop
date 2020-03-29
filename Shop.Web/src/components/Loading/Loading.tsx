@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const Loading = () => {
+const Loading = (): JSX.Element => {
 
     return (
         <div className="d-flex justify-content-center m-4">

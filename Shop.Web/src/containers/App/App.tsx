@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,8 +16,8 @@ import Logout from '../../components/Logout/Logout';
 import Account from '../Account/Account';
 
 class App extends React.Component {
-    render() {
-        const Update = () => this.forceUpdate();
+    render(): JSX.Element {
+        const Update = (): void => this.forceUpdate();
 
         return (
             <div className="d-flex flex-column">

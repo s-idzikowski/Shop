@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import './ServiceError.css';
 
-interface IProps {
-    message?: string
+interface Props {
+    message?: string;
 }
 
-const ServiceError = (props: IProps) => {
+const ServiceError = (props: Props): JSX.Element => {
 
     return (
         <div className="alert alert-danger m-2 p-2">

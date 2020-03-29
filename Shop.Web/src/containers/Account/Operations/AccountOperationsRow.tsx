@@ -3,14 +3,14 @@ import * as React from 'react';
 import './../Account.css';
 import { OperationData, OperationTypes } from '../../../../gRPC/service_pb';
 
-interface IProps {
-    index: any,
-    operation: OperationData.AsObject,
+interface Props {
+    index: number;
+    operation: OperationData.AsObject;
 }
 
-const AccountOperationsRow = (props: IProps) => {
+const AccountOperationsRow: React.FunctionComponent<Props> = (props: Props) => {
 
-    const operationName = () => {
+    const operationName = (): string => {
         switch (props.operation.type) {
             case OperationTypes.REGISTER:
                 return "Rejestracja";
@@ -32,7 +32,7 @@ const AccountOperationsRow = (props: IProps) => {
         }
     };
 
-    const operationColor = () => {
+    const operationColor = (): string => {
         switch (props.operation.type) {
             case OperationTypes.REGISTER:
                 return "text-primary";

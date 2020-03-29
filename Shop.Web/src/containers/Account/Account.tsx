@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as grpcWeb from 'grpc-web';
 
 import './Account.css';
 import { UserData, UserRequest, UserResponse, UserOperationsResponse, OperationData } from '../../../gRPC/service_pb';
@@ -14,20 +15,21 @@ import AccountOperations from './Operations/AccountOperations';
 import AccountChangePassword from './ChangePassword/AccountChangePassword';
 import AccountAddress from './Address/AccountAddress';
 
-interface IProps {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Props {
 
 }
 
-interface IState {
-    user: UserData.AsObject,
-    userError: boolean,
+interface State {
+    user: UserData.AsObject;
+    userError: boolean;
 
-    operations: Array<OperationData.AsObject>,
-    operationsError: boolean,
+    operations: Array<OperationData.AsObject>;
+    operationsError: boolean;
 }
 
-class Account extends React.Component<IProps, IState> {
-    state: IState = {
+class Account extends React.Component<Props, State> {
+    state: State = {
         user: null,
         userError: false,
 
@@ -35,7 +37,7 @@ class Account extends React.Component<IProps, IState> {
         operationsError: false,
     };
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         if (!Client.IsLogged()) {
@@ -48,21 +50,21 @@ class Account extends React.Component<IProps, IState> {
         }
     }
 
-    accountHandler() {
+    accountHandler(): void {
         if (this.state.user)
             return;
 
-        Client.Instance().getUser(new UserRequest(), Client.Header(), (err: any, response: UserResponse) => {
+        Client.Instance().getUser(new UserRequest(), Client.Header(), (err: grpcWeb.Error, response: UserResponse) => {
             Client.CheckError(err, () => {
 
-                const onSuccess = () => {
+                const onSuccess = (): void => {
                     this.setState({
                         user: response.getUserdata().toObject(),
                         userError: false,
                     });
                 };
 
-                const onError = () => {
+                const onError = (): void => {
                     this.setState({
                         userError: true
                     });
@@ -78,21 +80,21 @@ class Account extends React.Component<IProps, IState> {
         });
     }
 
-    operationsHandler() {
+    operationsHandler(): void {
         if (this.state.operations)
             return;
 
-        Client.Instance().getUserOperations(new UserRequest(), Client.Header(), (err: any, response: UserOperationsResponse) => {
+        Client.Instance().getUserOperations(new UserRequest(), Client.Header(), (err: grpcWeb.Error, response: UserOperationsResponse) => {
             Client.CheckError(err, () => {
 
-                const onSuccess = () => {
+                const onSuccess = (): void => {
                     this.setState({
-                        operations: response.getOperationdataList().map((value, index) => value.toObject()),
+                        operations: response.getOperationdataList().map((value) => value.toObject()),
                         operationsError: false,
                     });
                 };
 
-                const onError = () => {
+                const onError = (): void => {
                     this.setState({
                         operationsError: true
                     });
@@ -108,17 +110,17 @@ class Account extends React.Component<IProps, IState> {
         });
     }
 
-    render() {
-        const loading = () => <Loading />;
-        const serviceError = () => <ServiceError />;
+    render(): JSX.Element {
+        const loading = (): JSX.Element => <Loading />;
+        const serviceError = (): JSX.Element => <ServiceError />;
 
-        const userAccount = () => <AccountData user={this.state.user} />;
-        const userLoading = () => this.state.user;
-        const userError = () => this.state.userError;
+        const userAccount = (): JSX.Element => <AccountData user={this.state.user} />;
+        const userLoading = (): UserData.AsObject => this.state.user;
+        const userError = (): boolean => this.state.userError;
 
-        const operations = () => <AccountOperations operations={this.state.operations} />;
-        const operationsLoading = () => this.state.operations;
-        const operationsError = () => this.state.operationsError;
+        const operations = (): JSX.Element => <AccountOperations operations={this.state.operations} />;
+        const operationsLoading = (): OperationData.AsObject[] => this.state.operations;
+        const operationsError = (): boolean => this.state.operationsError;
 
         return (
             <div>

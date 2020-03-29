@@ -4,14 +4,14 @@ import './Navbar.css';
 import NavbarLink from './NavbarLink';
 import Client from '../../class/Client';
 
-const Navbar = () => {
+const Navbar = (): JSX.Element => {
 
     const isLogged: boolean = Client.IsLogged();
 
-    const signIn = () => <NavbarLink to="/signin" displayName="Zaloguj" />;
-    const register = () => <NavbarLink to="/register" displayName="Rejestracja" />;
-    const account = () => <NavbarLink to="/account" displayName="Moje konto" />;
-    const logOut = () => <NavbarLink to="/logout" displayName="Wyloguj" />;
+    const signIn = (): JSX.Element => <NavbarLink to="/signin" displayName="Zaloguj" />;
+    const register = (): JSX.Element => <NavbarLink to="/register" displayName="Rejestracja" />;
+    const account = (): JSX.Element => <NavbarLink to="/account" displayName="Moje konto" />;
+    const logOut = (): JSX.Element => <NavbarLink to="/logout" displayName="Wyloguj" />;
 
     return (
         <div>

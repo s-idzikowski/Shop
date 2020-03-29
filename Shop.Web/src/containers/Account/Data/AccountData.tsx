@@ -4,11 +4,11 @@ import './../Account.css';
 import { UserData } from '../../../../gRPC/service_pb';
 import { Label, Input } from 'reactstrap';
 
-interface IProps {
-    user: UserData.AsObject
+interface Props {
+    user: UserData.AsObject;
 }
 
-const AccountData = (props: IProps) => {
+const AccountData = (props: Props): JSX.Element => {
     return (
         <div>
             <p>

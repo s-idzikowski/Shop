@@ -1,5 +1,4 @@
 import * as grpcWeb from 'grpc-web';
-import * as crypto from 'crypto';
 
 import { ServiceClient } from '../../gRPC/ServiceServiceClientPb';
 
@@ -22,7 +21,7 @@ abstract class Client {
         };
     }
 
-    public static CheckError(err: grpcWeb.Error, callback: () => void, onErrorCallback: () => void = undefined) {
+    public static CheckError(err: grpcWeb.Error, callback: () => void, onErrorCallback: () => void = undefined): void {
         if (err) {
             switch (err.code) {
                 case grpcWeb.StatusCode.OK:
@@ -50,14 +49,14 @@ abstract class Client {
         callback();
     }
 
-    public static ErrorLog(msg: any) {
+    public static ErrorLog(msg: string): void {
         const message = "[Error] " + msg;
 
         console.log(message);
         toast.error(message);
     };
 
-    public static Redirect() {
+    public static Redirect(): void {
         window.sessionStorage.clear();
         window.location.href = "\\";
     }
@@ -67,7 +66,7 @@ abstract class Client {
         return !(!token || 0 === token.length);
     }
 
-    public static CheckStatusCode(statuscode: StatusCode, onError: () => any, onSuccess: () => any, onRedirect: () => any) {
+    public static CheckStatusCode(statuscode: StatusCode, onError: () => void, onSuccess: () => void, onRedirect: () => void): void {
         switch (statuscode) {
             case StatusCode.OK:
 

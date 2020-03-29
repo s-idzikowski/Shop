@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as grpcWeb from 'grpc-web';
 
 import './SignIn.css';
 import { Label, Input, Button } from 'reactstrap';
@@ -11,20 +12,20 @@ import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import ClientHelper from '../../class/ClientHelper';
 
-interface IProps {
-    onSignIn: () => void,
+interface Props {
+    onSignIn: () => void;
 }
 
-interface IState {
-    username: string,
-    password: string,
-    redirect: boolean,
-    loading: boolean,
-    error: boolean,
+interface State {
+    username: string;
+    password: string;
+    redirect: boolean;
+    loading: boolean;
+    error: boolean;
 }
 
-class SignIn extends React.Component<IProps, IState> {
-    state: IState = {
+class SignIn extends React.Component<Props, State> {
+    state: State = {
         username: "",
         password: "",
         redirect: false,
@@ -32,7 +33,7 @@ class SignIn extends React.Component<IProps, IState> {
         error: false,
     };
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         if (Client.IsLogged()) {
@@ -40,19 +41,19 @@ class SignIn extends React.Component<IProps, IState> {
         }
     }
 
-    usernameChangeHandler = (e: any) => {
+    usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void  => {
         this.setState({
             username: e.target.value
         });
     }
 
-    passwordChangeHandler = (e: any) => {
+    passwordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             password: e.target.value
         });
     }
 
-    clearState() {
+    clearState(): void {
         this.setState({
             username: "",
             password: "",
@@ -61,7 +62,7 @@ class SignIn extends React.Component<IProps, IState> {
         });
     }
 
-    signInHandler = () => {
+    signInHandler = (): void => {
         if (!this.validate())
             return;
 
@@ -76,16 +77,16 @@ class SignIn extends React.Component<IProps, IState> {
         const request: SignInRequest = new SignInRequest();
         request.setSignindata(signInData);
 
-        Client.Instance().userSignIn(request, Client.Header(), (err: any, response: BasicResponse) => {
+        Client.Instance().userSignIn(request, Client.Header(), (err: grpcWeb.Error, response: BasicResponse) => {
             Client.CheckError(err, () => {
 
-                const onSuccess = () => {
+                const onSuccess = (): void => {
                     window.sessionStorage.setItem("Authorization", response.getAuthorization());
                     toast.success("Poprawne logowanie.");
                     this.props.onSignIn();
                 };
 
-                const onRedirect = () => {
+                const onRedirect = (): void => {
                     this.setState({
                         loading: false,
                         redirect: true,
@@ -104,7 +105,7 @@ class SignIn extends React.Component<IProps, IState> {
     };
 
     validate = (): boolean => {
-        var status: boolean = true;
+        let status = true;
 
         if (!ClientHelper.ValidateLength(this.state.username)) {
             status = false;
@@ -119,7 +120,7 @@ class SignIn extends React.Component<IProps, IState> {
         return status;
     }
 
-    render() {
+    render(): JSX.Element {
         if (this.state.loading) {
             return (
                 <Loading />

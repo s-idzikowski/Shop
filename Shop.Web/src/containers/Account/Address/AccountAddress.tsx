@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import './../Account.css';
 
-const AccountAddress = () => {
+const AccountAddress = (): JSX.Element => {
     return (
         <div>
             Adresy

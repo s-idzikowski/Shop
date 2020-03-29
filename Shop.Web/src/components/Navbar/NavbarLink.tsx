@@ -2,13 +2,13 @@ import * as React from 'react';
 //import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-interface IProps {
-    to: string,
-    displayName: string,
-    onClick?: () => any,
+interface Props {
+    to: string;
+    displayName: string;
+    onClick?: () => void;
 }
 
-const NavbarLink = (props: IProps) => {
+const NavbarLink = (props: Props): JSX.Element => {
 
     // ToDo - stan
     //const [css, setCss] = useState("nav-link");

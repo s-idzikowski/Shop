@@ -3,7 +3,7 @@ import * as React from 'react';
 import './Dashboard.css';
 import PageTitle from '../PageTitle/PageTitle';
 
-const Dashboard = () => {
+const Dashboard = (): JSX.Element => {
 
     return (
         <div>
