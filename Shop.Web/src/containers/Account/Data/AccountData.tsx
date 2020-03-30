@@ -20,6 +20,11 @@ const AccountData = (props: Props): JSX.Element => {
                 <Label>Adres e-mail:</Label>
                 <Input readOnly value={props.user.email} />
             </p>
+
+            <p>
+                <Label>Telefon:</Label>
+                <Input readOnly value={props.user.telephone} />
+            </p>
         </div>
     );
 }

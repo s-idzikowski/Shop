@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shop.Service.Repositories;
+using System.Threading.Tasks;
 
 namespace Shop.Service
 {
@@ -20,6 +21,27 @@ namespace Shop.Service
             this.logger = logger;
             this.userRepository = userRepository;
             this.config = config;
+        }
+
+
+
+        protected Task<BasicResponse> GetResponse(StatusCode statusCode, string authorization = default)
+        {
+            if (string.IsNullOrEmpty(authorization))
+            {
+                return Task.FromResult(new BasicResponse()
+                {
+                    StatusCode = statusCode
+                });
+            }
+            else
+            {
+                return Task.FromResult(new BasicResponse()
+                {
+                    StatusCode = statusCode,
+                    Authorization = authorization
+                });
+            }
         }
     }
 }

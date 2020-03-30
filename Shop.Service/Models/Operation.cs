@@ -8,6 +8,9 @@ namespace Shop.Service.Models
         public OperationTypes Type { get; set; }
         public DateTime Time { get; set; }
         public string Ip { get; set; }
+        public List<string> Value { get; set; }
+
+
 
         public Operation()
         {
@@ -20,11 +23,16 @@ namespace Shop.Service.Models
             Ip = ip;
         }
 
-        public static List<Operation> GetOne(OperationTypes type, string ip)
+        public Operation(OperationTypes type, string ip, List<string> value) : this(type, ip)
+        {
+            Value = value;
+        }
+
+        public static List<Operation> GetOne(OperationTypes type, string ip, List<string> value = default)
         {
             return new List<Operation>()
             {
-                new Operation(type, ip)
+                new Operation(type, ip, value)
             };
         }
     }

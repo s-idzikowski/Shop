@@ -11,9 +11,11 @@ import * as grpcWeb from 'grpc-web';
 
 import {
   BasicResponse,
+  ChangeAddressesRequest,
   ChangePasswordRequest,
   RegisterRequest,
   SignInRequest,
+  UserAddressesResponse,
   UserOperationsResponse,
   UserRequest,
   UserResponse} from './service_pb';
@@ -125,6 +127,28 @@ export class ServiceClient {
       callback);
   }
 
+  methodInfoUserChangeAddresses = new grpcWeb.AbstractClientBase.MethodInfo(
+    BasicResponse,
+    (request: ChangeAddressesRequest) => {
+      return request.serializeBinary();
+    },
+    BasicResponse.deserializeBinary
+  );
+
+  userChangeAddresses(
+    request: ChangeAddressesRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: BasicResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserChangeAddresses',
+      request,
+      metadata || {},
+      this.methodInfoUserChangeAddresses,
+      callback);
+  }
+
   methodInfoGetUser = new grpcWeb.AbstractClientBase.MethodInfo(
     UserResponse,
     (request: UserRequest) => {
@@ -166,6 +190,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoGetUserOperations,
+      callback);
+  }
+
+  methodInfoGetUserAddresses = new grpcWeb.AbstractClientBase.MethodInfo(
+    UserAddressesResponse,
+    (request: UserRequest) => {
+      return request.serializeBinary();
+    },
+    UserAddressesResponse.deserializeBinary
+  );
+
+  getUserAddresses(
+    request: UserRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: UserAddressesResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/GetUserAddresses',
+      request,
+      metadata || {},
+      this.methodInfoGetUserAddresses,
       callback);
   }
 

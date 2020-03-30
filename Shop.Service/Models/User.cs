@@ -20,10 +20,12 @@ namespace Shop.Service.Models
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string EmailAddress { get; set; }
+        public string Telephone { get; set; }
 
         public bool IsBanned { get; set; }
 
         public List<Operation> Operations { get; set; } = new List<Operation>();
+        public List<AddressData> Addresses { get; set; } = new List<AddressData>();
 
 
 

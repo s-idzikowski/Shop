@@ -18,7 +18,7 @@ const AccountOperations = (props: Props): JSX.Element => {
             <table className="table table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col"></th>
                         <th scope="col">Operacja</th>
                         <th scope="col">Data</th>
                         <th scope="col">Adres IP</th>

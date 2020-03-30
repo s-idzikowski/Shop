@@ -7,11 +7,12 @@ service Service {
     rpc UserRegister (RegisterRequest) returns (BasicResponse);
     rpc UserLogout (UserRequest) returns (BasicResponse);
     rpc UserChangePassword (ChangePasswordRequest) returns (BasicResponse);
+    rpc UserChangeAddresses (ChangeAddressesRequest) returns (BasicResponse);
     
     rpc GetUser (UserRequest) returns (UserResponse);
     rpc GetUserOperations (UserRequest) returns (UserOperationsResponse);
+    rpc GetUserAddresses (UserRequest) returns (UserAddressesResponse);
 }
-
 
 // Start User:
 // Request:
@@ -33,6 +34,10 @@ message ChangePasswordRequest {
     string newPassword = 2;
 }
 
+message ChangeAddressesRequest {
+    repeated AddressData addressData = 1;
+}
+
 // Response:
 
 message BasicResponse {
@@ -47,7 +52,12 @@ message UserResponse {
 
 message UserOperationsResponse {
     StatusCode statusCode = 1;
-    repeated OperationData OperationData = 2;
+    repeated OperationData operationData = 2;
+}
+
+message UserAddressesResponse {
+    StatusCode statusCode = 1;
+    repeated AddressData addressData = 2;
 }
 
 // Models:
@@ -64,14 +74,24 @@ message RegisterData {
 }
 
 message UserData {
-    string username = 3;
-    string email = 4;
+    string username = 1;
+    string email = 2;
+    string telephone = 3;
 }
 
 message OperationData {
     OperationTypes type = 1;
     string time = 2;
     string ip = 3;
+}
+
+message AddressData {
+    string firstName = 1;
+    string lastName = 2;
+    string street = 3;
+    string place = 4;
+    string zipCode = 5;
+    string city = 6;
 }
 
 // Enums:
@@ -99,6 +119,7 @@ enum OperationTypes {
     LOGOUT = 3;
 
     CHANGEPASSWORD = 10;
+    CHANGEADDRESSES = 11;
 }
 
 // End User

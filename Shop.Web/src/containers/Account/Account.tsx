@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as grpcWeb from 'grpc-web';
 
 import './Account.css';
-import { UserData, UserRequest, UserResponse, UserOperationsResponse, OperationData } from '../../../gRPC/service_pb';
+import { UserData, UserRequest, UserResponse, UserOperationsResponse, OperationData, AddressData, UserAddressesResponse } from '../../../gRPC/service_pb';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Client from '../../class/Client';
 import AccountData from './Data/AccountData';
@@ -26,6 +26,9 @@ interface State {
 
     operations: Array<OperationData.AsObject>;
     operationsError: boolean;
+
+    addresses: Array<AddressData.AsObject>;
+    addressesError: boolean;
 }
 
 class Account extends React.Component<Props, State> {
@@ -35,6 +38,9 @@ class Account extends React.Component<Props, State> {
 
         operations: null,
         operationsError: false,
+
+        addresses: null,
+        addressesError: false,
     };
 
     constructor(props: Props) {
@@ -47,6 +53,8 @@ class Account extends React.Component<Props, State> {
                 this.accountHandler();
             else if (window.location.pathname == "/account/log")
                 this.operationsHandler();
+            else if (window.location.pathname == "/account/address")
+                this.addressesHandler();
         }
     }
 
@@ -110,6 +118,36 @@ class Account extends React.Component<Props, State> {
         });
     }
 
+    addressesHandler(): void {
+        if (this.state.operations)
+            return;
+
+        Client.Instance().getUserAddresses(new UserRequest(), Client.Header(), (err: grpcWeb.Error, response: UserAddressesResponse) => {
+            Client.CheckError(err, () => {
+
+                const onSuccess = (): void => {
+                    this.setState({
+                        addresses: response.getAddressdataList().map((value) => value.toObject()),
+                        addressesError: false,
+                    });
+                };
+
+                const onError = (): void => {
+                    this.setState({
+                        addressesError: true
+                    });
+                };
+
+                Client.CheckStatusCode(response.getStatuscode(), onError, onSuccess, null);
+
+            }, () => {
+                this.setState({
+                    addressesError: true
+                });
+            });
+        });
+    }
+
     render(): JSX.Element {
         const loading = (): JSX.Element => <Loading />;
         const serviceError = (): JSX.Element => <ServiceError />;
@@ -122,6 +160,10 @@ class Account extends React.Component<Props, State> {
         const operationsLoading = (): OperationData.AsObject[] => this.state.operations;
         const operationsError = (): boolean => this.state.operationsError;
 
+        const addresses = (): JSX.Element => <AccountAddress addresses={this.state.addresses} />;
+        const addressesLoading = (): AddressData.AsObject[] => this.state.addresses;
+        const addressesError = (): boolean => this.state.addressesError;
+
         return (
             <div>
                 <PageTitle title="Moje konto" />
@@ -129,7 +171,7 @@ class Account extends React.Component<Props, State> {
                 <div className="row">
                     <BrowserRouter>
                         <div className="col-4">
-                            <AccountNavbar accountHandler={this.accountHandler.bind(this)} operationsHandler={this.operationsHandler.bind(this)} />
+                            <AccountNavbar accountHandler={this.accountHandler.bind(this)} operationsHandler={this.operationsHandler.bind(this)} addressesHandler={this.addressesHandler.bind(this)} />
                         </div>
 
                         <div className="col-8">
@@ -140,7 +182,7 @@ class Account extends React.Component<Props, State> {
                                     </Route>
 
                                     <Route path='/account/address'>
-                                        <AccountAddress />
+                                        {addressesError() ? serviceError() : (addressesLoading() ? addresses() : loading())}
                                     </Route>
 
                                     <Route path='/account/changepassword'>

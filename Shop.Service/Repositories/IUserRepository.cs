@@ -15,7 +15,9 @@ namespace Shop.Service.Repositories
 
         Task AddOperations(Guid userId, IEnumerable<Operation> operations);
         Task<List<Operation>> GetUserOperations(Guid id);
+        Task<List<AddressData>> GetUserAddresses(Guid id);
 
         Task ChangePassword(User user);
+        Task ChangeAddresses(User user);
     }
 }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
+using Shop.Service.Extensions;
 using Shop.Service.Models;
 
 namespace Shop.Service
@@ -152,25 +154,35 @@ namespace Shop.Service
             }
         }
 
-
-
-        private Task<BasicResponse> GetResponse(StatusCode statusCode, string authorization = default)
+        [Authorize]
+        public override async Task<UserAddressesResponse> GetUserAddresses(UserRequest request, ServerCallContext context)
         {
-            if (string.IsNullOrEmpty(authorization))
+            List<AddressData> addresses = await userRepository.GetUserAddresses(User.GetGuidFromHeaders(context.RequestHeaders));
+
+            var userAddressesResponse = new UserAddressesResponse()
             {
-                return Task.FromResult(new BasicResponse()
-                {
-                    StatusCode = statusCode
-                });
-            }
-            else
+                StatusCode = StatusCode.Ok,
+            };
+
+            if (addresses?.Count > 0)
             {
-                return Task.FromResult(new BasicResponse()
-                {
-                    StatusCode = statusCode,
-                    Authorization = authorization
-                });
+                userAddressesResponse.AddressData.Add(addresses);
             }
+
+            return await Task.FromResult(userAddressesResponse);
+        }
+
+        [Authorize]
+        public override async Task<BasicResponse> UserChangeAddresses(ChangeAddressesRequest request, ServerCallContext context)
+        {
+            User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
+
+            user.Addresses = request.AddressData.ToList();
+
+            await userRepository.ChangeAddresses(user);
+            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeaddresses, context.Peer, user.Addresses.GetOperations()));
+
+            return await GetResponse(StatusCode.Ok);
         }
     }
 }

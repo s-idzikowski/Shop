@@ -76,6 +76,26 @@ export namespace ChangePasswordRequest {
   }
 }
 
+export class ChangeAddressesRequest extends jspb.Message {
+  getAddressdataList(): Array<AddressData>;
+  setAddressdataList(value: Array<AddressData>): void;
+  clearAddressdataList(): void;
+  addAddressdata(value?: AddressData, index?: number): AddressData;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ChangeAddressesRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ChangeAddressesRequest): ChangeAddressesRequest.AsObject;
+  static serializeBinaryToWriter(message: ChangeAddressesRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ChangeAddressesRequest;
+  static deserializeBinaryFromReader(message: ChangeAddressesRequest, reader: jspb.BinaryReader): ChangeAddressesRequest;
+}
+
+export namespace ChangeAddressesRequest {
+  export type AsObject = {
+    addressdataList: Array<AddressData.AsObject>,
+  }
+}
+
 export class BasicResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
@@ -146,6 +166,30 @@ export namespace UserOperationsResponse {
   }
 }
 
+export class UserAddressesResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
+  getAddressdataList(): Array<AddressData>;
+  setAddressdataList(value: Array<AddressData>): void;
+  clearAddressdataList(): void;
+  addAddressdata(value?: AddressData, index?: number): AddressData;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UserAddressesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UserAddressesResponse): UserAddressesResponse.AsObject;
+  static serializeBinaryToWriter(message: UserAddressesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UserAddressesResponse;
+  static deserializeBinaryFromReader(message: UserAddressesResponse, reader: jspb.BinaryReader): UserAddressesResponse;
+}
+
+export namespace UserAddressesResponse {
+  export type AsObject = {
+    statuscode: StatusCode,
+    addressdataList: Array<AddressData.AsObject>,
+  }
+}
+
 export class SignInData extends jspb.Message {
   getUsername(): string;
   setUsername(value: string): void;
@@ -201,6 +245,9 @@ export class UserData extends jspb.Message {
   getEmail(): string;
   setEmail(value: string): void;
 
+  getTelephone(): string;
+  setTelephone(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UserData.AsObject;
   static toObject(includeInstance: boolean, msg: UserData): UserData.AsObject;
@@ -213,6 +260,7 @@ export namespace UserData {
   export type AsObject = {
     username: string,
     email: string,
+    telephone: string,
   }
 }
 
@@ -242,6 +290,44 @@ export namespace OperationData {
   }
 }
 
+export class AddressData extends jspb.Message {
+  getFirstname(): string;
+  setFirstname(value: string): void;
+
+  getLastname(): string;
+  setLastname(value: string): void;
+
+  getStreet(): string;
+  setStreet(value: string): void;
+
+  getPlace(): string;
+  setPlace(value: string): void;
+
+  getZipcode(): string;
+  setZipcode(value: string): void;
+
+  getCity(): string;
+  setCity(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AddressData.AsObject;
+  static toObject(includeInstance: boolean, msg: AddressData): AddressData.AsObject;
+  static serializeBinaryToWriter(message: AddressData, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AddressData;
+  static deserializeBinaryFromReader(message: AddressData, reader: jspb.BinaryReader): AddressData;
+}
+
+export namespace AddressData {
+  export type AsObject = {
+    firstname: string,
+    lastname: string,
+    street: string,
+    place: string,
+    zipcode: string,
+    city: string,
+  }
+}
+
 export enum StatusCode { 
   OK = 0,
   DATABASE_ERROR = 1,
@@ -260,4 +346,5 @@ export enum OperationTypes {
   FAILEDLOGIN = 2,
   LOGOUT = 3,
   CHANGEPASSWORD = 10,
+  CHANGEADDRESSES = 11,
 }
