@@ -1,35 +1,28 @@
 import * as React from 'react';
-//import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Props {
     to: string;
     displayName: string;
+    cssType?: string;
     onClick?: () => void;
+    onUpdate?: () => void;
 }
 
 const NavbarLink = (props: Props): JSX.Element => {
+    const cssType = props.cssType ?? "nav-link";
 
-    // ToDo - stan
-    //const [css, setCss] = useState("nav-link");
-    //const active = () => window.location.pathname.includes(props.to);
-    //const updateCss = () => {
-    //    setTimeout(() => {
-    //        console.log(window.location.pathname);
-    //        active() ? setCss("nav-link active") : setCss("nav-link");
-    //    }, 10);
-    //};
+    const css = window.location.pathname == props.to ? cssType + " active" : window.location.pathname.includes(props.to) && props.to.length > 1 ? cssType + " active" : cssType;
 
-    //return (
-    //    <li className="nav-item">
-    //        <Link onClick={updateCss} className={css} to={props.to}>{props.displayName}</Link>
-    //    </li>
-    //);
+    const onUpdate = (): void => {
+        if (props.onClick)
+            props.onClick();
+        if (props.onUpdate)
+            props.onUpdate();
+    }
 
     return (
-        <li className="nav-item">
-            <Link onClick={props.onClick} className="nav-link" to={props.to}>{props.displayName}</Link>
-        </li>
+        <Link onClick={onUpdate} className={css} to={props.to}>{props.displayName}</Link>
     );
 }
 

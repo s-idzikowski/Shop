@@ -41,7 +41,7 @@ class SignIn extends React.Component<Props, State> {
         }
     }
 
-    usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void  => {
+    usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             username: e.target.value
         });

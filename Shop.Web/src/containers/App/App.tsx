@@ -16,9 +16,9 @@ import Logout from '../../components/Logout/Logout';
 import Account from '../Account/Account';
 
 class App extends React.Component {
-    render(): JSX.Element {
-        const Update = (): void => this.forceUpdate();
+    onUpdate = (): void => this.forceUpdate();
 
+    render(): JSX.Element {
         return (
             <div className="d-flex flex-column">
                 <ToastContainer />
@@ -32,13 +32,13 @@ class App extends React.Component {
                             <Route exact path='/' component={Dashboard} />
 
                             <Route path='/signin'>
-                                <SignIn onSignIn={Update} />
+                                <SignIn onSignIn={this.onUpdate} />
                             </Route>
                             <Route path='/register'>
-                                <Register onRegister={Update} />
+                                <Register onRegister={this.onUpdate} />
                             </Route>
                             <Route path='/logout'>
-                                <Logout onLogout={Update} />
+                                <Logout onLogout={this.onUpdate} />
                             </Route>
                             <Route path='/account' component={Account} />
 

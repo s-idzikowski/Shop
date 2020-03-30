@@ -90,17 +90,17 @@ class AccountChangePassword extends React.Component<Props, State> {
     validatePassword = (): boolean => {
         let status = true;
 
-        if (ClientHelper.ValidateLength(this.state.oldPassword)) {
+        if (!ClientHelper.ValidateLength(this.state.oldPassword)) {
             status = false;
             toast.warn("Pole 'Stare hasło' jest niepoprawne.");
         }
 
-        if (ClientHelper.ValidateLength(this.state.newPassword)) {
+        if (!ClientHelper.ValidateLength(this.state.newPassword)) {
             status = false;
             toast.warn("Pole 'Nowe hasło' jest niepoprawne.");
         }
 
-        if (ClientHelper.ValidateLength(this.state.newPassword2)) {
+        if (!ClientHelper.ValidateLength(this.state.newPassword2)) {
             status = false;
             toast.warn("Pole 'Powtórz nowe hasło' jest niepoprawne.");
         }

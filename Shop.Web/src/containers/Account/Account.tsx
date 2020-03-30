@@ -9,11 +9,11 @@ import AccountData from './Data/AccountData';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import NotFound from '../../components/NotFound/NotFound';
-import NavbarLink from '../../components/Navbar/NavbarLink';
 import PageTitle from '../../components/PageTitle/PageTitle';
 import AccountOperations from './Operations/AccountOperations';
 import AccountChangePassword from './ChangePassword/AccountChangePassword';
 import AccountAddress from './Address/AccountAddress';
+import AccountNavbar from './AccountNavbar';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
@@ -129,15 +129,7 @@ class Account extends React.Component<Props, State> {
                 <div className="row">
                     <BrowserRouter>
                         <div className="col-4">
-                            <div className="shadow p-2 m-2">
-                                <ul className="nav flex-column">
-                                    <NavbarLink onClick={this.accountHandler.bind(this)} to="/account" displayName="Moje dane" />
-                                    <NavbarLink to="/account/address" displayName="Moje adresy" />
-                                    <NavbarLink to="/account/changepassword" displayName="Zmień hasło" />
-                                    <NavbarLink onClick={this.operationsHandler.bind(this)} to="/account/log" displayName="Dziennik aktywności" />
-                                    <NavbarLink to="/account/settings" displayName="Ustawienia" />
-                                </ul>
-                            </div>
+                            <AccountNavbar accountHandler={this.accountHandler.bind(this)} operationsHandler={this.operationsHandler.bind(this)} />
                         </div>
 
                         <div className="col-8">
