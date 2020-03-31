@@ -5,12 +5,7 @@ import { UserRequest, BasicResponse } from '../../../gRPC/service_pb';
 import { toast } from 'react-toastify';
 import Loading from '../Loading/Loading';
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-interface IProps {
-    onLogout: () => void;
-}
-
-const Logout = (props: IProps): JSX.Element => {
+const Logout = (): JSX.Element => {
     const request: UserRequest = new UserRequest();
 
     Client.Instance().userLogout(request, Client.Header(), (err: grpcWeb.Error, response: BasicResponse) => {
@@ -18,16 +13,12 @@ const Logout = (props: IProps): JSX.Element => {
 
             const onSuccess = (): void => {
                 toast.success("Poprawnie wylogowano.");
-                props.onLogout();
-
                 Client.Redirect();
             };
 
             Client.CheckStatusCode(response.getStatuscode(), null, onSuccess, null);
         }, () => {
             toast.info("Wylogowano.");
-            props.onLogout();
-
             Client.Redirect();
         });
     });

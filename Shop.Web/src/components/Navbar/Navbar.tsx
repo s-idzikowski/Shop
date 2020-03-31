@@ -8,28 +8,37 @@ class Navbar extends React.Component {
     onUpdate = (): void => this.forceUpdate();
 
     render(): JSX.Element {
-        const isLogged: boolean = Client.IsLogged();
+        let menu: { (): JSX.Element };
 
-        const signIn = (): JSX.Element => <NavbarLink onUpdate={this.onUpdate} to="/signin" displayName="Zaloguj" />;
-        const register = (): JSX.Element => <NavbarLink onUpdate={this.onUpdate} to="/register" displayName="Rejestracja" />;
-        const account = (): JSX.Element => <NavbarLink onUpdate={this.onUpdate} to="/account" displayName="Moje konto" />;
-        const logOut = (): JSX.Element => <NavbarLink onUpdate={this.onUpdate} to="/logout" displayName="Wyloguj" />;
+        if (Client.IsLogged()) {
+            menu = (): JSX.Element => {
+                return (
+                    <ul className="navbar-nav ml-auto">
+                        <NavbarLink onUpdate={this.onUpdate} to="/" displayName="Dashboard" />
+                        <NavbarLink onUpdate={this.onUpdate} to="/account" displayName="Moje konto" />
+                        <NavbarLink onUpdate={this.onUpdate} to="/logout" displayName="Wyloguj" />
+                    </ul>
+                );
+            };
+        }
+        else {
+            menu = (): JSX.Element => {
+                return (
+                    <ul className="navbar-nav ml-auto">
+                        <NavbarLink onUpdate={this.onUpdate} to="/" displayName="Dashboard" />
+                        <NavbarLink onUpdate={this.onUpdate} to="/signin" displayName="Zaloguj" />
+                        <NavbarLink onUpdate={this.onUpdate} to="/register" displayName="Rejestracja" />
+                    </ul>
+                );
+            };
+        }
 
         return (
             <div>
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
                     <div className="container">
                         <div className="collapse navbar-collapse">
-                            <ul className="navbar-nav ml-auto">
-                                <NavbarLink onUpdate={this.onUpdate} to="/" displayName="Dashboard" />
-
-                                {isLogged ? "" : signIn()}
-                                {isLogged ? "" : register()}
-
-                                {isLogged ? account() : ""}
-
-                                {isLogged ? logOut() : ""}
-                            </ul>
+                            {menu()}
                         </div>
                     </div>
                 </nav>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter, Route, Switch} from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +14,8 @@ import Register from '../Register/Register';
 import NotFound from '../../components/NotFound/NotFound';
 import Logout from '../../components/Logout/Logout';
 import Account from '../Account/Account';
+import PrivateRoute from '../../class/PrivateRoute';
+import Unathorized from '../../components/Unathorized/Unathorized';
 
 class App extends React.Component {
     onUpdate = (): void => this.forceUpdate();
@@ -34,13 +36,16 @@ class App extends React.Component {
                             <Route path='/signin'>
                                 <SignIn onSignIn={this.onUpdate} />
                             </Route>
+
                             <Route path='/register'>
                                 <Register onRegister={this.onUpdate} />
                             </Route>
-                            <Route path='/logout'>
-                                <Logout onLogout={this.onUpdate} />
-                            </Route>
-                            <Route path='/account' component={Account} />
+
+                            <PrivateRoute path='/logout' component={Logout} />
+
+                            <PrivateRoute path='/account' component={Account} />
+
+                            <Route path='/unathorized' component={Unathorized} />
 
                             <Route component={NotFound} />
                         </Switch>
