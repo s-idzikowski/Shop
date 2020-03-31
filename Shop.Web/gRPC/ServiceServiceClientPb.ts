@@ -12,6 +12,7 @@ import * as grpcWeb from 'grpc-web';
 import {
   BasicResponse,
   ChangeAddressesRequest,
+  ChangeInformationRequest,
   ChangePasswordRequest,
   RegisterRequest,
   SignInRequest,
@@ -146,6 +147,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoUserChangeAddresses,
+      callback);
+  }
+
+  methodInfoUserChangeInformation = new grpcWeb.AbstractClientBase.MethodInfo(
+    BasicResponse,
+    (request: ChangeInformationRequest) => {
+      return request.serializeBinary();
+    },
+    BasicResponse.deserializeBinary
+  );
+
+  userChangeInformation(
+    request: ChangeInformationRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: BasicResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserChangeInformation',
+      request,
+      metadata || {},
+      this.methodInfoUserChangeInformation,
       callback);
   }
 

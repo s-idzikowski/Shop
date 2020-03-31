@@ -96,6 +96,26 @@ export namespace ChangeAddressesRequest {
   }
 }
 
+export class ChangeInformationRequest extends jspb.Message {
+  getUserdata(): UserData | undefined;
+  setUserdata(value?: UserData): void;
+  hasUserdata(): boolean;
+  clearUserdata(): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ChangeInformationRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ChangeInformationRequest): ChangeInformationRequest.AsObject;
+  static serializeBinaryToWriter(message: ChangeInformationRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ChangeInformationRequest;
+  static deserializeBinaryFromReader(message: ChangeInformationRequest, reader: jspb.BinaryReader): ChangeInformationRequest;
+}
+
+export namespace ChangeInformationRequest {
+  export type AsObject = {
+    userdata?: UserData.AsObject,
+  }
+}
+
 export class BasicResponse extends jspb.Message {
   getStatuscode(): StatusCode;
   setStatuscode(value: StatusCode): void;
@@ -334,11 +354,12 @@ export enum StatusCode {
   UNATHORIZED = 2,
   SIGNIN_NOT_FOUND = 10,
   SIGNIN_ACCOUNT_BAN = 11,
-  REGISTER_USERNAME_OCCUPIED = 20,
+  USERNAME_OCCUPIED = 20,
   PASSWORD_NOT_VALID = 21,
-  REGISTER_EMAIL_OCCUPIED = 22,
+  EMAIL_OCCUPIED = 22,
   CHANGEPASSWORD_SAME = 30,
   CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31,
+  EMPTY_CHANGES = 40,
 }
 export enum OperationTypes { 
   REGISTER = 0,
@@ -347,4 +368,5 @@ export enum OperationTypes {
   LOGOUT = 3,
   CHANGEPASSWORD = 10,
   CHANGEADDRESSES = 11,
+  CHANGEINFORMATION = 12,
 }

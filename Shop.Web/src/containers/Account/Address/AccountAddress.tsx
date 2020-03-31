@@ -22,13 +22,10 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
     constructor(props: Readonly<{}>) {
         super(props);
 
-        this.handler();
+        this.downloadHandler();
     }
 
-    handler(): void {
-        if (this.state.addresses)
-            return;
-
+    downloadHandler(): void {
         Client.Instance().getUserAddresses(new UserRequest(), Client.Header(), (err: grpcWeb.Error, response: UserAddressesResponse) => {
             Client.CheckError(err, () => {
 

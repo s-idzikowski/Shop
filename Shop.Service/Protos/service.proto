@@ -6,8 +6,10 @@ service Service {
     rpc UserSignIn (SignInRequest) returns (BasicResponse);
     rpc UserRegister (RegisterRequest) returns (BasicResponse);
     rpc UserLogout (UserRequest) returns (BasicResponse);
+    
     rpc UserChangePassword (ChangePasswordRequest) returns (BasicResponse);
     rpc UserChangeAddresses (ChangeAddressesRequest) returns (BasicResponse);
+    rpc UserChangeInformation (ChangeInformationRequest) returns (BasicResponse);
     
     rpc GetUser (UserRequest) returns (UserResponse);
     rpc GetUserOperations (UserRequest) returns (UserOperationsResponse);
@@ -36,6 +38,10 @@ message ChangePasswordRequest {
 
 message ChangeAddressesRequest {
     repeated AddressData addressData = 1;
+}
+
+message ChangeInformationRequest {
+    UserData userData = 1;
 }
 
 // Response:
@@ -104,12 +110,14 @@ enum StatusCode {
     SIGNIN_NOT_FOUND = 10;
     SIGNIN_ACCOUNT_BAN = 11;
     
-    REGISTER_USERNAME_OCCUPIED = 20;
+    USERNAME_OCCUPIED = 20;
     PASSWORD_NOT_VALID = 21;
-    REGISTER_EMAIL_OCCUPIED = 22;
+    EMAIL_OCCUPIED = 22;
 
     CHANGEPASSWORD_SAME = 30;
     CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31;
+    
+    EMPTY_CHANGES = 40;
 }
 
 enum OperationTypes {
@@ -120,6 +128,7 @@ enum OperationTypes {
 
     CHANGEPASSWORD = 10;
     CHANGEADDRESSES = 11;
+    CHANGEINFORMATION = 12;
 }
 
 // End User

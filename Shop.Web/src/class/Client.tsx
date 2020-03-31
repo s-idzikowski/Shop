@@ -84,14 +84,14 @@ abstract class Client {
                 toast.error("Podane hasło nie jest dopuszczalne.");
 
                 break;
-            case StatusCode.REGISTER_USERNAME_OCCUPIED:
+            case StatusCode.USERNAME_OCCUPIED:
 
                 if (onError)
                     onError();
                 toast.error("Podana nazwa użytkownika jest już zajęta.");
 
                 break;
-            case StatusCode.REGISTER_EMAIL_OCCUPIED:
+            case StatusCode.EMAIL_OCCUPIED:
 
                 if (onError)
                     onError();
@@ -134,6 +134,14 @@ abstract class Client {
                 if (onError)
                     onError();
                 toast.warn("Podano błędne stare hasło.");
+
+                break;
+
+            case StatusCode.EMPTY_CHANGES:
+
+                if (onError)
+                    onError();
+                toast.info("Nie wprowadzono żadnych zmian.");
 
                 break;
 

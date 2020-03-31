@@ -51,7 +51,7 @@ namespace Shop.Service
             User user = await userRepository.GetByUsername(request.RegisterData.Username);
             if (user != null)
             {
-                return await GetResponse(StatusCode.RegisterUsernameOccupied);
+                return await GetResponse(StatusCode.UsernameOccupied);
             }
 
             // Email validate:
@@ -61,7 +61,7 @@ namespace Shop.Service
             user = await userRepository.GetByEmailAddress(request.RegisterData.EmailAddress);
             if (user != null)
             {
-                return await GetResponse(StatusCode.RegisterEmailOccupied);
+                return await GetResponse(StatusCode.EmailOccupied);
             }
 
             user = User.New(context, request.RegisterData);
@@ -145,10 +145,12 @@ namespace Shop.Service
             }
             else
             {
+                List<string> beforePassword = user.GetPasswords();
+
                 user.HashPassword(Encoding.UTF8.GetBytes(request.NewPassword));
 
                 await userRepository.ChangePassword(user);
-                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changepassword, context.Peer));
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changepassword, context.Peer, beforePassword, user.GetPasswords()));
 
                 return await GetResponse(StatusCode.Ok, token);
             }
@@ -177,12 +179,69 @@ namespace Shop.Service
         {
             User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
 
+            List<string> beforeAddresses = user.Addresses.GetOperations();
+
             user.Addresses = request.AddressData.ToList();
 
             await userRepository.ChangeAddresses(user);
-            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeaddresses, context.Peer, user.Addresses.GetOperations()));
+            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeaddresses, context.Peer, beforeAddresses, user.Addresses.GetOperations()));
 
             return await GetResponse(StatusCode.Ok);
+        }
+
+        [Authorize]
+        public override async Task<BasicResponse> UserChangeInformation(ChangeInformationRequest request, ServerCallContext context)
+        {
+            User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
+
+            bool requireUpdate = false;
+
+            // Username in database:
+            if (user.Username != request.UserData.Username)
+            {
+                requireUpdate = true;
+
+                User userUsername = await userRepository.GetByUsername(request.UserData.Username);
+                if (userUsername != null)
+                {
+                    return await GetResponse(StatusCode.UsernameOccupied);
+                }
+            }
+
+            // Email validate:
+            // TODO !!!!!
+
+            // Email in database:
+            if (user.EmailAddress != request.UserData.Email)
+            {
+                requireUpdate = true;
+
+                User userEmail = await userRepository.GetByEmailAddress(request.UserData.Email);
+                if (userEmail != null)
+                {
+                    return await GetResponse(StatusCode.EmailOccupied);
+                }
+            }
+
+            // Telephone in database:
+            if (user.Telephone != request.UserData.Telephone)
+            {
+                requireUpdate = true;
+            }
+
+            if (requireUpdate)
+            {
+                List<string> beforeInformations = user.GetInfromations();
+
+                user.SetNewInfromations(request.UserData);
+
+                await userRepository.ChangeInformation(user);
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeinformation, context.Peer, beforeInformations, user.GetInfromations()));
+
+                return await GetResponse(StatusCode.Ok);
+            }
+
+            return await GetResponse(StatusCode.EmptyChanges);
         }
     }
 }

@@ -35,6 +35,7 @@ namespace Shop.Service.Models
             {
                 Username = Username,
                 Email = EmailAddress,
+                Telephone = Telephone,
             };
         }
 
@@ -50,7 +51,7 @@ namespace Shop.Service.Models
             }
         }
 
-        internal static User New(ServerCallContext context, RegisterData registerData)
+        public static User New(ServerCallContext context, RegisterData registerData)
         {
             return new User()
             {
@@ -132,6 +133,13 @@ namespace Shop.Service.Models
                 return false;
 
             return password.Length >= 40;
+        }
+
+        public void SetNewInfromations(UserData userData)
+        {
+            Username = userData.Username;
+            EmailAddress = userData.Email;
+            Telephone = userData.Telephone;
         }
     }
 }

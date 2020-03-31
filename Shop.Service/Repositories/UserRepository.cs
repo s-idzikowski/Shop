@@ -27,12 +27,16 @@ namespace Shop.Service.Repositories
 
         public Task<User> GetByUsername(string username)
         {
-            return db.Users.Find(o => o.Username == username).SingleOrDefaultAsync();
+            return db.Users.Find(o => o.Username == username)
+                .Project<User>(UserFields())
+                .SingleOrDefaultAsync();
         }
 
         public Task<User> GetByEmailAddress(string emailAddress)
         {
-            return db.Users.Find(o => o.EmailAddress == emailAddress).SingleOrDefaultAsync();
+            return db.Users.Find(o => o.EmailAddress == emailAddress)
+                .Project<User>(UserFields())
+                .SingleOrDefaultAsync();
         }
 
         public Task<User> GetById(Guid userId)
@@ -40,7 +44,14 @@ namespace Shop.Service.Repositories
             FilterDefinition<User> filter = Builders<User>.Filter
                 .Eq(o => o.Id, userId);
 
-            ProjectionDefinition<User> fields = Builders<User>.Projection
+            return db.Users.Find(filter)
+                .Project<User>(UserFields())
+                .SingleAsync();
+        }
+
+        private ProjectionDefinition<User> UserFields()
+        {
+            return Builders<User>.Projection
                 .Include(u => u.Id)
                 .Include(u => u.Username)
                 .Include(u => u.PasswordHash)
@@ -48,8 +59,6 @@ namespace Shop.Service.Repositories
                 .Include(u => u.EmailAddress)
                 .Include(u => u.Telephone)
                 .Include(u => u.IsBanned);
-
-            return db.Users.Find(filter).Project<User>(fields).SingleAsync();
         }
 
         public Task AddOperations(Guid userId, IEnumerable<Operation> operations)
@@ -68,7 +77,9 @@ namespace Shop.Service.Repositories
             FilterDefinition<User> filter = Builders<User>.Filter
                 .Eq(o => o.Id, id);
 
-            return db.Users.Find(filter).Project(o => o.Operations).SingleAsync();
+            return db.Users.Find(filter)
+                .Project(o => o.Operations)
+                .SingleAsync();
         }
 
         public Task<List<AddressData>> GetUserAddresses(Guid id)
@@ -76,7 +87,9 @@ namespace Shop.Service.Repositories
             FilterDefinition<User> filter = Builders<User>.Filter
                 .Eq(o => o.Id, id);
 
-            return db.Users.Find(filter).Project(o => o.Addresses).SingleAsync();
+            return db.Users.Find(filter)
+                .Project(o => o.Addresses)
+                .SingleAsync();
         }
 
         public Task ChangePassword(User user)
@@ -98,6 +111,19 @@ namespace Shop.Service.Repositories
 
             UpdateDefinition<User> update = Builders<User>.Update
                 .Set(o => o.Addresses, user.Addresses);
+
+            return db.Users.UpdateOneAsync(filter, update);
+        }
+
+        public Task ChangeInformation(User user)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, user.Id);
+
+            UpdateDefinition<User> update = Builders<User>.Update
+                .Set(o => o.Username, user.Username)
+                .Set(o => o.EmailAddress, user.EmailAddress)
+                .Set(o => o.Telephone, user.Telephone);
 
             return db.Users.UpdateOneAsync(filter, update);
         }

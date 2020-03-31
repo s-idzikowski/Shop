@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Shop.Service.Extensions
 {
     public static class AddressDataExtension
     {
-        private static readonly string separator = $";{Environment.NewLine}";
-
         public static string GetOperation(this AddressData address)
         {
-            return $"Imię: '{address.FirstName}'{separator}" +
-                $"Nazwisko: '{address.LastName}'{separator}" +
-                $"Ulica: '{address.Street}'{separator}" +
-                $"Numer domu: '{address.Place}'{separator}" +
-                $"Kod pocztowy: '{address.ZipCode}'{separator}" +
-                $"Miejscowość: '{address.City}'{separator}";
+            return $"Imię: '{address.FirstName}'{ExtensionHelper.Separator}" +
+                $"Nazwisko: '{address.LastName}'{ExtensionHelper.Separator}" +
+                $"Ulica: '{address.Street}'{ExtensionHelper.Separator}" +
+                $"Numer domu: '{address.Place}'{ExtensionHelper.Separator}" +
+                $"Kod pocztowy: '{address.ZipCode}'{ExtensionHelper.Separator}" +
+                $"Miejscowość: '{address.City}'{ExtensionHelper.Separator}";
         }
 
         public static List<string> GetOperations(this AddressData address)

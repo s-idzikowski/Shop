@@ -19,5 +19,6 @@ namespace Shop.Service.Repositories
 
         Task ChangePassword(User user);
         Task ChangeAddresses(User user);
+        Task ChangeInformation(User user);
     }
 }

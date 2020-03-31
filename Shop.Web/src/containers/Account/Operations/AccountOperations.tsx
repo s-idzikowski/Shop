@@ -22,13 +22,10 @@ class AccountOperations extends React.Component<Readonly<{}>, State> {
     constructor(props: Readonly<{}>) {
         super(props);
 
-        this.handler();
+        this.downloadHandler();
     }
 
-    handler(): void {
-        if (this.state.operations)
-            return;
-
+    downloadHandler(): void {
         Client.Instance().getUserOperations(new UserRequest(), Client.Header(), (err: grpcWeb.Error, response: UserOperationsResponse) => {
             Client.CheckError(err, () => {
 
