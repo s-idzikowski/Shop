@@ -16,10 +16,9 @@ import Logout from '../../components/Logout/Logout';
 import Account from '../Account/Account';
 import PrivateRoute from '../../class/PrivateRoute';
 import Unathorized from '../../components/Unathorized/Unathorized';
+import AnonymouseRoute from '../../class/AnonymouseRoute';
 
 class App extends React.Component {
-    onUpdate = (): void => this.forceUpdate();
-
     render(): JSX.Element {
         return (
             <div className="d-flex flex-column">
@@ -33,13 +32,9 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path='/' component={Dashboard} />
 
-                            <Route path='/signin'>
-                                <SignIn onSignIn={this.onUpdate} />
-                            </Route>
+                            <AnonymouseRoute path='/signin' component={SignIn} />
 
-                            <Route path='/register'>
-                                <Register onRegister={this.onUpdate} />
-                            </Route>
+                            <AnonymouseRoute path='/register' component={Register} />
 
                             <PrivateRoute path='/logout' component={Logout} />
 

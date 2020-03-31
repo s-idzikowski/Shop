@@ -35,7 +35,7 @@ namespace Shop.Service.Models
             {
                 Username = Username,
                 Email = EmailAddress,
-                Telephone = Telephone,
+                Telephone = Telephone ?? "",
             };
         }
 

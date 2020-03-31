@@ -2701,12 +2701,11 @@ proto.AddressData.prototype.toObject = function(opt_includeInstance) {
  */
 proto.AddressData.toObject = function(includeInstance, msg) {
   var f, obj = {
-    firstname: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    lastname: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    street: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    place: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    zipcode: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    city: jspb.Message.getFieldWithDefault(msg, 6, "")
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    street: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    place: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    zipcode: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    city: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -2745,25 +2744,21 @@ proto.AddressData.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setFirstname(value);
+      msg.setName(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setLastname(value);
+      msg.setStreet(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setStreet(value);
+      msg.setPlace(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setPlace(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readString());
       msg.setZipcode(value);
       break;
-    case 6:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setCity(value);
       break;
@@ -2796,45 +2791,38 @@ proto.AddressData.prototype.serializeBinary = function() {
  */
 proto.AddressData.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getFirstname();
+  f = message.getName();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
-  f = message.getLastname();
+  f = message.getStreet();
   if (f.length > 0) {
     writer.writeString(
       2,
       f
     );
   }
-  f = message.getStreet();
+  f = message.getPlace();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
-  f = message.getPlace();
+  f = message.getZipcode();
   if (f.length > 0) {
     writer.writeString(
       4,
       f
     );
   }
-  f = message.getZipcode();
-  if (f.length > 0) {
-    writer.writeString(
-      5,
-      f
-    );
-  }
   f = message.getCity();
   if (f.length > 0) {
     writer.writeString(
-      6,
+      5,
       f
     );
   }
@@ -2842,10 +2830,10 @@ proto.AddressData.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string firstName = 1;
+ * optional string name = 1;
  * @return {string}
  */
-proto.AddressData.prototype.getFirstname = function() {
+proto.AddressData.prototype.getName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -2854,16 +2842,16 @@ proto.AddressData.prototype.getFirstname = function() {
  * @param {string} value
  * @return {!proto.AddressData} returns this
  */
-proto.AddressData.prototype.setFirstname = function(value) {
+proto.AddressData.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * optional string lastName = 2;
+ * optional string street = 2;
  * @return {string}
  */
-proto.AddressData.prototype.getLastname = function() {
+proto.AddressData.prototype.getStreet = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -2872,16 +2860,16 @@ proto.AddressData.prototype.getLastname = function() {
  * @param {string} value
  * @return {!proto.AddressData} returns this
  */
-proto.AddressData.prototype.setLastname = function(value) {
+proto.AddressData.prototype.setStreet = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional string street = 3;
+ * optional string place = 3;
  * @return {string}
  */
-proto.AddressData.prototype.getStreet = function() {
+proto.AddressData.prototype.getPlace = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -2890,16 +2878,16 @@ proto.AddressData.prototype.getStreet = function() {
  * @param {string} value
  * @return {!proto.AddressData} returns this
  */
-proto.AddressData.prototype.setStreet = function(value) {
+proto.AddressData.prototype.setPlace = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string place = 4;
+ * optional string zipCode = 4;
  * @return {string}
  */
-proto.AddressData.prototype.getPlace = function() {
+proto.AddressData.prototype.getZipcode = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -2908,16 +2896,16 @@ proto.AddressData.prototype.getPlace = function() {
  * @param {string} value
  * @return {!proto.AddressData} returns this
  */
-proto.AddressData.prototype.setPlace = function(value) {
+proto.AddressData.prototype.setZipcode = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional string zipCode = 5;
+ * optional string city = 5;
  * @return {string}
  */
-proto.AddressData.prototype.getZipcode = function() {
+proto.AddressData.prototype.getCity = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
@@ -2926,26 +2914,8 @@ proto.AddressData.prototype.getZipcode = function() {
  * @param {string} value
  * @return {!proto.AddressData} returns this
  */
-proto.AddressData.prototype.setZipcode = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
-};
-
-
-/**
- * optional string city = 6;
- * @return {string}
- */
-proto.AddressData.prototype.getCity = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.AddressData} returns this
- */
 proto.AddressData.prototype.setCity = function(value) {
-  return jspb.Message.setProto3StringField(this, 6, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

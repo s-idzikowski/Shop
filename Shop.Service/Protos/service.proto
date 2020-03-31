@@ -92,12 +92,11 @@ message OperationData {
 }
 
 message AddressData {
-    string firstName = 1;
-    string lastName = 2;
-    string street = 3;
-    string place = 4;
-    string zipCode = 5;
-    string city = 6;
+    string name = 1;
+    string street = 2;
+    string place = 3;
+    string zipCode = 4;
+    string city = 5;
 }
 
 // Enums:

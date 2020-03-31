@@ -162,7 +162,7 @@ class AccountInformation extends React.Component<Readonly<{}>, State> {
                 </p>
 
                 <p>
-                    <Button onClick={this.changePasswordHandler.bind(this)}>Zmień hasło</Button>
+                    <Button onClick={this.changePasswordHandler.bind(this)}>Zmień moje dane</Button>
                 </p>
             </div>
         );

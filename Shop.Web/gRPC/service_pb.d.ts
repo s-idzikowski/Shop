@@ -311,11 +311,8 @@ export namespace OperationData {
 }
 
 export class AddressData extends jspb.Message {
-  getFirstname(): string;
-  setFirstname(value: string): void;
-
-  getLastname(): string;
-  setLastname(value: string): void;
+  getName(): string;
+  setName(value: string): void;
 
   getStreet(): string;
   setStreet(value: string): void;
@@ -339,8 +336,7 @@ export class AddressData extends jspb.Message {
 
 export namespace AddressData {
   export type AsObject = {
-    firstname: string,
-    lastname: string,
+    name: string,
     street: string,
     place: string,
     zipcode: string,

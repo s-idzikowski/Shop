@@ -7,10 +7,9 @@ namespace Shop.Service.Extensions
     {
         public static string GetOperation(this AddressData address)
         {
-            return $"Imię: '{address.FirstName}'{ExtensionHelper.Separator}" +
-                $"Nazwisko: '{address.LastName}'{ExtensionHelper.Separator}" +
+            return $"Imię i nazwisko: '{address.Name}'{ExtensionHelper.Separator}" +
                 $"Ulica: '{address.Street}'{ExtensionHelper.Separator}" +
-                $"Numer domu: '{address.Place}'{ExtensionHelper.Separator}" +
+                $"Lokal: '{address.Place}'{ExtensionHelper.Separator}" +
                 $"Kod pocztowy: '{address.ZipCode}'{ExtensionHelper.Separator}" +
                 $"Miejscowość: '{address.City}'{ExtensionHelper.Separator}";
         }

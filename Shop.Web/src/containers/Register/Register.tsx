@@ -6,41 +6,29 @@ import { RegisterData, RegisterRequest, BasicResponse } from '../../../gRPC/serv
 import Client from '../../class/Client';
 import { toast } from 'react-toastify';
 import { Label, Input, Button } from 'reactstrap';
-import { Redirect } from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import ClientHelper from '../../class/ClientHelper';
-
-interface Props {
-    onRegister: () => void;
-}
+import { Redirect } from 'react-router-dom';
 
 interface State {
     username: string;
     password: string;
     emailAddress: string;
-    redirect: boolean;
     loading: boolean;
     error: boolean;
+    redirect: boolean;
 }
 
-class Register extends React.Component<Props, State> {
+class Register extends React.Component<Readonly<{}>, State> {
     state: State = {
         username: "",
         password: "",
         emailAddress: "",
-        redirect: false,
         loading: false,
         error: false,
+        redirect: false,
     };
-
-    constructor(props: Props) {
-        super(props);
-
-        if (Client.IsLogged()) {
-            Client.Redirect();
-        }
-    }
 
     usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
@@ -92,12 +80,12 @@ class Register extends React.Component<Props, State> {
                 const onSuccess = (): void => {
                     window.sessionStorage.setItem("Authorization", response.getAuthorization());
                     toast.success("Poprawna rejestracja.");
-                    this.props.onRegister();
                 };
 
                 const onRedirect = (): void => {
                     this.setState({
                         loading: false,
+                        error: false,
                         redirect: true,
                     });
                 };
