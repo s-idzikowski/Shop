@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 import './../Account.css';
 import { AddressData } from '../../../../gRPC/service_pb';
@@ -53,9 +55,10 @@ const AccountAddressRow: React.FunctionComponent<Props> = (props: Props) => {
 
                 <div className="col-4">
                     <div className={cssButtonRow}>
-                        <Button className={cssButton} onClick={(): void => props.editHandler(props.index)}>Edytuj</Button>
-                        <Button className={cssButton} onClick={(): void => props.removeHandler(props.index)}>Usuń</Button>
+                        <FaEdit cursor="pointer" className={cssButton + " editIcon"} onClick={(): void => props.editHandler(props.index)} />
+                        <MdDelete cursor="pointer" className={cssButton + " removeIcon"} onClick={(): void => props.removeHandler(props.index)} />
                     </div>
+
                     {buttonDefault}
                 </div>
             </div>

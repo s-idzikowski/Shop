@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as grpcWeb from 'grpc-web';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 import './../Account.css';
 import { AddressData, UserRequest, UserAddressesResponse, ChangeAddressesRequest, BasicResponse } from '../../../../gRPC/service_pb';
@@ -7,7 +8,6 @@ import AccountAddressRow from './AccountAddressRow';
 import ServiceError from '../../../components/ServiceError/ServiceError';
 import Loading from '../../../components/Loading/Loading';
 import Client from '../../../class/Client';
-import { Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Address from './Address';
 
@@ -181,14 +181,12 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
         });
 
         return (
-            <div>
-                <div className="row">
-                    <div className="col-* p-2 m-2">
-                        <Button onClick={this.addNewHandler.bind(this)}>Dodaj nowy</Button>
-                    </div>
+            <div className="p-2">
+                <div className="row p-2">
+                    <AiOutlinePlusCircle cursor="pointer" className="col plusIcon p-2" onClick={this.addNewHandler.bind(this)} />
                 </div>
-
-                <div className="p-2">
+                                
+                <div>
                     {items}
                 </div>
             </div>

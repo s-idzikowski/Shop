@@ -3,3 +3,17 @@
     text-transform: uppercase;
     font-weight: bold;
 }
+
+.plusIcon {
+    height: 64px;
+}
+
+.editIcon {
+    height: 32px;
+    color: #21dd10c4;
+}
+
+.removeIcon {
+    height: 32px;
+    color: #fb1515b2;
+}

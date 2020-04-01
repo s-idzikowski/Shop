@@ -20,6 +20,7 @@
     "grpc-web": "^1.0.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-icons": "^3.9.0",
     "react-router-dom": "^5.1.2",
     "react-toastify": "^5.5.0",
     "reactstrap": "^8.4.1",
