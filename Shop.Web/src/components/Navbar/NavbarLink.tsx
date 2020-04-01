@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 interface Props {
     to: string;
+    extraTo?: string;
     displayName: string;
     cssType?: string;
     onClick?: () => void;
@@ -11,8 +12,13 @@ interface Props {
 
 const NavbarLink = (props: Props): JSX.Element => {
     const cssType = props.cssType ?? "nav-link";
+    const active = " active";
 
-    const css = window.location.pathname == props.to ? cssType + " active" : window.location.pathname.includes(props.to) && props.to.length > 1 ? cssType + " active" : cssType;
+    const validate = (path: string): string => window.location.pathname == path ? cssType + active : window.location.pathname.indexOf(path) !== -1 && path.length > 1 ? cssType + active : cssType;
+
+    const validateExtra = (path: string): string => window.location.pathname == path ? cssType + active : validate(props.to);
+
+    const css = props.extraTo ? validateExtra(props.extraTo) : validate(props.to);
 
     const onUpdate = (): void => {
         if (props.onClick)

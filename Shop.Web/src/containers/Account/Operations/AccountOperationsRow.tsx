@@ -27,11 +27,14 @@ const AccountOperationsRow: React.FunctionComponent<Props> = (props: Props) => {
             case OperationTypes.CHANGEPASSWORD:
                 return "Zmiana hasła";
 
+            case OperationTypes.CHANGEADDRESSES:
+                return "Zmiana adresów";
+
             case OperationTypes.CHANGEINFORMATION:
                 return "Zmiana danych użytkownika";
 
             default:
-                return "Niezdefiniowana operacja";
+                return "Niezdefiniowana operacja " + props.operation.type;
         }
     };
 
@@ -50,6 +53,9 @@ const AccountOperationsRow: React.FunctionComponent<Props> = (props: Props) => {
                 return "text-warning";
 
             case OperationTypes.CHANGEPASSWORD:
+                return "text-info";
+
+            case OperationTypes.CHANGEADDRESSES:
                 return "text-info";
 
             case OperationTypes.CHANGEINFORMATION:

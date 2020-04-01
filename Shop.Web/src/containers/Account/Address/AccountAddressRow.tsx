@@ -7,6 +7,9 @@ import { Button } from 'reactstrap';
 interface Props {
     index: number;
     address: AddressData.AsObject;
+    editHandler: (index: number) => void;
+    removeHandler: (index: number) => void;
+    setDefaultHandler: (index: number) => void;
 }
 
 const AccountAddressRow: React.FunctionComponent<Props> = (props: Props) => {
@@ -23,7 +26,7 @@ const AccountAddressRow: React.FunctionComponent<Props> = (props: Props) => {
     ) : "";
     const buttonDefault = !isDefault ? (
         <div className={cssButtonRow}>
-            <Button className={cssButton} >Ustaw jako domyślny</Button>
+            <Button className={cssButton} onClick={(): void => props.setDefaultHandler(props.index)}>Ustaw jako domyślny</Button>
         </div>
     ) : "";
 
@@ -34,7 +37,7 @@ const AccountAddressRow: React.FunctionComponent<Props> = (props: Props) => {
                     {textDefault}
 
                     <div className="row">
-                        <div className={cssColumn}><sub className={cssSub}>Imię i nazwisko lub nazwa firmy:</sub><strong className={cssValue}>{props.address.name}</strong></div>
+                        <div className={cssColumn}><sub className={cssSub}>Imię i nazwisko / Nazwa firmy:</sub><strong className={cssValue}>{props.address.name}</strong></div>
                     </div>
 
                     <div className="row">
@@ -50,8 +53,8 @@ const AccountAddressRow: React.FunctionComponent<Props> = (props: Props) => {
 
                 <div className="col-4">
                     <div className={cssButtonRow}>
-                        <Button className={cssButton} >Edytuj</Button>
-                        <Button className={cssButton} >Usuń</Button>
+                        <Button className={cssButton} onClick={(): void => props.editHandler(props.index)}>Edytuj</Button>
+                        <Button className={cssButton} onClick={(): void => props.removeHandler(props.index)}>Usuń</Button>
                     </div>
                     {buttonDefault}
                 </div>

@@ -11,7 +11,7 @@ class AccountNavbar extends React.Component {
         return (
             <div className="shadow p-2 m-2">
                 <ul className="list-group">
-                    <NavbarLink onUpdate={this.onUpdate} to="/account/information" displayName="Moje dane" cssType={css} />
+                    <NavbarLink onUpdate={this.onUpdate} to="/account/information" displayName="Moje dane" cssType={css} extraTo="/account" />
                     <NavbarLink onUpdate={this.onUpdate} to="/account/address" displayName="Moje adresy" cssType={css} />
                     <NavbarLink onUpdate={this.onUpdate} to="/account/changepassword" displayName="Zmień hasło" cssType={css} />
                     <NavbarLink onUpdate={this.onUpdate} to="/account/log" displayName="Dziennik aktywności" cssType={css} />

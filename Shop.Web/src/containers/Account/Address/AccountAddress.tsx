@@ -9,11 +9,14 @@ import Loading from '../../../components/Loading/Loading';
 import Client from '../../../class/Client';
 import { Button } from 'reactstrap';
 import { toast } from 'react-toastify';
+import Address from './Address';
 
 interface State {
     addresses: Array<AddressData.AsObject>;
     error: boolean;
     loading: boolean;
+    address: AddressData.AsObject;
+    addressIndex?: number;
 }
 
 class AccountAddress extends React.Component<Readonly<{}>, State> {
@@ -21,6 +24,8 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
         addresses: null,
         error: false,
         loading: false,
+        address: null,
+        addressIndex: null,
     };
 
     constructor(props: Readonly<{}>) {
@@ -57,19 +62,9 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
     }
 
     addNewHandler = (): void => {
-        const array: Array<AddressData.AsObject> = this.state.addresses;
-        const addressData: AddressData = new AddressData();
-        
-        addressData.setName("Jan Nowak");
-        addressData.setStreet("Inżynierska 10");
-        addressData.setPlace("30");
-        addressData.setZipcode("12-123");
-        addressData.setCity("Warszawa");
-
-        array.push(addressData.toObject());
-
         this.setState({
-            addresses: array,
+            addressIndex: null,
+            address: new AddressData().toObject(),
         });
     };
 
@@ -112,6 +107,64 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
         });
     };
 
+    editHandler(index: number): void {
+        this.setState({
+            addressIndex: index,
+            address: this.state.addresses[index],
+        });
+    }
+
+    saveHandler(address: AddressData.AsObject, index: number): void {
+        const addresses = this.state.addresses;
+
+        if (index != null) {
+            addresses[index] = address;
+        } else {
+            addresses.push(address);
+        }
+
+        this.setState({
+            addresses: addresses,
+            address: null,
+            addressIndex: null,
+        });
+
+        this.updateAddressesHandler();
+    }
+
+
+    cancelHandler(): void {
+        this.setState({
+            addressIndex: null,
+            address: null,
+        });
+    }
+
+    removeHandler(index: number): void {
+        const addresses = this.state.addresses;
+        addresses.splice(index, 1);
+
+        this.setState({
+            addresses: addresses,
+        });
+
+        this.updateAddressesHandler();
+    }
+
+    setDefaultHandler(index: number): void {
+        const addresses = this.state.addresses;
+
+        const address = addresses[index];
+        addresses.splice(index, 1);
+        addresses.unshift(address);
+
+        this.setState({
+            addresses: addresses,
+        });
+
+        this.updateAddressesHandler();
+    }
+
     render(): JSX.Element {
         if (this.state.error) {
             return <ServiceError />
@@ -119,9 +172,12 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
         else if (this.state.addresses == null || this.state.loading) {
             return <Loading />
         }
+        else if (this.state.address) {
+            return <Address index={this.state.addressIndex} address={this.state.address} saveHandler={this.saveHandler.bind(this)} cancelHandler={this.cancelHandler.bind(this)} />
+        }
 
         const items = this.state.addresses.map((value, index) => {
-            return <AccountAddressRow key={index} address={value} index={index} />;
+            return <AccountAddressRow key={index} address={value} index={index} editHandler={this.editHandler.bind(this)} removeHandler={this.removeHandler.bind(this)} setDefaultHandler={this.setDefaultHandler.bind(this)} />;
         });
 
         return (
@@ -129,9 +185,6 @@ class AccountAddress extends React.Component<Readonly<{}>, State> {
                 <div className="row">
                     <div className="col-* p-2 m-2">
                         <Button onClick={this.addNewHandler.bind(this)}>Dodaj nowy</Button>
-                    </div>
-                    <div className="col-* p-2 m-2">
-                        <Button onClick={this.updateAddressesHandler.bind(this)}>TEMP - Aktualizuj</Button>
                     </div>
                 </div>
 
