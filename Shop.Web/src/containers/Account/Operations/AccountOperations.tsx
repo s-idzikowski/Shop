@@ -65,20 +65,17 @@ class AccountOperations extends React.Component<Readonly<{}>, State> {
         });
 
         return (
-            <div className="p-2">
-                <table className="table table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Operacja</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">Adres IP</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items}
-                    </tbody>
-                </table>
+            <div className="m-2">
+                <div className="p-2">
+                    <div className="row tableHeader">
+                        <div className="col-1"></div>
+                        <h4 className="col-6">Operacja</h4>
+                        <h4 className="col-3">Data</h4>
+                        <div className="col-2"></div>
+                    </div>
+
+                    {items}
+                </div>
             </div>
         );
     }

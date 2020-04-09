@@ -89,6 +89,17 @@ message OperationData {
     OperationTypes type = 1;
     string time = 2;
     string ip = 3;
+    repeated ListOfValue valueBefore = 4;
+    repeated ListOfValue valueAfter = 5;
+}
+
+message ListOfValue {
+    repeated ValueData value = 1;
+}
+
+message ValueData {
+    PropertyNames propertyName = 1;
+    string propertyValue = 2;
 }
 
 message AddressData {
@@ -128,6 +139,21 @@ enum OperationTypes {
     CHANGEPASSWORD = 10;
     CHANGEADDRESSES = 11;
     CHANGEINFORMATION = 12;
+}
+
+enum PropertyNames {
+    USERNAME = 0;
+    EMAIL = 1;
+    TELEPHONE = 2;
+
+    PASSWORD_HASH = 3;
+    PASSWORD_SALT = 4;
+    
+    NAME = 10;
+    STREET = 11;
+    PLACE = 12;
+    ZIPCODE = 13;
+    CITY = 14;
 }
 
 // End User

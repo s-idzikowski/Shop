@@ -124,7 +124,7 @@ namespace Shop.Service.Models
             string fullToken = headers.Single(o => o.Key == "authorization").Value;
             string token = fullToken.Remove(0, TokenPrefix.Length);
             var tokenS = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
-            return tokenS.Claims.First(claim => claim.Type == claimType).Value;
+            return tokenS.Claims.Single(claim => claim.Type == claimType).Value;
         }
 
         public static bool IsValidatePassword(string password)

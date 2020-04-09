@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,13 +12,13 @@ using MongoDB.Driver;
 using Shop.Service.Database;
 using Shop.Service.Repositories;
 
-
 namespace Shop.Service
 {
     public class Startup
 
     {
         private readonly IConfiguration config;
+        private readonly int messageSize = 2; // 2 MB
         public Startup(IConfiguration config)
         {
             this.config = config;
@@ -33,8 +29,8 @@ namespace Shop.Service
         {
             services.AddGrpc(options =>
             {
-                options.MaxReceiveMessageSize = 2 * 1024 * 1024; // 2 MB
-                options.MaxSendMessageSize = 2 * 1024 * 1024; // 2 MB
+                options.MaxReceiveMessageSize = messageSize * 1024 * 1024;
+                options.MaxSendMessageSize = messageSize * 1024 * 1024;
             });
             services.AddCors();
 
@@ -65,17 +61,19 @@ namespace Shop.Service
                 app.UseDeveloperExceptionPage();
             }
 
+            DbMapper.Configure();
+
             app.UseRouting();
-           
+
             app.UseGrpcWeb();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<WebService>().EnableGrpcWeb();
-                
+
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

@@ -8,8 +8,8 @@ namespace Shop.Service.Models
         public OperationTypes Type { get; set; }
         public DateTime Time { get; set; }
         public string Ip { get; set; }
-        public List<string> ValueBefore { get; set; }
-        public List<string> ValueAfter { get; set; }
+        public List<List<Value>> ValueBefore { get; set; } = new List<List<Value>>();
+        public List<List<Value>> ValueAfter { get; set; } = new List<List<Value>>();
 
 
 
@@ -24,13 +24,13 @@ namespace Shop.Service.Models
             Ip = ip;
         }
 
-        public Operation(OperationTypes type, string ip, List<string> before, List<string> after) : this(type, ip)
+        public Operation(OperationTypes type, string ip, List<List<Value>> before, List<List<Value>> after) : this(type, ip)
         {
             ValueBefore = before;
             ValueAfter = after;
         }
 
-        public static List<Operation> GetOne(OperationTypes type, string ip, List<string> before = default, List<string> after = default)
+        public static List<Operation> GetOne(OperationTypes type, string ip, List<List<Value>> before = default, List<List<Value>> after = default)
         {
             return new List<Operation>()
             {

@@ -17,3 +17,12 @@
     height: 32px;
     color: #fb1515b2;
 }
+
+.tableHeader {
+    padding-bottom: 16px;
+}
+
+.tableRow {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}

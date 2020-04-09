@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -109,12 +110,24 @@ namespace Shop.Service
 
             foreach (Operation operation in operations)
             {
-                userOperationsResponse.OperationData.Add(new OperationData()
+                var operationData = new OperationData()
                 {
                     Ip = operation.Ip,
                     Time = operation.Time.ToString(),
                     Type = operation.Type,
-                });
+                };
+
+                if (operation.ValueBefore?.Any() ?? false)
+                {
+                    operationData.ValueBefore.Add(operation.ValueBefore.GetListOfValue());
+                }
+
+                if (operation.ValueAfter?.Any() ?? false)
+                {
+                    operationData.ValueAfter.Add(operation.ValueAfter.GetListOfValue());
+                }
+
+                userOperationsResponse.OperationData.Add(operationData);
             }
 
             return await Task.FromResult(userOperationsResponse);
@@ -145,7 +158,7 @@ namespace Shop.Service
             }
             else
             {
-                List<string> beforePassword = user.GetPasswords();
+                var beforePassword = user.GetPasswords();
 
                 user.HashPassword(Encoding.UTF8.GetBytes(request.NewPassword));
 
@@ -179,7 +192,8 @@ namespace Shop.Service
         {
             User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
 
-            List<string> beforeAddresses = user.Addresses.GetOperations();
+            user.Addresses = await userRepository.GetUserAddresses(user.Id);
+            var beforeAddresses = user.Addresses.GetOperations();
 
             user.Addresses = request.AddressData.ToList();
 
@@ -231,7 +245,7 @@ namespace Shop.Service
 
             if (requireUpdate)
             {
-                List<string> beforeInformations = user.GetInfromations();
+                var beforeInformations = user.GetInfromations();
 
                 user.SetNewInfromations(request.UserData);
 

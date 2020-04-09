@@ -9,7 +9,7 @@ import { Label, Input, Button } from 'reactstrap';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import ClientHelper from '../../class/ClientHelper';
-import { Redirect } from 'react-router-dom';
+//import { Redirect } from 'react-router-dom';
 
 interface State {
     username: string;
@@ -17,7 +17,7 @@ interface State {
     emailAddress: string;
     loading: boolean;
     error: boolean;
-    redirect: boolean;
+    //redirect: boolean;
 }
 
 class Register extends React.Component<Readonly<{}>, State> {
@@ -27,7 +27,7 @@ class Register extends React.Component<Readonly<{}>, State> {
         emailAddress: "",
         loading: false,
         error: false,
-        redirect: false,
+        //redirect: false,
     };
 
     usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -86,8 +86,9 @@ class Register extends React.Component<Readonly<{}>, State> {
                     this.setState({
                         loading: false,
                         error: false,
-                        redirect: true,
+                        //redirect: true,
                     });
+                    window.location.href = "\\";
                 };
 
                 Client.CheckStatusCode(response.getStatuscode(), this.clearState.bind(this), onSuccess, onRedirect);
@@ -131,11 +132,12 @@ class Register extends React.Component<Readonly<{}>, State> {
             return (
                 <ServiceError />
             );
-        } else if (this.state.redirect) {
-            return (
-                <Redirect to='/' />
-            );
         }
+        // else if (this.state.redirect) {
+        //     return (
+        //         <Redirect to='/' />
+        //     );
+        // }
 
         return (
             <div>

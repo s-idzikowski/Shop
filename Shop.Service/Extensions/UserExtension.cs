@@ -5,39 +5,40 @@ namespace Shop.Service.Extensions
 {
     public static class UserExtension
     {
-        public static string GetInfromation(this User user)
+        public static List<Value> GetInfromation(this User user)
         {
-            return $"Nazwa użytkownika: '{user.Username}'{ExtensionHelper.Separator}" +
-                $"Adres e-mail: '{user.EmailAddress}'{ExtensionHelper.Separator}" +
-                $"Telefon: '{user.Telephone}'{ExtensionHelper.Separator}";
+            return new List<Value>()
+            {
+                new Value(PropertyNames.Username, user.Username),
+                new Value(PropertyNames.Email, user.EmailAddress),
+                new Value(PropertyNames.Telephone, user.Telephone),
+            };
         }
 
-        public static List<string> GetInfromations(this User user)
+        public static List<List<Value>> GetInfromations(this User user)
         {
-            return new List<string>()
+            return new List<List<Value>>()
             {
-                GetInfromation(user)
+                user.GetInfromation()
             };
         }
 
 
-        private static string Password(this byte[] bytes)
-        {
-            return System.Text.Encoding.UTF8.GetString(bytes);
-        }
 
-        public static string GetPassword(this User user)
+        public static List<Value> GetPassword(this User user)
         {
-            return $"Hasło hash: '{user.PasswordHash.Password()}'{ExtensionHelper.Separator}" +
-                $"Hasło salt: '{user.PasswordSalt.Password()}'{ExtensionHelper.Separator}";
-
-        }
-
-        public static List<string> GetPasswords(this User user)
-        {
-            return new List<string>()
+            return new List<Value>()
             {
-                GetPassword(user)
+                new Value(PropertyNames.PasswordHash, user.PasswordHash.Password()),
+                new Value(PropertyNames.PasswordSalt, user.PasswordSalt.Password()),
+            };
+        }
+
+        public static List<List<Value>> GetPasswords(this User user)
+        {
+            return new List<List<Value>>()
+            {
+                user.GetPassword()
             };
         }
     }

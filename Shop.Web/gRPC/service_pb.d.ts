@@ -294,6 +294,16 @@ export class OperationData extends jspb.Message {
   getIp(): string;
   setIp(value: string): void;
 
+  getValuebeforeList(): Array<ListOfValue>;
+  setValuebeforeList(value: Array<ListOfValue>): void;
+  clearValuebeforeList(): void;
+  addValuebefore(value?: ListOfValue, index?: number): ListOfValue;
+
+  getValueafterList(): Array<ListOfValue>;
+  setValueafterList(value: Array<ListOfValue>): void;
+  clearValueafterList(): void;
+  addValueafter(value?: ListOfValue, index?: number): ListOfValue;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): OperationData.AsObject;
   static toObject(includeInstance: boolean, msg: OperationData): OperationData.AsObject;
@@ -307,6 +317,50 @@ export namespace OperationData {
     type: OperationTypes,
     time: string,
     ip: string,
+    valuebeforeList: Array<ListOfValue.AsObject>,
+    valueafterList: Array<ListOfValue.AsObject>,
+  }
+}
+
+export class ListOfValue extends jspb.Message {
+  getValueList(): Array<ValueData>;
+  setValueList(value: Array<ValueData>): void;
+  clearValueList(): void;
+  addValue(value?: ValueData, index?: number): ValueData;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ListOfValue.AsObject;
+  static toObject(includeInstance: boolean, msg: ListOfValue): ListOfValue.AsObject;
+  static serializeBinaryToWriter(message: ListOfValue, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ListOfValue;
+  static deserializeBinaryFromReader(message: ListOfValue, reader: jspb.BinaryReader): ListOfValue;
+}
+
+export namespace ListOfValue {
+  export type AsObject = {
+    valueList: Array<ValueData.AsObject>,
+  }
+}
+
+export class ValueData extends jspb.Message {
+  getPropertyname(): PropertyNames;
+  setPropertyname(value: PropertyNames): void;
+
+  getPropertyvalue(): string;
+  setPropertyvalue(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ValueData.AsObject;
+  static toObject(includeInstance: boolean, msg: ValueData): ValueData.AsObject;
+  static serializeBinaryToWriter(message: ValueData, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ValueData;
+  static deserializeBinaryFromReader(message: ValueData, reader: jspb.BinaryReader): ValueData;
+}
+
+export namespace ValueData {
+  export type AsObject = {
+    propertyname: PropertyNames,
+    propertyvalue: string,
   }
 }
 
@@ -365,4 +419,16 @@ export enum OperationTypes {
   CHANGEPASSWORD = 10,
   CHANGEADDRESSES = 11,
   CHANGEINFORMATION = 12,
+}
+export enum PropertyNames { 
+  USERNAME = 0,
+  EMAIL = 1,
+  TELEPHONE = 2,
+  PASSWORD_HASH = 3,
+  PASSWORD_SALT = 4,
+  NAME = 10,
+  STREET = 11,
+  PLACE = 12,
+  ZIPCODE = 13,
+  CITY = 14,
 }

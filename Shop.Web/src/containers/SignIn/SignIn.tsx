@@ -10,14 +10,14 @@ import { toast } from 'react-toastify';
 import Loading from '../../components/Loading/Loading';
 import ServiceError from '../../components/ServiceError/ServiceError';
 import ClientHelper from '../../class/ClientHelper';
-import { Redirect } from 'react-router-dom';
+//import { Redirect } from 'react-router-dom';
 
 interface State {
     username: string;
     password: string;
     loading: boolean;
     error: boolean;
-    redirect: boolean;
+    //redirect: boolean;
 }
 
 class SignIn extends React.Component<Readonly<{}>, State> {
@@ -26,7 +26,7 @@ class SignIn extends React.Component<Readonly<{}>, State> {
         password: "",
         loading: false,
         error: false,
-        redirect: false,
+        //redirect: false,
     };
 
     usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -77,8 +77,9 @@ class SignIn extends React.Component<Readonly<{}>, State> {
                     this.setState({
                         loading: false,
                         error: false,
-                        redirect: true,
+                        //redirect: true,
                     });
+                    window.location.href = "\\";
                 };
 
                 Client.CheckStatusCode(response.getStatuscode(), this.clearState.bind(this), onSuccess, onRedirect);
@@ -117,11 +118,12 @@ class SignIn extends React.Component<Readonly<{}>, State> {
             return (
                 <ServiceError />
             );
-        } else if (this.state.redirect) {
-            return (
-                <Redirect to='/' />
-            );
         }
+        // else if (this.state.redirect) {
+        //     return (
+        //         <Redirect to='/' />
+        //     );
+        // }
 
         return (
             <div>
