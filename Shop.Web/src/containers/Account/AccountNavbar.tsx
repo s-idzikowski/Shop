@@ -16,6 +16,8 @@ class AccountNavbar extends React.Component {
                     <NavbarLink onUpdate={this.onUpdate} to="/account/changepassword" displayName="Zmień hasło" cssType={css} />
                     <NavbarLink onUpdate={this.onUpdate} to="/account/log" displayName="Dziennik aktywności" cssType={css} />
                     <NavbarLink onUpdate={this.onUpdate} to="/account/settings" displayName="Ustawienia" cssType={css} />
+                    
+                    <NavbarLink onUpdate={this.onUpdate} to="/account/administration" displayName="Administracja" cssType={css} />
                 </ul>
             </div>
         );

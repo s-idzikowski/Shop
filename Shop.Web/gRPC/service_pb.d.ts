@@ -1,5 +1,27 @@
 import * as jspb from "google-protobuf"
 
+export class BasicResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
+  getAuthorization(): string;
+  setAuthorization(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): BasicResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: BasicResponse): BasicResponse.AsObject;
+  static serializeBinaryToWriter(message: BasicResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): BasicResponse;
+  static deserializeBinaryFromReader(message: BasicResponse, reader: jspb.BinaryReader): BasicResponse;
+}
+
+export namespace BasicResponse {
+  export type AsObject = {
+    statuscode: StatusCode,
+    authorization: string,
+  }
+}
+
 export class SignInRequest extends jspb.Message {
   getSignindata(): SignInData | undefined;
   setSignindata(value?: SignInData): void;
@@ -113,28 +135,6 @@ export class ChangeInformationRequest extends jspb.Message {
 export namespace ChangeInformationRequest {
   export type AsObject = {
     userdata?: UserData.AsObject,
-  }
-}
-
-export class BasicResponse extends jspb.Message {
-  getStatuscode(): StatusCode;
-  setStatuscode(value: StatusCode): void;
-
-  getAuthorization(): string;
-  setAuthorization(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): BasicResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: BasicResponse): BasicResponse.AsObject;
-  static serializeBinaryToWriter(message: BasicResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): BasicResponse;
-  static deserializeBinaryFromReader(message: BasicResponse, reader: jspb.BinaryReader): BasicResponse;
-}
-
-export namespace BasicResponse {
-  export type AsObject = {
-    statuscode: StatusCode,
-    authorization: string,
   }
 }
 
@@ -395,6 +395,62 @@ export namespace AddressData {
     place: string,
     zipcode: string,
     city: string,
+  }
+}
+
+export class AddCategoryRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): AddCategoryRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: AddCategoryRequest): AddCategoryRequest.AsObject;
+  static serializeBinaryToWriter(message: AddCategoryRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): AddCategoryRequest;
+  static deserializeBinaryFromReader(message: AddCategoryRequest, reader: jspb.BinaryReader): AddCategoryRequest;
+}
+
+export namespace AddCategoryRequest {
+  export type AsObject = {
+  }
+}
+
+export class CategoriesResponse extends jspb.Message {
+  getStatuscode(): StatusCode;
+  setStatuscode(value: StatusCode): void;
+
+  getCategorydataList(): Array<CategoryData>;
+  setCategorydataList(value: Array<CategoryData>): void;
+  clearCategorydataList(): void;
+  addCategorydata(value?: CategoryData, index?: number): CategoryData;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CategoriesResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: CategoriesResponse): CategoriesResponse.AsObject;
+  static serializeBinaryToWriter(message: CategoriesResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CategoriesResponse;
+  static deserializeBinaryFromReader(message: CategoriesResponse, reader: jspb.BinaryReader): CategoriesResponse;
+}
+
+export namespace CategoriesResponse {
+  export type AsObject = {
+    statuscode: StatusCode,
+    categorydataList: Array<CategoryData.AsObject>,
+  }
+}
+
+export class CategoryData extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CategoryData.AsObject;
+  static toObject(includeInstance: boolean, msg: CategoryData): CategoryData.AsObject;
+  static serializeBinaryToWriter(message: CategoryData, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CategoryData;
+  static deserializeBinaryFromReader(message: CategoryData, reader: jspb.BinaryReader): CategoryData;
+}
+
+export namespace CategoryData {
+  export type AsObject = {
+    name: string,
   }
 }
 

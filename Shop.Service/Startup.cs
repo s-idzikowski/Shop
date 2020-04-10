@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using Shop.Service.AuthorizationRoles;
 using Shop.Service.Database;
 using Shop.Service.Repositories;
 
@@ -50,7 +52,16 @@ namespace Shop.Service
                         ValidateAudience = false
                     };
                 });
-            services.AddAuthorization();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(nameof(Roles.Administrator), policy =>
+                {
+                    //policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    //policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new AdministratorRole());
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Attributes;
+using Shop.Service.AuthorizationRoles;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,6 +24,7 @@ namespace Shop.Service.Models
         public string Telephone { get; set; }
 
         public bool IsBanned { get; set; }
+        public List<Roles> Roles { get; set; }
 
         public List<Operation> Operations { get; set; } = new List<Operation>();
         public List<AddressData> Addresses { get; set; } = new List<AddressData>();
@@ -58,6 +60,7 @@ namespace Shop.Service.Models
                 Username = registerData.Username,
                 PasswordHash = Encoding.UTF8.GetBytes(registerData.Password),
                 EmailAddress = registerData.EmailAddress,
+                Roles = new List<Roles>() { AuthorizationRoles.Roles.User }
             };
         }
 

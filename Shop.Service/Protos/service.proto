@@ -2,7 +2,11 @@ syntax = "proto3";
 
 option csharp_namespace = "Shop.Service";
 
+/////////////////////////
+// Start Service
+/////////////////////////
 service Service {
+    // User:
     rpc UserSignIn (SignInRequest) returns (BasicResponse);
     rpc UserRegister (RegisterRequest) returns (BasicResponse);
     rpc UserLogout (UserRequest) returns (BasicResponse);
@@ -14,9 +18,59 @@ service Service {
     rpc GetUser (UserRequest) returns (UserResponse);
     rpc GetUserOperations (UserRequest) returns (UserOperationsResponse);
     rpc GetUserAddresses (UserRequest) returns (UserAddressesResponse);
+
+    // Shop categories:
+    rpc GetCategories (UserRequest) returns (CategoriesResponse);
+    rpc AddCategory (AddCategoryRequest) returns (BasicResponse);
+
+}
+/////////////////////////
+// End Service
+/////////////////////////
+
+
+
+/////////////////////////
+// Start Global
+/////////////////////////
+
+// Response:
+
+message BasicResponse {
+    StatusCode statusCode = 1;
+    string authorization = 2;
 }
 
+// Enums:
+
+enum StatusCode {
+    OK = 0;
+    DATABASE_ERROR = 1;
+    UNATHORIZED = 2;
+
+    SIGNIN_NOT_FOUND = 10;
+    SIGNIN_ACCOUNT_BAN = 11;
+    
+    USERNAME_OCCUPIED = 20;
+    PASSWORD_NOT_VALID = 21;
+    EMAIL_OCCUPIED = 22;
+
+    CHANGEPASSWORD_SAME = 30;
+    CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31;
+    
+    EMPTY_CHANGES = 40;
+}
+
+/////////////////////////
+// End Global
+/////////////////////////
+
+
+
+/////////////////////////
 // Start User:
+/////////////////////////
+
 // Request:
 
 message SignInRequest {
@@ -45,11 +99,6 @@ message ChangeInformationRequest {
 }
 
 // Response:
-
-message BasicResponse {
-    StatusCode statusCode = 1;
-    string authorization = 2;
-}
 
 message UserResponse {
     StatusCode statusCode = 1;
@@ -112,24 +161,6 @@ message AddressData {
 
 // Enums:
 
-enum StatusCode {
-    OK = 0;
-    DATABASE_ERROR = 1;
-    UNATHORIZED = 2;
-
-    SIGNIN_NOT_FOUND = 10;
-    SIGNIN_ACCOUNT_BAN = 11;
-    
-    USERNAME_OCCUPIED = 20;
-    PASSWORD_NOT_VALID = 21;
-    EMAIL_OCCUPIED = 22;
-
-    CHANGEPASSWORD_SAME = 30;
-    CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31;
-    
-    EMPTY_CHANGES = 40;
-}
-
 enum OperationTypes {
     REGISTER = 0;
     LOGIN = 1;
@@ -155,5 +186,76 @@ enum PropertyNames {
     ZIPCODE = 13;
     CITY = 14;
 }
-
+    
+/////////////////////////
 // End User
+/////////////////////////
+
+
+
+/////////////////////////
+// Start Shop categories:
+/////////////////////////
+
+// Request:
+
+message AddCategoryRequest {
+
+}
+
+// Response:
+
+message CategoriesResponse {
+    StatusCode statusCode = 1;
+    repeated CategoryData categoryData = 2;
+}
+
+// Models:
+
+message CategoryData {
+    string name = 1;
+}
+
+// Enums:
+
+
+
+/////////////////////////
+// End Shop categories
+/////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////
+// Start %SCHEMA%:
+/////////////////////////
+
+// Request:
+
+
+
+// Response:
+
+
+
+// Models:
+
+
+
+// Enums:
+
+
+
+/////////////////////////
+// End %SCHEMA%
+/////////////////////////

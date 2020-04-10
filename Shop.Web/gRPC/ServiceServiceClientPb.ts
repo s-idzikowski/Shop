@@ -10,7 +10,9 @@
 import * as grpcWeb from 'grpc-web';
 
 import {
+  AddCategoryRequest,
   BasicResponse,
+  CategoriesResponse,
   ChangeAddressesRequest,
   ChangeInformationRequest,
   ChangePasswordRequest,
@@ -235,6 +237,50 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoGetUserAddresses,
+      callback);
+  }
+
+  methodInfoGetCategories = new grpcWeb.AbstractClientBase.MethodInfo(
+    CategoriesResponse,
+    (request: UserRequest) => {
+      return request.serializeBinary();
+    },
+    CategoriesResponse.deserializeBinary
+  );
+
+  getCategories(
+    request: UserRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: CategoriesResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/GetCategories',
+      request,
+      metadata || {},
+      this.methodInfoGetCategories,
+      callback);
+  }
+
+  methodInfoAddCategory = new grpcWeb.AbstractClientBase.MethodInfo(
+    BasicResponse,
+    (request: AddCategoryRequest) => {
+      return request.serializeBinary();
+    },
+    BasicResponse.deserializeBinary
+  );
+
+  addCategory(
+    request: AddCategoryRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: BasicResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/AddCategory',
+      request,
+      metadata || {},
+      this.methodInfoAddCategory,
       callback);
   }
 

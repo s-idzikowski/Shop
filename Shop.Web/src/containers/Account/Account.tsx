@@ -9,6 +9,8 @@ import AccountOperations from './Operations/AccountOperations';
 import AccountChangePassword from './ChangePassword/AccountChangePassword';
 import AccountAddress from './Address/AccountAddress';
 import AccountNavbar from './AccountNavbar';
+import Administration from '../Administration/Administration';
+import AccountSettings from './AccountSettings/AccountSettings';
 
 class Account extends React.Component {
     render(): JSX.Element {
@@ -46,7 +48,11 @@ class Account extends React.Component {
                                     </Route>
 
                                     <Route path='/account/settings'>
-                                        Ustawienia
+                                        <AccountSettings />
+                                    </Route>
+
+                                    <Route path='/account/administration'>
+                                        <Administration />
                                     </Route>
 
                                     <Route component={NotFound} />

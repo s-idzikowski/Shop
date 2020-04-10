@@ -12,6 +12,7 @@ namespace Shop.Service
 {
     public partial class WebService : Service.ServiceBase
     {
+        [AllowAnonymous]
         public override async Task<BasicResponse> UserSignIn(SignInRequest request, ServerCallContext context)
         {
             User user = await userRepository.GetByUsername(request.SignInData.Username);
@@ -37,6 +38,7 @@ namespace Shop.Service
             }
         }
 
+        [AllowAnonymous]
         public override async Task<BasicResponse> UserRegister(RegisterRequest request, ServerCallContext context)
         {
             // Password validate:
