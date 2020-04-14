@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Shop.Service.AuthorizationRoles;
 using Shop.Service.Database;
 using Shop.Service.Models;
 using System;
@@ -58,7 +59,7 @@ namespace Shop.Service.Repositories
                 .Include(u => u.PasswordSalt)
                 .Include(u => u.EmailAddress)
                 .Include(u => u.Telephone)
-                .Include(u => u.IsBanned);
+                .Include(u => u.Roles);
         }
 
         public Task AddOperations(Guid userId, IEnumerable<Operation> operations)
@@ -126,6 +127,12 @@ namespace Shop.Service.Repositories
                 .Set(o => o.Telephone, user.Telephone);
 
             return db.Users.UpdateOneAsync(filter, update);
+        }
+
+        public async Task<bool> HasRole(Guid userId, Roles role)
+        {
+            User user = await GetById(userId);
+            return user.Roles.Contains(role);
         }
     }
 }

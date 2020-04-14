@@ -34,6 +34,14 @@ abstract class Client {
                     this.Redirect();
 
                     break;
+                case grpcWeb.StatusCode.PERMISSION_DENIED:
+
+                    this.ErrorLog("PERMISSION_DENIED");
+
+                    if (onErrorCallback)
+                        onErrorCallback();
+
+                    break;
                 default:
 
                     this.ErrorLog(decodeURI(err.message));

@@ -96,7 +96,7 @@ namespace Shop.Service
             return await Task.FromResult(new UserResponse()
             {
                 StatusCode = StatusCode.Ok,
-                UserData = user.GetUserData()
+                UserData = user.Map()
             });
         }
 

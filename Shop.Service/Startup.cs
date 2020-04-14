@@ -39,8 +39,8 @@ namespace Shop.Service
             services.AddSingleton<IMongoClient>(s => new MongoClient("mongodb://admin:SasaAdmin@77.55.213.192:27017/?authSource=admin"));
             services.AddScoped(s => new AppDbContext(s.GetRequiredService<IMongoClient>(), "ShopDb"));
 
-            services.AddTransient<IUserRepository, UserRepository>()
-                    .AddTransient(serviceProvider => new Lazy<IUserRepository>(() => serviceProvider.GetRequiredService<IUserRepository>()));
+            AppDbContext.Configure(services);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -53,12 +53,11 @@ namespace Shop.Service
                     };
                 });
 
+            services.AddTransient<IAuthorizationHandler, AdministratorHandler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(nameof(Roles.Administrator), policy =>
                 {
-                    //policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-                    //policy.RequireAuthenticatedUser();
                     policy.Requirements.Add(new AdministratorRole());
                 });
             });
@@ -71,8 +70,6 @@ namespace Shop.Service
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            DbMapper.Configure();
 
             app.UseRouting();
 

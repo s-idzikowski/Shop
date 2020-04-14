@@ -8,19 +8,26 @@ namespace Shop.Service
     public partial class WebService : Service.ServiceBase
     {
         private readonly ILogger<WebService> logger;
-        private readonly IUserRepository userRepository;
         private readonly IConfiguration config;
-
         private string ConfigToken => config.GetSection("AppSettings:Token").Value;
 
 
 
-        public WebService(ILogger<WebService> logger,
-            IUserRepository userRepository, IConfiguration config)
+        private readonly IUserRepository userRepository;
+        private readonly ICategoryRepository categoryRepository;
+
+
+
+        public WebService(ILogger<WebService> logger, 
+            IConfiguration config,
+            IUserRepository userRepository,
+            ICategoryRepository categoryRepository)
         {
             this.logger = logger;
-            this.userRepository = userRepository;
             this.config = config;
+
+            this.userRepository = userRepository;
+            this.categoryRepository = categoryRepository;
         }
 
 

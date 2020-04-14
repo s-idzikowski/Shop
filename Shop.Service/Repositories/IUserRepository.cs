@@ -1,4 +1,5 @@
-﻿using Shop.Service.Models;
+﻿using Shop.Service.AuthorizationRoles;
+using Shop.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,5 +21,7 @@ namespace Shop.Service.Repositories
         Task ChangePassword(User user);
         Task ChangeAddresses(User user);
         Task ChangeInformation(User user);
+
+        Task<bool> HasRole(Guid userId, Roles role);
     }
 }

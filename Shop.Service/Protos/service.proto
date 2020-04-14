@@ -214,6 +214,7 @@ message CategoriesResponse {
 
 message CategoryData {
     string name = 1;
+    repeated CategoryData subCategories = 2;
 }
 
 // Enums:

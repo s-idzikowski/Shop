@@ -23,15 +23,14 @@ namespace Shop.Service.Models
         public string EmailAddress { get; set; }
         public string Telephone { get; set; }
 
-        public bool IsBanned { get; set; }
-        public List<Roles> Roles { get; set; }
+        public List<Roles> Roles { get; set; } = new List<Roles>();
 
         public List<Operation> Operations { get; set; } = new List<Operation>();
         public List<AddressData> Addresses { get; set; } = new List<AddressData>();
 
 
 
-        public UserData GetUserData()
+        public UserData Map()
         {
             return new UserData()
             {
@@ -60,7 +59,6 @@ namespace Shop.Service.Models
                 Username = registerData.Username,
                 PasswordHash = Encoding.UTF8.GetBytes(registerData.Password),
                 EmailAddress = registerData.EmailAddress,
-                Roles = new List<Roles>() { AuthorizationRoles.Roles.User }
             };
         }
 
