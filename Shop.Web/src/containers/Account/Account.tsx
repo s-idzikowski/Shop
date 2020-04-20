@@ -9,7 +9,7 @@ import AccountOperations from './Operations/AccountOperations';
 import AccountChangePassword from './ChangePassword/AccountChangePassword';
 import AccountAddress from './Address/AccountAddress';
 import AccountNavbar from './AccountNavbar';
-import Administration from '../Administration/Administration';
+import AdministrationCategories from '../Administration/Categories/AdministrationCategories';
 import AccountSettings from './AccountSettings/AccountSettings';
 
 class Account extends React.Component {
@@ -52,7 +52,7 @@ class Account extends React.Component {
                                     </Route>
 
                                     <Route path='/account/administration'>
-                                        <Administration />
+                                        <AdministrationCategories />
                                     </Route>
 
                                     <Route component={NotFound} />

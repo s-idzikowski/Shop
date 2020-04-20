@@ -7,7 +7,7 @@ using System;
 
 namespace Shop.Service.AuthorizationRoles
 {
-    public class AdministratorHandler : AuthorizationHandler<AdministratorRole>
+    public class AdministratorHandler : AuthorizationHandler<AdministrationCategoriesRole>
     {
         private readonly IUserRepository userRepository;
 
@@ -20,13 +20,13 @@ namespace Shop.Service.AuthorizationRoles
 
 
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdministratorRole requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdministrationCategoriesRole requirement)
         {
             context.Succeed(requirement);
 
             var userId = new Guid(context.User.Claims.Single(o => o.Type == ClaimTypes.NameIdentifier).Value);
 
-            var status = await userRepository.HasRole(userId, Roles.Administrator);
+            var status = await userRepository.HasRole(userId, Roles.AdministrationCategories);
 
             if (!status)
             {

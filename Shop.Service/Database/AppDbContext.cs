@@ -29,5 +29,6 @@ namespace Shop.Service.Database
         }
 
         public IMongoCollection<User> Users => _db.GetCollection<User>("User");
+        public IMongoCollection<Category> Categories => _db.GetCollection<Category>("Category");
     }
 }

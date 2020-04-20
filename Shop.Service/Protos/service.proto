@@ -22,6 +22,7 @@ service Service {
     // Shop categories:
     rpc GetCategories (UserRequest) returns (CategoriesResponse);
     rpc AddCategory (AddCategoryRequest) returns (BasicResponse);
+    rpc CategoryChange (ChangeCategoryRequest) returns (BasicResponse);
 
 }
 /////////////////////////
@@ -186,6 +187,12 @@ enum PropertyNames {
     ZIPCODE = 13;
     CITY = 14;
 }
+
+enum Roles {
+    BANNED = 0;
+    VERIFIED = 1;
+    ADMINISTRATION_CATEGORIES = 2;
+}
     
 /////////////////////////
 // End User
@@ -200,7 +207,11 @@ enum PropertyNames {
 // Request:
 
 message AddCategoryRequest {
+    CategoryData categoryData = 1;
+}
 
+message ChangeCategoryRequest {
+    CategoryData categoryData = 1;
 }
 
 // Response:
@@ -213,8 +224,11 @@ message CategoriesResponse {
 // Models:
 
 message CategoryData {
-    string name = 1;
-    repeated CategoryData subCategories = 2;
+    string id = 1;
+    string name = 2;
+    bool active = 3;
+    CategoryData parent = 4;
+    repeated CategoryData subCategories = 5;
 }
 
 // Enums:

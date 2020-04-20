@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization.Attributes;
-using Shop.Service.AuthorizationRoles;
+using Shop.Service.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -113,6 +113,7 @@ namespace Shop.Service.Models
         {
             new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
             new Claim(ClaimTypes.Name, Username),
+            new Claim(ClaimTypes.Role, Roles.ToStringSeparator()),
         };
 
         public static Guid GetGuidFromHeaders(Metadata headers)

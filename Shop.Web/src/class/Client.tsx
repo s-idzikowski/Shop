@@ -74,6 +74,29 @@ abstract class Client {
         return !(!token || 0 === token.length);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public static JWT(): any {
+        if (!this.IsLogged())
+            return;
+
+        const base64Url = window.sessionStorage.getItem("Authorization").split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
+
+    public static HasRole(role: number): boolean {
+        if (!this.IsLogged())
+            return false;
+
+        const roles: string = this.JWT()['role'].split(';');
+
+        return roles.includes(role.toString());
+    }
+
     public static CheckStatusCode(statuscode: StatusCode, onError: () => void, onSuccess: () => void, onRedirect: () => void): void {
         switch (statuscode) {
             case StatusCode.OK:

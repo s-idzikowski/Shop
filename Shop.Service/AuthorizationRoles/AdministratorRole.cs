@@ -2,7 +2,7 @@
 
 namespace Shop.Service.AuthorizationRoles
 {
-    public class AdministratorRole : IAuthorizationRequirement
+    public class AdministrationCategoriesRole : IAuthorizationRequirement
     {
     }
 }

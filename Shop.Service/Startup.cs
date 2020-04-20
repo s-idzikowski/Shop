@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Shop.Service.AuthorizationRoles;
 using Shop.Service.Database;
-using Shop.Service.Repositories;
 
 namespace Shop.Service
 {
@@ -56,9 +54,9 @@ namespace Shop.Service
             services.AddTransient<IAuthorizationHandler, AdministratorHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(nameof(Roles.Administrator), policy =>
+                options.AddPolicy(nameof(Roles.AdministrationCategories), policy =>
                 {
-                    policy.Requirements.Add(new AdministratorRole());
+                    policy.Requirements.Add(new AdministrationCategoriesRole());
                 });
             });
         }

@@ -14,6 +14,7 @@ import {
   BasicResponse,
   CategoriesResponse,
   ChangeAddressesRequest,
+  ChangeCategoryRequest,
   ChangeInformationRequest,
   ChangePasswordRequest,
   RegisterRequest,
@@ -281,6 +282,28 @@ export class ServiceClient {
       request,
       metadata || {},
       this.methodInfoAddCategory,
+      callback);
+  }
+
+  methodInfoCategoryChange = new grpcWeb.AbstractClientBase.MethodInfo(
+    BasicResponse,
+    (request: ChangeCategoryRequest) => {
+      return request.serializeBinary();
+    },
+    BasicResponse.deserializeBinary
+  );
+
+  categoryChange(
+    request: ChangeCategoryRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: BasicResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/CategoryChange',
+      request,
+      metadata || {},
+      this.methodInfoCategoryChange,
       callback);
   }
 

@@ -399,6 +399,11 @@ export namespace AddressData {
 }
 
 export class AddCategoryRequest extends jspb.Message {
+  getCategorydata(): CategoryData | undefined;
+  setCategorydata(value?: CategoryData): void;
+  hasCategorydata(): boolean;
+  clearCategorydata(): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AddCategoryRequest.AsObject;
   static toObject(includeInstance: boolean, msg: AddCategoryRequest): AddCategoryRequest.AsObject;
@@ -409,6 +414,27 @@ export class AddCategoryRequest extends jspb.Message {
 
 export namespace AddCategoryRequest {
   export type AsObject = {
+    categorydata?: CategoryData.AsObject,
+  }
+}
+
+export class ChangeCategoryRequest extends jspb.Message {
+  getCategorydata(): CategoryData | undefined;
+  setCategorydata(value?: CategoryData): void;
+  hasCategorydata(): boolean;
+  clearCategorydata(): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ChangeCategoryRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ChangeCategoryRequest): ChangeCategoryRequest.AsObject;
+  static serializeBinaryToWriter(message: ChangeCategoryRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ChangeCategoryRequest;
+  static deserializeBinaryFromReader(message: ChangeCategoryRequest, reader: jspb.BinaryReader): ChangeCategoryRequest;
+}
+
+export namespace ChangeCategoryRequest {
+  export type AsObject = {
+    categorydata?: CategoryData.AsObject,
   }
 }
 
@@ -437,8 +463,24 @@ export namespace CategoriesResponse {
 }
 
 export class CategoryData extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
   getName(): string;
   setName(value: string): void;
+
+  getActive(): boolean;
+  setActive(value: boolean): void;
+
+  getParent(): CategoryData | undefined;
+  setParent(value?: CategoryData): void;
+  hasParent(): boolean;
+  clearParent(): void;
+
+  getSubcategoriesList(): Array<CategoryData>;
+  setSubcategoriesList(value: Array<CategoryData>): void;
+  clearSubcategoriesList(): void;
+  addSubcategories(value?: CategoryData, index?: number): CategoryData;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CategoryData.AsObject;
@@ -450,7 +492,11 @@ export class CategoryData extends jspb.Message {
 
 export namespace CategoryData {
   export type AsObject = {
+    id: string,
     name: string,
+    active: boolean,
+    parent?: CategoryData.AsObject,
+    subcategoriesList: Array<CategoryData.AsObject>,
   }
 }
 
@@ -487,4 +533,9 @@ export enum PropertyNames {
   PLACE = 12,
   ZIPCODE = 13,
   CITY = 14,
+}
+export enum Roles { 
+  BANNED = 0,
+  VERIFIED = 1,
+  ADMINISTRATION_CATEGORIES = 2,
 }
