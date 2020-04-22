@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Shop.Service.Extensions;
+using Shop.Service.Mail;
 using Shop.Service.Models;
 
 namespace Shop.Service
@@ -26,7 +27,7 @@ namespace Shop.Service
 
             if (string.IsNullOrEmpty(token))
             {
-                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Failedlogin, context.Peer));
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.FailedLogin, context.Peer));
 
                 return await GetResponse(StatusCode.SigninNotFound);
             }
@@ -72,6 +73,9 @@ namespace Shop.Service
 
             await userRepository.Register(user);
             await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Register, context.Peer));
+
+            string mailToken = user.CreateToken(ConfigToken, DateTime.Now.AddHours(1), false);
+            user.SendRegisterMail(MailTypes.Register, mailToken);
 
             string token = await user.GenerateToken(request.RegisterData.Password, ConfigToken);
 
@@ -165,7 +169,7 @@ namespace Shop.Service
                 user.HashPassword(Encoding.UTF8.GetBytes(request.NewPassword));
 
                 await userRepository.ChangePassword(user);
-                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changepassword, context.Peer, beforePassword, user.GetPasswords()));
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.ChangePassword, context.Peer, beforePassword, user.GetPasswords()));
 
                 return await GetResponse(StatusCode.Ok, token);
             }
@@ -200,7 +204,7 @@ namespace Shop.Service
             user.Addresses = request.AddressData.ToList();
 
             await userRepository.ChangeAddresses(user);
-            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeaddresses, context.Peer, beforeAddresses, user.Addresses.GetOperations()));
+            await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.ChangeAddresses, context.Peer, beforeAddresses, user.Addresses.GetOperations()));
 
             return await GetResponse(StatusCode.Ok);
         }
@@ -252,12 +256,28 @@ namespace Shop.Service
                 user.SetNewInfromations(request.UserData);
 
                 await userRepository.ChangeInformation(user);
-                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.Changeinformation, context.Peer, beforeInformations, user.GetInfromations()));
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.ChangeInformation, context.Peer, beforeInformations, user.GetInfromations()));
 
                 return await GetResponse(StatusCode.Ok);
             }
 
             return await GetResponse(StatusCode.EmptyChanges);
+        }
+
+        public override async Task<BasicResponse> UserActiveAccount(UserRequest request, ServerCallContext context)
+        {
+            User user = await userRepository.GetById(User.GetGuidFromHeaders(context.RequestHeaders));
+
+            if (user.Roles.Contains(Roles.Verified))
+            {
+                return await GetResponse(StatusCode.AccountIsActive);
+            }
+            else
+            {
+                await userRepository.AddRole(user.Id, Roles.Verified);
+                await userRepository.AddOperations(user.Id, Operation.GetOne(OperationTypes.ActiveAccount, context.Peer));
+                return await GetResponse(StatusCode.Ok);
+            }
         }
     }
 }

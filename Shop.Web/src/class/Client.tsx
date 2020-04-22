@@ -176,6 +176,14 @@ abstract class Client {
 
                 break;
 
+            case StatusCode.ACCOUNT_IS_ACTIVE:
+
+                if (onError)
+                    onError();
+                toast.info("Twoje konto jest już aktywne.");
+
+                break;
+
             case StatusCode.UNATHORIZED:
 
                 window.sessionStorage.clear();

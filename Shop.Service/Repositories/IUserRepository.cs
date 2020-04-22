@@ -22,5 +22,6 @@ namespace Shop.Service.Repositories
         Task ChangeInformation(User user);
 
         Task<bool> HasRole(Guid userId, Roles role);
+        Task AddRole(Guid userId, Roles role);
     }
 }

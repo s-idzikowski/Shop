@@ -109,6 +109,28 @@ export class ServiceClient {
       callback);
   }
 
+  methodInfoUserActiveAccount = new grpcWeb.AbstractClientBase.MethodInfo(
+    BasicResponse,
+    (request: UserRequest) => {
+      return request.serializeBinary();
+    },
+    BasicResponse.deserializeBinary
+  );
+
+  userActiveAccount(
+    request: UserRequest,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: BasicResponse) => void) {
+    return this.client_.rpcCall(
+      this.hostname_ +
+        '/Service/UserActiveAccount',
+      request,
+      metadata || {},
+      this.methodInfoUserActiveAccount,
+      callback);
+  }
+
   methodInfoUserChangePassword = new grpcWeb.AbstractClientBase.MethodInfo(
     BasicResponse,
     (request: ChangePasswordRequest) => {

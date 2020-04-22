@@ -512,6 +512,7 @@ export enum StatusCode {
   CHANGEPASSWORD_SAME = 30,
   CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31,
   EMPTY_CHANGES = 40,
+  ACCOUNT_IS_ACTIVE = 41,
 }
 export enum OperationTypes { 
   REGISTER = 0,
@@ -521,6 +522,7 @@ export enum OperationTypes {
   CHANGEPASSWORD = 10,
   CHANGEADDRESSES = 11,
   CHANGEINFORMATION = 12,
+  ACTIVEACCOUNT = 13,
 }
 export enum PropertyNames { 
   USERNAME = 0,

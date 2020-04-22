@@ -36,6 +36,9 @@ const AccountOperationsRow: React.FunctionComponent<Props> = (props: Props) => {
             case OperationTypes.CHANGEINFORMATION:
                 return "Zmiana danych użytkownika";
 
+            case OperationTypes.ACTIVEACCOUNT:
+                return "Potwierdzenie adresu email";
+
             default:
                 return "Niezdefiniowana operacja " + props.operation.type;
         }
@@ -62,6 +65,9 @@ const AccountOperationsRow: React.FunctionComponent<Props> = (props: Props) => {
                 return "text-info";
 
             case OperationTypes.CHANGEINFORMATION:
+                return "text-info";
+
+            case OperationTypes.ACTIVEACCOUNT:
                 return "text-info";
 
             default:

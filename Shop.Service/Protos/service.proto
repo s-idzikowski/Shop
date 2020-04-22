@@ -10,6 +10,7 @@ service Service {
     rpc UserSignIn (SignInRequest) returns (BasicResponse);
     rpc UserRegister (RegisterRequest) returns (BasicResponse);
     rpc UserLogout (UserRequest) returns (BasicResponse);
+    rpc UserActiveAccount (UserRequest) returns (BasicResponse);
     
     rpc UserChangePassword (ChangePasswordRequest) returns (BasicResponse);
     rpc UserChangeAddresses (ChangeAddressesRequest) returns (BasicResponse);
@@ -60,6 +61,7 @@ enum StatusCode {
     CHANGEPASSWORD_WRONG_OLD_PASSWORD = 31;
     
     EMPTY_CHANGES = 40;
+    ACCOUNT_IS_ACTIVE = 41;
 }
 
 /////////////////////////
@@ -165,12 +167,13 @@ message AddressData {
 enum OperationTypes {
     REGISTER = 0;
     LOGIN = 1;
-    FAILEDLOGIN = 2;
+    FAILED_LOGIN = 2;
     LOGOUT = 3;
 
-    CHANGEPASSWORD = 10;
-    CHANGEADDRESSES = 11;
-    CHANGEINFORMATION = 12;
+    CHANGE_PASSWORD = 10;
+    CHANGE_ADDRESSES = 11;
+    CHANGE_INFORMATION = 12;
+    ACTIVE_ACCOUNT = 13;
 }
 
 enum PropertyNames {

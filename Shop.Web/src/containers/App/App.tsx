@@ -17,6 +17,7 @@ import Account from '../Account/Account';
 import PrivateRoute from '../../class/PrivateRoute';
 import Unathorized from '../../components/Unathorized/Unathorized';
 import AnonymouseRoute from '../../class/AnonymouseRoute';
+import VerifyAccount from '../Account/Verify/VerifyAccount';
 
 class App extends React.Component {
     render(): JSX.Element {
@@ -39,6 +40,8 @@ class App extends React.Component {
                             <PrivateRoute path='/logout' component={Logout} />
 
                             <PrivateRoute path='/account' component={Account} />
+
+                            <Route path='/verifyaccount' component={VerifyAccount} />
 
                             <Route path='/unathorized' component={Unathorized} />
 

@@ -85,7 +85,7 @@ namespace Shop.Service.Models
             });
         }
 
-        private string CreateToken(string configToken)
+        public string CreateToken(string configToken, DateTime? expires = default, bool prefix = true)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configToken));
 
@@ -94,7 +94,7 @@ namespace Shop.Service.Models
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(Claims),
-                Expires = DateTime.Now.AddHours(24),
+                Expires = expires ?? DateTime.Now.AddHours(24),
                 SigningCredentials = creeds
             };
 
@@ -104,7 +104,7 @@ namespace Shop.Service.Models
             //Console.WriteLine("TOKEN: " + token.ToString());
             //Console.WriteLine("TOKENDOLOGOWANIA: " + tokenHandler.WriteToken(token));
 
-            return $"{TokenPrefix}{tokenHandler.WriteToken(token)}";
+            return prefix ? $"{TokenPrefix}{tokenHandler.WriteToken(token)}" : tokenHandler.WriteToken(token);
         }
 
         private static readonly string TokenPrefix = "Bearer ";

@@ -29,14 +29,14 @@ namespace Shop.Service.Repositories
         {
             return db.Users.Find(o => o.Username == username)
                 .Project<User>(UserFields())
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
         }
 
         public Task<User> GetByEmailAddress(string emailAddress)
         {
             return db.Users.Find(o => o.EmailAddress == emailAddress)
                 .Project<User>(UserFields())
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
         }
 
         public Task<User> GetById(Guid userId)
@@ -132,6 +132,17 @@ namespace Shop.Service.Repositories
         {
             User user = await GetById(userId);
             return user.Roles.Contains(role);
+        }
+
+        public Task AddRole(Guid userId, Roles role)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq(o => o.Id, userId);
+
+            UpdateDefinition<User> update = Builders<User>.Update
+                .Push(o => o.Roles, role);
+
+            return db.Users.UpdateOneAsync(filter, update);
         }
     }
 }
